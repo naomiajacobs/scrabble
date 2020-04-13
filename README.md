@@ -1,3 +1,12 @@
+Running at https://corona-scrabble.herokuapp.com/
+To deploy, run `git push heroku master`.
+To develop, in one window run `yarn start`, and in another run `nodemon server.js`.
+Currently requires running `yarn build` locally.
+
+
+---------------------------------------------
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
