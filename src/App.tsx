@@ -15,6 +15,7 @@ function useGameState(): GameState {
   useEffect(() => {
     const subscriptionId = subscribeToGameChanges((newState: GameState) => {
       setGameState(newState);
+      console.log(newState);
     });
     return () => {
       unsubscribeFromGameChanges(subscriptionId);
