@@ -1,6 +1,6 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import './App.css';
-import {GameState} from "./gameLogic";
+import {GameState, subscribeToGameChanges, unsubscribeFromGameChanges} from "./gameLogic";
 
 // connect to server, see if game is currently happening
 // if so, render game
@@ -9,10 +9,22 @@ import {GameState} from "./gameLogic";
 function Game() {
     return <div>Let's play!</div>
 }
-export interface AppProps {
-    gameState: GameState;
+
+function useGameState(): GameState {
+  const [gameState, setGameState] = useState<GameState>(null);
+  useEffect(() => {
+    const subscriptionId = subscribeToGameChanges((newState: GameState) => {
+      setGameState(newState);
+    });
+    return () => {
+      unsubscribeFromGameChanges(subscriptionId);
+    }
+  });
+  return gameState;
 }
-function App({gameState}: AppProps) {
+
+function App() {
+  const gameState = useGameState();
   return (
     <div className="App">
       <h1>scrabble app</h1>
