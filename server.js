@@ -4,6 +4,8 @@ const path = require('path');
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
 
+const port = process.env.PORT || 3001;
+
 let gameState = null;
 
 app.use(express.static(path.join(__dirname, 'build')));
@@ -24,6 +26,6 @@ io.on('connection', function(socket){
 });
 
 
-http.listen(3001, function(){
-  console.log('listening on *:3001');
+http.listen(port, function(){
+  console.log(`listening on ${port}`);
 });
