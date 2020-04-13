@@ -1,15 +1,26 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+import App, {AppProps} from './App';
 import * as serviceWorker from './serviceWorker';
+import {GameState, getGameState, subscribeToGameChanges} from "./gameLogic";
 
-ReactDOM.render(
+
+
+function render(props: AppProps) {
+    ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <App gameState={props.gameState}/>
   </React.StrictMode>,
   document.getElementById('root')
 );
+}
+
+subscribeToGameChanges((gameState: GameState) => {
+    render({gameState});
+});
+render({gameState: getGameState()});
+
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

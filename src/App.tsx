@@ -1,24 +1,24 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import {GameState} from "./gameLogic";
 
-function App() {
+// connect to server, see if game is currently happening
+// if so, render game
+// else, ask for name and start new game
+
+function Game() {
+    return <div>Let's play!</div>
+}
+export interface AppProps {
+    gameState: GameState;
+}
+function App({gameState}: AppProps) {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>scrabble app</h1>
+        <div>
+            {gameState == null ? 'initializing...' : <Game />}
+        </div>
     </div>
   );
 }
