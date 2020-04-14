@@ -1,7 +1,7 @@
 Running at https://corona-scrabble.herokuapp.com/
 To deploy, run `git push heroku master`.
-To develop, in one window run `yarn start`, and in another run `nodemon server.js`.
-Currently requires running `yarn build` locally.
+To develop, in one window run `yarn start-dev`, and in another run `nodemon server.js`.
+The CRA server will proxy socket requests to `server.js`.
 
 
 ---------------------------------------------
