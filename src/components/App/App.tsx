@@ -1,21 +1,17 @@
 import React, {useEffect, useState} from 'react';
 import './App.css';
-import {GameState, subscribeToGameChanges, unsubscribeFromGameChanges} from "./gameLogic";
+import {GameState, subscribeToGameChanges, unsubscribeFromGameChanges} from "../../gameLogic";
+import Game from "../Game/Game";
 
 // connect to server, see if game is currently happening
 // if so, render game
 // else, ask for name and start new game
-
-function Game() {
-    return <div>Let's play!</div>
-}
 
 function useGameState(): GameState {
   const [gameState, setGameState] = useState<GameState>(null);
   useEffect(() => {
     const subscriptionId = subscribeToGameChanges((newState: GameState) => {
       setGameState(newState);
-      console.log(newState);
     });
     return () => {
       unsubscribeFromGameChanges(subscriptionId);

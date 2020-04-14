@@ -1,0 +1,44 @@
+.board {
+  --tile-basic: #cdc6ac;
+  --tile-tws: #fa664d;
+  --tile-dws: #f9bbaa;
+  --tile-tls: #3b9bb3;
+  --tile-dls: #b7d1cc;
+}
+
+.board {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+.tile {
+  height: 45px;
+  width: 45px;
+  border: 1px white solid;
+  background: var(--tile-basic);
+  font-family: 'Asap', sans-serif;
+  font-size: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tls {
+  background: var(--tile-tls);
+}
+.tws {
+  background: var(--tile-tws);
+}
+.dls {
+  background: var(--tile-dls);
+}
+.dws {
+  background: var(--tile-dws);
+}
