@@ -1,39 +1,46 @@
 import io from "socket.io-client";
 import {v4 as uuid} from 'uuid';
+import {Letter} from "./Constants";
 
 enum Event {
-    INITIALIZE = 'initialize',
-    GAME_STATE = 'game state',
+  INITIALIZE = 'initialize',
+  GAME_STATE = 'game state',
 }
 
 type NoGame = 'no game';
-interface Game {}
-export type GameState = NoGame | Game | null;
+interface Player {
+  rack: Array<Letter>;
+}
+export interface GameState {
+  players: [Player, Player];
+  letterBag: Array<Letter>;
+}
+export type IndeterminateGameState = NoGame | GameState | null;
 
-let gameState: GameState = null;
+let indeterminateGameState: IndeterminateGameState = null;
 
-const subscribers: {[subscriptionId: string]: (gameState: GameState) => void} = {};
+const subscribers: {[subscriptionId: string]: (gameState: IndeterminateGameState) => void} = {};
 
 function notifySubscribers(): void {
-    for (const subscriberId of Object.keys(subscribers)) {
-        subscribers[subscriberId](gameState);
-    }
+  for (const subscriberId of Object.keys(subscribers)) {
+    subscribers[subscriberId](indeterminateGameState);
+  }
 }
 
 function syncGameState(gameStateFromServer: GameState) {
-    gameState = gameStateFromServer;
-    notifySubscribers();
+  indeterminateGameState = gameStateFromServer;
+  notifySubscribers();
 }
 
-export function subscribeToGameChanges(callback: (gameState: GameState) => void): string {
-    const id = uuid();
-    subscribers[id] = callback;
-    callback(gameState);
-    return id;
+export function subscribeToGameChanges(callback: (gameState: IndeterminateGameState) => void): string {
+  const id = uuid();
+  subscribers[id] = callback;
+  callback(indeterminateGameState);
+  return id;
 }
 
 export function unsubscribeFromGameChanges(id: string) {
-    delete subscribers[id];
+  delete subscribers[id];
 }
 
 const socket = io();

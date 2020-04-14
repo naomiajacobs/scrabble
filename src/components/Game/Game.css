@@ -1,9 +1,13 @@
 .board {
-  --tile-basic: #cdc6ac;
-  --tile-tws: #fa664d;
-  --tile-dws: #f9bbaa;
-  --tile-tls: #3b9bb3;
-  --tile-dls: #b7d1cc;
+  --sq-basic: #cdc6ac;
+  --sq-tws: #fa664d;
+  --sq-dws: #f9bbaa;
+  --sq-tls: #3b9bb3;
+  --sq-dls: #b7d1cc;
+}
+
+.rack {
+  --tile: #fedbbf;
 }
 
 .board {
@@ -18,12 +22,12 @@
   flex-direction: row;
 }
 
-.tile {
-  height: 45px;
-  width: 45px;
+.square {
+  height: 55px;
+  width: 50px;
   border: 1px white solid;
-  background: var(--tile-basic);
-  font-family: 'Asap', sans-serif;
+  background: var(--sq-basic);
+  font-family: "FuturaBold", sans-serif;
   font-size: 10px;
   display: flex;
   justify-content: center;
@@ -31,14 +35,43 @@
 }
 
 .tls {
-  background: var(--tile-tls);
+  background: var(--sq-tls);
 }
 .tws {
-  background: var(--tile-tws);
+  background: var(--sq-tws);
 }
 .dls {
-  background: var(--tile-dls);
+  background: var(--sq-dls);
 }
 .dws {
-  background: var(--tile-dws);
+  background: var(--sq-dws);
+}
+
+.rack {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tile {
+  font-family: "NewGothicStandard", sans-serif;
+  font-size: 24px;
+  height: 55px;
+  width: 50px;
+  background: var(--tile);
+  background-image: url('../../images/tile1.png');
+  background-size: cover;
+  background-position: center;
+  border: 1px black solid;
+  margin: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tile-points {
+  position: relative;
+  top: 17px;
+  left: 10px;
+  font-size: 10px;
 }

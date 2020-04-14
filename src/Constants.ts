@@ -84,9 +84,99 @@ const SQUARES: { [key in SpecialSquare]: Array<string> } = {
   ],
 };
 
-export const SQUARES_BY_LOCATION: { [location: string]: SpecialSquare } = (Object.keys(
-  SQUARES
-) as Array<SpecialSquare>).reduce(
+export enum Letter {
+  A = "A",
+  B = "B",
+  C = "C",
+  D = "D",
+  E = "E",
+  F = "F",
+  G = "G",
+  H = "H",
+  I = "I",
+  J = "J",
+  K = "K",
+  L = "L",
+  M = "M",
+  N = "N",
+  O = "O",
+  P = "P",
+  Q = "Q",
+  R = "R",
+  S = "S",
+  T = "T",
+  U = "U",
+  V = "V",
+  W = "W",
+  X = "X",
+  Y = "Y",
+  Z = "Z",
+  BLANK = "BLANK",
+}
+
+export const LETTER_VALUES: { [key in Letter]: number } = {
+  A: 1,
+  B: 3,
+  C: 3,
+  D: 2,
+  E: 1,
+  F: 4,
+  G: 2,
+  H: 4,
+  I: 1,
+  J: 8,
+  K: 5,
+  L: 2,
+  M: 3,
+  N: 1,
+  O: 1,
+  P: 3,
+  Q: 10,
+  R: 1,
+  S: 1,
+  T: 1,
+  U: 1,
+  V: 4,
+  W: 4,
+  X: 8,
+  Y: 4,
+  Z: 10,
+  BLANK: 0,
+};
+
+const LETTER_FREQUENCIES: { [key in Letter]: number } = {
+  A: 9,
+  B: 2,
+  C: 2,
+  D: 4,
+  E: 12,
+  F: 2,
+  G: 3,
+  H: 2,
+  I: 9,
+  J: 1,
+  K: 1,
+  L: 4,
+  M: 2,
+  N: 6,
+  O: 8,
+  P: 2,
+  Q: 1,
+  R: 6,
+  S: 4,
+  T: 6,
+  U: 4,
+  V: 2,
+  W: 2,
+  X: 1,
+  Y: 2,
+  Z: 1,
+  BLANK: 2,
+};
+
+export const SQUARES_BY_LOCATION: {
+  [location: string]: SpecialSquare;
+} = (Object.keys(SQUARES) as Array<SpecialSquare>).reduce(
   (hash: { [location: string]: SpecialSquare }, tileName: SpecialSquare) => {
     const locations = SQUARES[tileName];
     locations.forEach((location) => {
@@ -96,4 +186,3 @@ export const SQUARES_BY_LOCATION: { [location: string]: SpecialSquare } = (Objec
   },
   {}
 );
-
