@@ -8,6 +8,7 @@ enum Event {
 }
 
 type NoGame = 'no game';
+type GameFull = 'too late';
 interface Player {
   rack: Array<Letter>;
 }
@@ -15,7 +16,7 @@ export interface GameState {
   players: [Player, Player];
   letterBag: Array<Letter>;
 }
-export type IndeterminateGameState = NoGame | GameState | null;
+export type IndeterminateGameState = NoGame | GameState | GameFull | null;
 
 let indeterminateGameState: IndeterminateGameState = null;
 

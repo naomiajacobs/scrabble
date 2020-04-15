@@ -25,17 +25,26 @@ function useGameState(): IndeterminateGameState {
 
 function App() {
   const gameState = useGameState();
+  let content: JSX.Element | string;
+  switch (gameState) {
+    case null:
+      content = 'initializing...';
+      break;
+    case 'no game':
+      content = 'start new game';
+      break;
+    case 'too late':
+      content = 'A game is already in progress. Try again later';
+      break;
+    default:
+      content = <Game gameState={gameState} />;
+
+  }
   return (
     <div className="App">
       <h1>scrabble app</h1>
       <div>
-        {gameState == null ? (
-          "initializing..."
-        ) : gameState === "no game" ? (
-          "start new game"
-        ) : (
-          <Game gameState={gameState} />
-        )}
+        {content}
       </div>
     </div>
   );
