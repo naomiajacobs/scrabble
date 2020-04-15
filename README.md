@@ -3,6 +3,8 @@ To deploy, run `git push heroku master`.
 To develop, in one window run `yarn start-dev`, and in another run `nodemon server.js`.
 The CRA server will proxy socket requests to `server.js`.
 
+Inspired by https://www.robinsloan.com/notes/home-cooked-app/
+
 
 ---------------------------------------------
 
