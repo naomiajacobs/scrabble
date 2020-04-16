@@ -188,11 +188,15 @@ export const SQUARES_BY_LOCATION: {
 );
 
 interface Player {
+  name: string;
   rack: Array<Letter>;
 }
+interface Move {}
 export interface GameState {
-  players: [Player, Player];
+  player: Player;
   letterBag: Array<Letter>;
+  moves: Array<Move>;
+  currentTurn: string;
 }
 
 export enum CurrentGameStatus {

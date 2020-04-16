@@ -62,7 +62,8 @@ export default function Game({
 }): JSX.Element {
   return (
     <div className="game">
-      <Rack tiles={gameState.players[0].rack} />
+      <h3>Hi, {gameState.player.name}</h3>
+      <Rack tiles={gameState.player.rack} />
       <Board />
     </div>
   );

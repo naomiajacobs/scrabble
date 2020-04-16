@@ -4,7 +4,13 @@ const path = require("path");
 const http = require("http").createServer(app);
 const io = require("socket.io")(http);
 
-const { getCurrentGame, startNewGame } = require("./gameLogic");
+const {
+  endCurrentGame,
+  getCurrentGame,
+  MERT,
+  NAOMI,
+  startNewGame,
+} = require("./gameLogic");
 
 const port = process.env.PORT || 3001;
 
@@ -14,67 +20,67 @@ app.get("/", function (req, res) {
   res.sendFile(path.join(__dirname, "build", "index.html"));
 });
 
+let naomiHere = false;
+let mertHere = false;
+
 function emitGameState(game) {
-  io.in("game").emit("server status", {
-    currentGameStatus: 'in progress',
-    gameState: game.getGameState(),
+  io.in(NAOMI).emit("server status", {
+    currentGameStatus: "in progress",
+    gameState: game.getGameState(NAOMI),
+  });
+  io.in(MERT).emit("server status", {
+    currentGameStatus: "in progress",
+    gameState: game.getGameState(MERT),
   });
 }
 
-// Wipe names upon finishing game
-let player1Name;
-let player2Name;
-
-const knownSockets = {};
-
 io.on("connection", function (socket) {
   console.log("a user connected");
-  knownSockets[socket.id] = socket;
 
   socket.on("disconnect", function () {
     console.log("user disconnected");
-    delete knownSockets[socket.id];
+    io.in(NAOMI).clients((_, clients) => {
+      if (clients.length === 0) {
+        naomiHere = false;
+        endCurrentGame();
+      }
+    });
+    io.in(MERT).clients((_, clients) => {
+      if (clients.length === 0) {
+        mertHere = false;
+        endCurrentGame();
+      }
+    });
   });
 
   socket.on("initialize", (name) => {
-    const currentGame = getCurrentGame() || startNewGame();
-    if (player1Name === name || player2Name === name) {
-      // Another connection to existing game
-      socket.join("game");
-      emitGameState(currentGame);
+    if (name !== NAOMI && name !== MERT) {
+      console.log("an intruder!");
+      socket.emit("server status", { currentGameStatus: "full" });
+      return;
+    }
+    if (name === NAOMI) {
+      console.log("Naomi joined");
+      naomiHere = true;
+      socket.join(NAOMI);
     } else {
-      if (!player1Name) {
-        player1Name = name;
-        socket.join("game");
-        socket.emit("server status", { currentGameStatus: "waiting on opponent" });
-      } else if (!player2Name) {
-        player2Name = name;
-        socket.join("game");
-        emitGameState(currentGame);
+      console.log("Mert joined");
+      mertHere = true;
+      socket.join(MERT);
+    }
+
+    if (!getCurrentGame()) {
+      if (naomiHere && mertHere) {
+        console.log("Everyone is here!");
+        emitGameState(startNewGame());
       } else {
-        // Game full
-        console.log("full");
-        socket.emit("server status", { currentGameStatus: "full" });
+        console.log("Waiting for opponent");
+        socket.emit("server status", {
+          currentGameStatus: "waiting on opponent",
+        });
       }
     }
   });
-
-  // if (Object.keys(players).length === 2) {
-  //   console.log('too late');
-  //   socket.emit('server status', 'full');
-  // } else {
-  //   console.log('still room for more');
-  //   players[socket.id] = socket;
-  //   socket.join('game');
-  //   socket.on("initialize", function (name) {
-  //     console.log('name: ', name);
-  //     let currentGame = getCurrentGame();
-  //     if (!currentGame) {
-  //       currentGame = startNewGame();
-  //     }
-  //     emitGameState(currentGame);
-  //   });
-  // }
 });
 
 http.listen(port, function () {
