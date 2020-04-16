@@ -1,44 +1,43 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import "./App.css";
-import {
-  IndeterminateGameState,
-  subscribeToGameChanges,
-  unsubscribeFromGameChanges,
-} from "../../gameLogic";
 import Game from "../Game/Game";
+import {CurrentGameStatus, defaultServerStatus, ServerStatus} from "../../Constants";
+import {subscribeToServer, unsubscribeFromServer} from "../../subscriptions";
 
-function useGameState(): IndeterminateGameState {
-  const [gameState, setGameState] = useState<IndeterminateGameState>(null);
+function useServerStatus(): ServerStatus {
+  const [serverStatus, setServerStatus] = useState<ServerStatus>(defaultServerStatus);
   useEffect(() => {
-    const subscriptionId = subscribeToGameChanges(
-      (newState: IndeterminateGameState) => {
-        setGameState(newState);
-        console.log(newState);
+    const subscriptionId = subscribeToServer(
+      (newStatus: ServerStatus) => {
+        setServerStatus(newStatus);
+        console.log(newStatus);
       }
     );
     return () => {
-      unsubscribeFromGameChanges(subscriptionId);
+      unsubscribeFromServer(subscriptionId);
     };
   });
-  return gameState;
+  return serverStatus;
 }
 
 function App() {
-  const gameState = useGameState();
+  const serverStatus = useServerStatus();
   let content: JSX.Element | string;
-  switch (gameState) {
-    case null:
-      content = 'initializing...';
+  switch (serverStatus.currentGameStatus) {
+    case CurrentGameStatus.WAITING_ON_OPPONENT:
+      content = 'waiting for opponent to join';
       break;
-    case 'no game':
-      content = 'start new game';
-      break;
-    case 'too late':
+    case CurrentGameStatus.FULL:
       content = 'A game is already in progress. Try again later';
       break;
+    case CurrentGameStatus.FINISHED:
+      content = 'done!';
+      break;
+    case CurrentGameStatus.IN_PROGRESS:
+      content = <Game gameState={serverStatus.gameState} />;
+      break;
     default:
-      content = <Game gameState={gameState} />;
-
+      content = `Unknown server response: ${serverStatus}`
   }
   return (
     <div className="App">

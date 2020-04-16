@@ -186,3 +186,38 @@ export const SQUARES_BY_LOCATION: {
   },
   {}
 );
+
+interface Player {
+  rack: Array<Letter>;
+}
+export interface GameState {
+  players: [Player, Player];
+  letterBag: Array<Letter>;
+}
+
+export enum CurrentGameStatus {
+  FULL = "full",
+  WAITING_ON_OPPONENT = "waiting on opponent",
+  IN_PROGRESS = "in progress",
+  FINISHED = "finished",
+}
+
+interface BaseServerStatus {
+  currentGameStatus: CurrentGameStatus;
+  gameState?: GameState;
+}
+
+interface ServerStatusWithGame extends BaseServerStatus {
+  currentGameStatus: CurrentGameStatus.IN_PROGRESS | CurrentGameStatus.FINISHED;
+  gameState: GameState;
+}
+
+interface ServerStatusWithoutGame extends BaseServerStatus {
+  currentGameStatus: CurrentGameStatus.FULL | CurrentGameStatus.WAITING_ON_OPPONENT;
+}
+
+export type ServerStatus = ServerStatusWithGame | ServerStatusWithoutGame;
+
+export const defaultServerStatus: ServerStatus = {
+  currentGameStatus: CurrentGameStatus.WAITING_ON_OPPONENT,
+};

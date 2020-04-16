@@ -2,12 +2,12 @@ import React from "react";
 
 import "./Game.css";
 import {
+  GameState,
   Letter,
   LETTER_VALUES,
   SQUARES_BY_LOCATION,
   TILE_NAME,
 } from "../../Constants";
-import { GameState } from "../../gameLogic";
 
 function EmptySquare({ x, y }: { x: number; y: number }): JSX.Element {
   const locationKey = `${x},${y}`;
