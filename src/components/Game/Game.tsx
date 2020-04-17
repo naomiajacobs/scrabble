@@ -37,6 +37,10 @@ function Board(): JSX.Element {
 }
 
 function Tile({ letter }: { letter: Letter }): JSX.Element {
+  if (letter === Letter.BLANK) {
+    return <span className="tile" />;
+  }
+
   return (
     <span className="tile">
       {letter}
