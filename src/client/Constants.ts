@@ -187,21 +187,31 @@ export const SQUARES_BY_LOCATION: {
   {}
 );
 enum PlayerName {
-  MERT = 'MERT',
-  NAOMI = 'NAOMI',
+  MERT = "MERT",
+  NAOMI = "NAOMI",
+}
+enum MoveType {
+  PLAY = "PLAY",
+  PASS = "PASS",
+  DUMP = "DUMP",
 }
 interface Player {
   name: PlayerName;
   rack: Array<Letter>;
 }
-type PlacedLetter = [Letter, string, Letter | null];
-interface Move {}
+type PlacedLetter = [Letter, [number, number], Letter | null];
+interface Move {
+  playerName: PlayerName;
+  type: MoveType;
+  lettersPlaced: Array<PlacedLetter>;
+}
+export type Board = Array<Array<Letter | null>>;
 export interface GameState {
   player: Player;
   letterBag: Array<Letter>;
   moves: Array<Move>;
   activePlayer: PlayerName;
-  derivedBoard: {[location: string]: PlacedLetter}
+  derivedBoard: Board;
 }
 
 export enum CurrentGameStatus {
@@ -222,7 +232,9 @@ interface ServerStatusWithGame extends BaseServerStatus {
 }
 
 interface ServerStatusWithoutGame extends BaseServerStatus {
-  currentGameStatus: CurrentGameStatus.FULL | CurrentGameStatus.WAITING_ON_OPPONENT;
+  currentGameStatus:
+    | CurrentGameStatus.FULL
+    | CurrentGameStatus.WAITING_ON_OPPONENT;
 }
 
 export type ServerStatus = ServerStatusWithGame | ServerStatusWithoutGame;
