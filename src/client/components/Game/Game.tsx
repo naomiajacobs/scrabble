@@ -67,6 +67,13 @@ export default function Game({
   return (
     <div className="game">
       <h3>Hi, {gameState.player.name}</h3>
+      <h4>
+        It's{" "}
+        {gameState.player.name === gameState.currentTurn
+          ? "your"
+          : `${gameState.currentTurn}'s`}{" "}
+        turn
+      </h4>
       <Rack tiles={gameState.player.rack} />
       <Board />
     </div>

@@ -1,3 +1,5 @@
+const {LETTER_FREQUENCIES, MERT, NAOMI} = require('./constants');
+
 const shuffle = require("shuffle-array");
 /*
  * players:
@@ -18,36 +20,6 @@ const shuffle = require("shuffle-array");
  *     validScrabbleWord: boolean
  * */
 
-const LETTER_FREQUENCIES = {
-  A: 9,
-  B: 2,
-  C: 2,
-  D: 4,
-  E: 12,
-  F: 2,
-  G: 3,
-  H: 2,
-  I: 9,
-  J: 1,
-  K: 1,
-  L: 4,
-  M: 2,
-  N: 6,
-  O: 8,
-  P: 2,
-  Q: 1,
-  R: 6,
-  S: 4,
-  T: 6,
-  U: 4,
-  V: 2,
-  W: 2,
-  X: 1,
-  Y: 2,
-  Z: 1,
-  BLANK: 2,
-};
-
 class Player {
   constructor(name) {
     this.rack = [];
@@ -61,9 +33,6 @@ class Player {
     console.log(`Letters left in bag: ${letterBag.length}`);
   }
 }
-
-const NAOMI = "Naomi";
-const MERT = "Mert";
 
 class ScrabbleGame {
   constructor() {
@@ -91,6 +60,7 @@ class ScrabbleGame {
   getGameState(playerName) {
     return {
       player: this.gameState.players.find((p) => p.name === playerName),
+      // todo remove letterbag from client?
       letterBag: this.gameState.letterBag,
       moves: this.gameState.moves,
       currentTurn: this.gameState.currentTurn,
