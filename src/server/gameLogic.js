@@ -50,7 +50,7 @@ class ScrabbleGame {
           lettersPlaced: [
             [LETTER.F, [7, 7], null],
             [LETTER.I, [7, 8], null],
-            [LETTER.R, [7, 9], null],
+            [LETTER.BLANK, [7, 9], LETTER.R],
             [LETTER.S, [7, 10], null],
             [LETTER.T, [7, 11], null],
           ],

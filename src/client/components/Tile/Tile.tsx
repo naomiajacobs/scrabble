@@ -17,7 +17,7 @@ export function PresentationalTile({
   onClick?: () => void;
 }): JSX.Element {
   if (letter === Letter.BLANK) {
-    return <span className={`tile ${className || ""}`} onClick={onClick} />;
+    return <span className={`tile ${className || ""} ${getBackgroundImageClass(letter)}`} onClick={onClick} />;
   }
   return (
     <span
