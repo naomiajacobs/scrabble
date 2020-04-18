@@ -25,8 +25,8 @@
     "uws": "10.148.1"
   },
   "scripts": {
-    "start-dev-server": "npx nodemon src/server/server.js",
-    "start": "node src/server/server.js",
+    "start-dev-server": "npx nodemon server.js",
+    "start": "node server.js",
     "start-dev-client": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

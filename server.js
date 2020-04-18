@@ -3,7 +3,7 @@ const app = express();
 const path = require("path");
 const http = require("http").createServer(app);
 
-const { getIo, onConnection } = require("./socketHandlers");
+const { getIo, onConnection } = require("./src/server/socketHandlers");
 
 const io = getIo(http);
 
