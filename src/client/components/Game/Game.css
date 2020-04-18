@@ -24,7 +24,7 @@
 
 .square {
   height: 55px;
-  width: 50px;
+  width: 55px;
   border: 1px white solid;
   background: var(--sq-basic);
   font-family: "FuturaBold", sans-serif;
@@ -56,10 +56,10 @@
 .tile {
   font-family: "NewGothicStandard", sans-serif;
   font-size: 24px;
-  height: 55px;
+  height: 50px;
   width: 50px;
   background: var(--tile);
-  background-image: url('../../images/tile1.png');
+  background-image: url('../../../assets/images/tile1.png');
   background-size: cover;
   background-position: center;
   border: 1px black solid;

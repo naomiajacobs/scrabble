@@ -14,10 +14,10 @@ code {
 
 @font-face {
   font-family: 'FuturaBold';
-  src: local('FuturaBold'), url(./fonts/FuturaBold.otf) format('opentype');
+  src: local('FuturaBold'), url(assets/fonts/FuturaBold.otf) format('opentype');
 }
 
 @font-face {
   font-family: 'NewGothicStandard';
-  src: local('NewGothicStandard'), url(./fonts/NewsGothicStd.otf) format('opentype');
+  src: local('NewGothicStandard'), url(assets/fonts/NewsGothicStd.otf) format('opentype');
 }
