@@ -59,7 +59,7 @@ class ScrabbleGame {
       activePlayer: firstActivePlayer,
     };
     console.log(
-      `Starting new game, first player is ${this.gameState.firstActivePlayer}`
+      `Starting new game, first player is ${this.gameState.activePlayer}`
     );
     console.log("Drawing initial tiles");
     this.gameState.players.forEach((player) => {
@@ -98,13 +98,7 @@ function startNewGame() {
   return currentGame;
 }
 
-function endCurrentGame() {
-  console.log("Ending current game");
-  currentGame = null;
-}
-
 module.exports = {
   getCurrentGame,
   startNewGame,
-  endCurrentGame,
 };

@@ -4,7 +4,7 @@ const path = require("path");
 const http = require("http").createServer(app);
 const io = require("socket.io")(http);
 
-const { endCurrentGame, getCurrentGame, startNewGame } = require("./gameLogic");
+const { getCurrentGame, startNewGame } = require("./gameLogic");
 const { MERT, NAOMI } = require("./constants");
 
 const port = process.env.PORT || 3001;
@@ -37,20 +37,18 @@ io.on("connection", function (socket) {
     io.in(NAOMI).clients((_, clients) => {
       if (clients.length === 0) {
         naomiHere = false;
-        endCurrentGame();
       }
     });
     io.in(MERT).clients((_, clients) => {
       if (clients.length === 0) {
         mertHere = false;
-        endCurrentGame();
       }
     });
   });
 
   socket.on("initialize", (name) => {
     if (name !== NAOMI && name !== MERT) {
-      console.log("an intruder!");
+      console.log("An intruder: ", name);
       socket.emit("server status", { currentGameStatus: "full" });
       return;
     }
