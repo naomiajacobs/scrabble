@@ -9,11 +9,11 @@ import {
   TILE_NAME,
 } from "../../Constants";
 
-function EmptySquare({ x, y }: { x: number; y: number }): JSX.Element {
-  const locationKey = `${x},${y}`;
+function EmptySquare({ row, col }: { row: number; col: number }): JSX.Element {
+  const locationKey = `${row},${col}`;
   const specialTileClassName = SQUARES_BY_LOCATION[locationKey] || "";
   return (
-    <span className={`square ${specialTileClassName}`}>
+    <span className={`square ${specialTileClassName}`} data-row={row} data-col={col}>
       {specialTileClassName ? TILE_NAME[specialTileClassName] : ""}
     </span>
   );
@@ -23,11 +23,11 @@ function Board(): JSX.Element {
   const board = Array(15).fill(Array(15).fill({}));
   return (
     <div className="board">
-      {board.map((row, i) => {
+      {board.map((row, rowIndex) => {
         return (
-          <div className="row" key={i}>
-            {row.map((square: {}, j: number) => (
-              <EmptySquare key={j} x={i} y={j} />
+          <div className="row" key={rowIndex}>
+            {row.map((square: {}, colIndex: number) => (
+              <EmptySquare key={colIndex} row={rowIndex} col={colIndex} />
             ))}
           </div>
         );
@@ -91,9 +91,9 @@ export default function Game({
       <h3>Hi, {gameState.player.name}</h3>
       <h4>
         It's{" "}
-        {gameState.player.name === gameState.currentTurn
+        {gameState.player.name === gameState.activePlayer
           ? "your"
-          : `${gameState.currentTurn}'s`}{" "}
+          : `${gameState.activePlayer}'s`}{" "}
         turn
       </h4>
       <Rack tiles={gameState.player.rack} />

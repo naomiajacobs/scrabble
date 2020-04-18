@@ -1,5 +1,41 @@
+// Players
 const NAOMI = "Naomi";
 const MERT = "Mert";
+
+// Move Type
+const PLAY = 'PLAY';
+const PASS = 'PASS';
+const DUMP = 'DUMP';
+
+const LETTER = {
+  A: 'A',
+  B: 'B',
+  C: 'C',
+  D: 'D',
+  E: 'E',
+  F: 'F',
+  G: 'G',
+  H: 'H',
+  I: 'I',
+  J: 'J',
+  K: 'K',
+  L: 'L',
+  M: 'M',
+  N: 'N',
+  O: 'O',
+  P: 'P',
+  Q: 'Q',
+  R: 'R',
+  S: 'S',
+  T: 'T',
+  U: 'U',
+  V: 'V',
+  W: 'W',
+  X: 'X',
+  Y: 'Y',
+  Z: 'Z',
+  BLANK: 'BLANK',
+}
 
 const LETTER_FREQUENCIES = {
   A: 9,
@@ -34,5 +70,9 @@ const LETTER_FREQUENCIES = {
 module.exports = {
   NAOMI,
   MERT,
+  LETTER,
   LETTER_FREQUENCIES,
+  PLAY,
+  PASS,
+  DUMP,
 };

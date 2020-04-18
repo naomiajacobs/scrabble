@@ -186,17 +186,22 @@ export const SQUARES_BY_LOCATION: {
   },
   {}
 );
-
+enum PlayerName {
+  MERT = 'MERT',
+  NAOMI = 'NAOMI',
+}
 interface Player {
-  name: string;
+  name: PlayerName;
   rack: Array<Letter>;
 }
+type PlacedLetter = [Letter, string, Letter | null];
 interface Move {}
 export interface GameState {
   player: Player;
   letterBag: Array<Letter>;
   moves: Array<Move>;
-  currentTurn: string;
+  activePlayer: PlayerName;
+  derivedBoard: {[location: string]: PlacedLetter}
 }
 
 export enum CurrentGameStatus {

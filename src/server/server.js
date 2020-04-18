@@ -4,13 +4,8 @@ const path = require("path");
 const http = require("http").createServer(app);
 const io = require("socket.io")(http);
 
-const {
-  endCurrentGame,
-  getCurrentGame,
-  MERT,
-  NAOMI,
-  startNewGame,
-} = require("./gameLogic");
+const { endCurrentGame, getCurrentGame, startNewGame } = require("./gameLogic");
+const { MERT, NAOMI } = require("./constants");
 
 const port = process.env.PORT || 3001;
 
