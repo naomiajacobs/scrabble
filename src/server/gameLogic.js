@@ -36,13 +36,13 @@ class Player {
 
 class ScrabbleGame {
   constructor() {
-    console.log(`Starting new game`);
     this.gameState = {
       players: [new Player(NAOMI), new Player(MERT)],
       letterBag: this._randomizeTiles(),
       moves: [],
       currentTurn: Math.floor(Math.random() * 2) ? NAOMI : MERT,
     };
+    console.log(`Starting new game, first player is ${this.gameState.currentTurn}`);
     console.log("Drawing initial tiles");
     this.gameState.players.forEach((player) => {
       player.drawTiles(this.gameState.letterBag);

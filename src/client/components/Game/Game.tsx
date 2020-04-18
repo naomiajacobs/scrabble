@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import "./Game.css";
 import {
@@ -36,13 +36,26 @@ function Board(): JSX.Element {
   );
 }
 
-function Tile({ letter }: { letter: Letter }): JSX.Element {
+function Tile({
+  letter,
+  onSelect,
+  selected,
+}: {
+  letter: Letter;
+  selected: boolean;
+  onSelect: () => void;
+}): JSX.Element {
   if (letter === Letter.BLANK) {
-    return <span className="tile" />;
+    return (
+      <span
+        className={`tile ${selected ? "selected" : ""}`}
+        onClick={onSelect}
+      />
+    );
   }
 
   return (
-    <span className="tile">
+    <span className={`tile ${selected ? "selected" : ""}`} onClick={onSelect}>
       {letter}
       <span className="tile-points">{LETTER_VALUES[letter]}</span>
     </span>
@@ -50,10 +63,19 @@ function Tile({ letter }: { letter: Letter }): JSX.Element {
 }
 
 function Rack({ tiles }: { tiles: Array<Letter> }): JSX.Element {
+  const [selectedLetter, setSelectedLetter] = useState<number | null>(null);
+
   return (
     <div className="rack">
       {tiles.map((tile, i) => (
-        <Tile key={i} letter={tile} />
+        <Tile
+          key={i}
+          letter={tile}
+          onSelect={() => {
+            setSelectedLetter(i);
+          }}
+          selected={selectedLetter === i}
+        />
       ))}
     </div>
   );
