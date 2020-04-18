@@ -36,14 +36,6 @@ class Player {
   }
 }
 
-function makeEmptyBoard() {
-  const board = [];
-  for (const i of Array(15).keys()) {
-    board.push(Array(15).fill(null));
-  }
-  return board;
-}
-
 class ScrabbleGame {
   constructor() {
     const firstActivePlayer = Math.floor(Math.random() * 2) ? NAOMI : MERT;
@@ -83,26 +75,12 @@ class ScrabbleGame {
     return shuffle(letters);
   }
 
-  deriveBoardFromMoves() {
-    const board = makeEmptyBoard();
-    this.gameState.moves.forEach((move) => {
-      if (move.type === PLAY) {
-        for (const [letter, [row, col], _] of move.lettersPlaced) {
-          board[row][col] = letter;
-        }
-      }
-    });
-    console.log(board);
-    return board;
-  }
-
   getGameState(playerName) {
     return {
       player: this.gameState.players.find((p) => p.name === playerName),
       // todo remove letterbag from client?
       letterBag: this.gameState.letterBag,
       moves: this.gameState.moves,
-      derivedBoard: this.deriveBoardFromMoves(),
       activePlayer: this.gameState.activePlayer,
     };
   }

@@ -9,6 +9,7 @@ import {
   SQUARES_BY_LOCATION,
   TILE_NAME,
 } from "../../Constants";
+import { getDeriveBoardFromMoves } from "../../util";
 
 function getBackgroundImageClass(letter: Letter): string {
   return `backgroundImage-${(LETTER_VALUES[letter] % 4) + 1}`;
@@ -124,7 +125,7 @@ export default function Game({
         turn
       </h4>
       <Rack tiles={gameState.player.rack} />
-      <ScrabbleBoard board={gameState.derivedBoard} />
+      <ScrabbleBoard board={getDeriveBoardFromMoves(gameState.moves)} />
     </div>
   );
 }

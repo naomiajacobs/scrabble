@@ -190,7 +190,7 @@ enum PlayerName {
   MERT = "MERT",
   NAOMI = "NAOMI",
 }
-enum MoveType {
+export enum MoveType {
   PLAY = "PLAY",
   PASS = "PASS",
   DUMP = "DUMP",
@@ -200,7 +200,7 @@ interface Player {
   rack: Array<Letter>;
 }
 type PlacedLetter = [Letter, [number, number], Letter | null];
-interface Move {
+export interface Move {
   playerName: PlayerName;
   type: MoveType;
   lettersPlaced: Array<PlacedLetter>;
@@ -211,7 +211,6 @@ export interface GameState {
   letterBag: Array<Letter>;
   moves: Array<Move>;
   activePlayer: PlayerName;
-  derivedBoard: Board;
 }
 
 export enum CurrentGameStatus {
