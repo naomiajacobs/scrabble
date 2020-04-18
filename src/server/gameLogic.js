@@ -1,26 +1,14 @@
 const {
-  EMPTY_BOARD,
   LETTER,
   LETTER_FREQUENCIES,
   MERT,
   NAOMI,
   PLAY,
+  DUMP,
+  PASS
 } = require("./constants");
 
 const shuffle = require("shuffle-array");
-/*
- * players:
- *   name: string
- *   rack: array of 7 letters
- *   score: derived from moves
- * currentTurn: 0 or 1
- * board state: 15x15 array (derived from moves)
- * remaining tiles: array of letters
- * moves:
- *   playerId: string
- *   type: 'play' or 'dump' or 'pass'
- *   lettersPlaced: Array<[Letter, [y,x], blankSpecifier]>
- * */
 
 class Player {
   constructor(name) {
@@ -83,6 +71,19 @@ class ScrabbleGame {
       moves: this.gameState.moves,
       activePlayer: this.gameState.activePlayer,
     };
+  }
+
+  makeMove(move) {
+    if (move.type === PASS) {
+      this.gameState.moves.push(move);
+    } else if (move.type === DUMP) {
+      // validate (optional?)
+      // dump letters
+      // append
+    } else {
+      // validate move
+      // append
+    }
   }
 }
 

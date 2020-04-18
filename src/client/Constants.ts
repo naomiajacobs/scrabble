@@ -215,7 +215,6 @@ export interface GameState {
 
 export enum CurrentGameStatus {
   FULL = "full",
-  WAITING_ON_OPPONENT = "waiting on opponent",
   IN_PROGRESS = "in progress",
   FINISHED = "finished",
 }
@@ -231,13 +230,11 @@ interface ServerStatusWithGame extends BaseServerStatus {
 }
 
 interface ServerStatusWithoutGame extends BaseServerStatus {
-  currentGameStatus:
-    | CurrentGameStatus.FULL
-    | CurrentGameStatus.WAITING_ON_OPPONENT;
+  currentGameStatus: CurrentGameStatus.FULL;
 }
 
 export type ServerStatus = ServerStatusWithGame | ServerStatusWithoutGame;
 
 export const defaultServerStatus: ServerStatus = {
-  currentGameStatus: CurrentGameStatus.WAITING_ON_OPPONENT,
+  currentGameStatus: CurrentGameStatus.FULL,
 };

@@ -24,11 +24,8 @@ function App() {
   const serverStatus = useServerStatus();
   let content: JSX.Element | string;
   switch (serverStatus.currentGameStatus) {
-    case CurrentGameStatus.WAITING_ON_OPPONENT:
-      content = 'Waiting for opponent to join';
-      break;
     case CurrentGameStatus.FULL:
-      content = 'A game is already in progress. Try again later';
+      content = 'Who the hell are you?';
       break;
     case CurrentGameStatus.FINISHED:
       content = 'Done!';
