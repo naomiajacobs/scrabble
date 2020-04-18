@@ -10,6 +10,10 @@ import {
   TILE_NAME,
 } from "../../Constants";
 
+function getBackgroundImageClass(letter: Letter): string {
+  return `backgroundImage-${(LETTER_VALUES[letter] % 4) + 1}`;
+}
+
 function PresentationalTile({
   letter,
   className,
@@ -23,7 +27,10 @@ function PresentationalTile({
     return <span className={`tile ${className || ""}`} onClick={onClick} />;
   }
   return (
-    <span className={`tile ${className || ""}`} onClick={onClick}>
+    <span
+      className={`tile ${className || ""} ${getBackgroundImageClass(letter)}`}
+      onClick={onClick}
+    >
       {letter}
       <span className="tile-points">{LETTER_VALUES[letter]}</span>
     </span>
@@ -52,9 +59,9 @@ function ScrabbleBoard({ board }: { board: Board }): JSX.Element {
           <div className="row" key={rowIndex}>
             {row.map((letter: Letter | null, colIndex: number) =>
               letter ? (
-                <PresentationalTile letter={letter} />
+                <PresentationalTile key={colIndex} letter={letter} />
               ) : (
-                <EmptySquare row={rowIndex} col={colIndex} />
+                <EmptySquare key={colIndex} row={rowIndex} col={colIndex} />
               )
             )}
           </div>

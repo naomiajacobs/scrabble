@@ -60,7 +60,6 @@
   height: 55px;
   width: 55px;
   background: var(--tile);
-  background-image: url("../../../assets/images/tile1.png");
   background-size: cover;
   background-position: center;
   display: flex;
@@ -71,6 +70,22 @@
 
 .rack .tile {
   margin: 5px;
+}
+
+.backgroundImage-1 {
+  background-image: url("../../../assets/images/tile1.png");
+}
+
+.backgroundImage-2 {
+  background-image: url("../../../assets/images/tile2.png");
+}
+
+.backgroundImage-3 {
+  background-image: url("../../../assets/images/tile3.png");
+}
+
+.backgroundImage-4 {
+  background-image: url("../../../assets/images/tile4.png");
 }
 
 .rack .selected {
