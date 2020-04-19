@@ -5,8 +5,8 @@ const {
   NAOMI,
   PLAY,
   DUMP,
-  PASS
 } = require("./constants");
+const MoveValidator = require("./moveValidator");
 
 const shuffle = require("shuffle-array");
 
@@ -55,6 +55,11 @@ class ScrabbleGame {
     });
   }
 
+  toggleActivePlayer() {
+    this.gameState.activePlayer =
+      this.gameState.activePlayer === MERT ? NAOMI : MERT;
+  }
+
   _randomizeTiles() {
     const letters = [];
     for (const letter of Object.keys(LETTER_FREQUENCIES)) {
@@ -73,16 +78,23 @@ class ScrabbleGame {
     };
   }
 
+  handleDump(move) {}
+
+  checkForGameEnd() {}
+
   makeMove(move) {
-    if (move.type === PASS) {
+    const isFirstMove = this.gameState.moves.length === 0;
+    if (new MoveValidator(this.gameState, move, isFirstMove).moveIsValid()) {
       this.gameState.moves.push(move);
-    } else if (move.type === DUMP) {
-      // validate (optional?)
-      // dump letters
-      // append
+
+      if (move.type === DUMP) {
+        this.handleDump(move);
+      }
+
+      this.checkForGameEnd();
+      this.toggleActivePlayer();
     } else {
-      // validate move
-      // append
+      // handle error
     }
   }
 }
@@ -94,7 +106,7 @@ function getCurrentGame() {
 }
 
 function startNewGame() {
-  console.log('Starting a new game');
+  console.log("Starting a new game");
   currentGame = new ScrabbleGame();
   return currentGame;
 }

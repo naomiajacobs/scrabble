@@ -10,10 +10,11 @@ const getIo = function (http) {
   return io;
 };
 
-const SERVER_STATUS = 'server status';
-const IN_PROGRESS = 'in progress';
-const INITIALIZE = 'initialize';
-const MAKE_MOVE = 'make move';
+const SERVER_STATUS = "server status";
+const IN_PROGRESS = "in progress";
+const INITIALIZE = "initialize";
+const MAKE_MOVE = "make move";
+const CHALLENGE = "challenge";
 
 function emitGameState(game) {
   io.in(NAOMI).emit(SERVER_STATUS, {
@@ -36,7 +37,11 @@ function onConnection(socket) {
 
   socket.on(MAKE_MOVE, (move) => {
     onMakeMove(socket, move);
-  })
+  });
+
+  socket.on(CHALLENGE, () => {
+    onChallenge(socket);
+  });
 }
 
 function onInitialize(socket, name) {
@@ -60,6 +65,8 @@ function onMakeMove(socket, move) {
   getCurrentGame().makeMove(move);
   emitGameState(getCurrentGame());
 }
+
+function onChallenge(socket) {}
 
 module.exports = {
   onConnection,
