@@ -7,6 +7,16 @@ test();
  */
 
 function test() {
+  const firstMove = {
+    type: PLAY,
+    lettersPlaced: [
+      [LETTER.F, [7, 7], null],
+      [LETTER.I, [7, 8], null],
+      [LETTER.BLANK, [7, 9], LETTER.R],
+      [LETTER.S, [7, 10], null],
+      [LETTER.T, [7, 11], null],
+    ],
+  };
   const singleLetterValidMove = {
     type: PLAY,
     lettersPlaced: [[LETTER.I, [6, 7], null]],
@@ -48,14 +58,15 @@ function test() {
   };
   const game = startNewGame();
   const makeMove = (move) => {
-    game.makeMove({...move, playerName: game.gameState.activePlayer})
+    game.makeMove({ ...move, playerName: game.gameState.activePlayer });
   };
-  console.log('Valid moves:');
+  console.log("Valid moves:");
+  makeMove(firstMove);
   makeMove(singleLetterValidMove);
   makeMove(continuousMove);
   makeMove(oneDirectionMove);
 
-  console.log('Invalid moves:');
+  console.log("Invalid moves:");
   makeMove(invalidCoordsMove);
   makeMove(letterAlreadyThereMove);
   makeMove(nonContinuousMove);

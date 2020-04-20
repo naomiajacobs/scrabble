@@ -28,22 +28,9 @@ class ScrabbleGame {
   constructor() {
     const firstActivePlayer = Math.floor(Math.random() * 2) ? NAOMI : MERT;
     this.gameState = {
-      players: {[NAOMI]: new Player(NAOMI), [MERT]: new Player(MERT)},
+      players: { [NAOMI]: new Player(NAOMI), [MERT]: new Player(MERT) },
       letterBag: this._randomizeTiles(),
-      moves: [
-        // todo remove, just seeding for now
-        {
-          playerName: firstActivePlayer,
-          type: PLAY,
-          lettersPlaced: [
-            [LETTER.F, [7, 7], null],
-            [LETTER.I, [7, 8], null],
-            [LETTER.BLANK, [7, 9], LETTER.R],
-            [LETTER.S, [7, 10], null],
-            [LETTER.T, [7, 11], null],
-          ],
-        },
-      ],
+      moves: [],
       activePlayer: firstActivePlayer,
     };
     console.log(
