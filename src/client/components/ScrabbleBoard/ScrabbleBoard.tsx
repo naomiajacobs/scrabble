@@ -6,6 +6,9 @@ import {
   Location,
   SQUARES_BY_LOCATION,
   TILE_NAME,
+  TileFromRack as TileFromRackType,
+  RackIndex,
+  PreviouslyPlayedTile,
 } from "../../Constants";
 import { PresentationalTile } from "../Tile/Tile";
 import "./ScrabbleBoard.css";
@@ -33,32 +36,73 @@ function EmptySquare({
   );
 }
 
+function TileFromRack({
+  letter,
+  select,
+  selected,
+}: {
+  letter: Letter;
+  select: () => void;
+  selected: boolean;
+}): JSX.Element {
+  return (
+    <PresentationalTile
+      letter={letter}
+      className={`from-rack ${selected ? "selected" : ""}`}
+      onClick={select}
+    />
+  );
+}
+
 export default function ScrabbleBoard({
   board,
   placeLetter,
+  setSelectedLetter,
+  selectedLetter,
 }: {
   board: Board;
   placeLetter: (location: Location) => void;
+  setSelectedLetter: (number: RackIndex) => void;
+  selectedLetter: RackIndex | null;
 }): JSX.Element {
   return (
     <div className="board">
       {board.map((row, rowIndex) => {
         return (
           <div className="row" key={rowIndex}>
-            {row.map((letter: Letter | null, colIndex: number) =>
-              letter ? (
-                <PresentationalTile key={colIndex} letter={letter} />
-              ) : (
-                <EmptySquare
+            {row.map((square, colIndex: number) => {
+              if (!square) {
+                return (
+                  <EmptySquare
+                    key={colIndex}
+                    row={rowIndex}
+                    col={colIndex}
+                    onClick={() => {
+                      placeLetter([rowIndex, colIndex]);
+                    }}
+                  />
+                );
+              }
+
+              if (square.fromRack) {
+                const rackTile: TileFromRackType = square as TileFromRackType;
+                return (
+                  <TileFromRack
+                    key={colIndex}
+                    letter={rackTile.letter}
+                    select={() => setSelectedLetter(rackTile.rackIndex)}
+                    selected={selectedLetter === rackTile.rackIndex}
+                  />
+                );
+              }
+
+              return (
+                <PresentationalTile
                   key={colIndex}
-                  row={rowIndex}
-                  col={colIndex}
-                  onClick={() => {
-                    placeLetter([rowIndex, colIndex]);
-                  }}
+                  letter={(square as PreviouslyPlayedTile).letter}
                 />
-              )
-            )}
+              );
+            })}
           </div>
         );
       })}

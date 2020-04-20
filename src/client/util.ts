@@ -19,7 +19,7 @@ export function getDeriveBoard(
   moves.forEach((move) => {
     if (move.type === MoveType.PLAY) {
       for (const [letter, [row, col], _] of move.lettersPlaced) {
-        board[row][col] = letter;
+        board[row][col] = {letter, fromRack: false};
       }
     }
   });
@@ -27,7 +27,7 @@ export function getDeriveBoard(
   placedLetters.forEach((location, i) => {
     if (location) {
       const [row, col] = location;
-      board[row][col] = rack[i];
+      board[row][col] = {letter: rack[i], fromRack: true, rackIndex: i};
     }
   });
   return board;

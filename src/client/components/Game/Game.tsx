@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 
-import { GameState, Location } from "../../Constants";
+import {GameState, Location, RackIndex} from "../../Constants";
 import { getDeriveBoard } from "../../util";
 import Rack from "../Rack/Rack";
 import ScrabbleBoard from "../ScrabbleBoard/ScrabbleBoard";
 import usePlacedLetters, {
   PlacedLettersState,
-  RackIndex,
 } from "../../state/usePlacedLetters";
 import "./Game.css";
 
@@ -127,6 +126,8 @@ export default function Game({
           gameState.player.rack
         )}
         placeLetter={placeSelectedLetter}
+        setSelectedLetter={setSelectedLetterIndex}
+        selectedLetter={selectedLetterIndex}
       />
     </div>
   );

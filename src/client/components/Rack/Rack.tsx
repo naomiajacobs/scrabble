@@ -1,9 +1,9 @@
-import React, { MouseEvent } from "react";
+import React from "react";
 
-import { Letter, Rack as RackType } from "../../Constants";
+import {Letter, Rack as RackType, RackIndex} from "../../Constants";
 import { PresentationalTile } from "../Tile/Tile";
 import "./Rack.css";
-import { PlacedLettersState, RackIndex } from "../../state/usePlacedLetters";
+import { PlacedLettersState } from "../../state/usePlacedLetters";
 
 function RackTile({
   letter,

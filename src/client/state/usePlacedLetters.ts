@@ -1,8 +1,6 @@
 import { useState } from "react";
 
-import { Location } from "../Constants";
-
-export type RackIndex = 0 | 1 | 2 | 3 | 4 | 5 | 6;
+import {Location, RackIndex} from "../Constants";
 
 const initialState: PlacedLettersState = [null, null, null, null, null, null, null];
 

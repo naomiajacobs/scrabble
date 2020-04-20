@@ -1,4 +1,4 @@
-import React, { MouseEvent } from "react";
+import React from "react";
 
 import { Letter, LETTER_VALUES } from "../../Constants";
 import "./Tile.css";

@@ -211,7 +211,22 @@ export interface Move {
   type: MoveType;
   lettersPlaced: Array<PlacedLetter>;
 }
-export type Board = Array<Array<Letter | null>>;
+
+export interface PreviouslyPlayedTile {
+  letter: Letter;
+  fromRack: false;
+}
+export type RackIndex = 0 | 1 | 2 | 3 | 4 | 5 | 6;
+export interface TileFromRack {
+  letter: Letter;
+  fromRack: true;
+  rackIndex: RackIndex;
+}
+
+export type Board = Array<
+  Array<PreviouslyPlayedTile | TileFromRack | null>
+>;
+
 export interface GameState {
   player: Player;
   letterBag: Array<Letter>;
