@@ -19,12 +19,12 @@
 }
 
 .square {
-  height: 55px;
-  width: 55px;
+  height: 45px;
+  width: 45px;
   border: 1px white solid;
   background: var(--sq-basic);
   font-family: "FuturaBold", sans-serif;
-  font-size: 10px;
+  font-size: 8px;
   display: flex;
   justify-content: center;
   align-items: center;

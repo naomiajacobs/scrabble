@@ -50,7 +50,6 @@ export default function Rack({
           );
         }
 
-        // todo fill in when tile is placed on the board
         return <span />;
       })}
     </div>
