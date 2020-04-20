@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import {GameState, Location, RackIndex} from "../../Constants";
+import { GameState, Location, RackIndex } from "../../Constants";
 import { getDeriveBoard } from "../../util";
 import Rack from "../Rack/Rack";
 import ScrabbleBoard from "../ScrabbleBoard/ScrabbleBoard";
@@ -105,8 +105,10 @@ export default function Game({
 
   return (
     <div className="game">
-      <h2>Hi, {gameState.player.name}</h2>
-      <h4>It's {active ? "your" : `${gameState.activePlayer}'s`} turn</h4>
+      <h2>
+        Hi, {gameState.player.name}! It's{" "}
+        {active ? "your" : `${gameState.activePlayer}'s`} turn
+      </h2>
       <ControlButtons
         active={active}
         placedLetters={placedLetters}
@@ -116,7 +118,7 @@ export default function Game({
       <Rack
         tiles={gameState.player.rack}
         selectedLetterIndex={selectedLetterIndex}
-        setSelectedLetterIndex={setSelectedLetterIndex}
+        setSelectedLetterIndex={active ? setSelectedLetterIndex : () => {}}
         placedLetters={placedLetters}
       />
       <ScrabbleBoard
@@ -125,8 +127,8 @@ export default function Game({
           placedLetters,
           gameState.player.rack
         )}
-        placeLetter={placeSelectedLetter}
-        setSelectedLetter={setSelectedLetterIndex}
+        placeLetter={active ? placeSelectedLetter : () => {}}
+        setSelectedLetter={active ? setSelectedLetterIndex : () => {}}
         selectedLetter={selectedLetterIndex}
       />
     </div>
