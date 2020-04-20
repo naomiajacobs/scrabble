@@ -69,7 +69,9 @@ class ScrabbleGame {
 
   checkForGameEnd() {}
 
-  refillRack() {}
+  refillRack(player) {
+    player.drawTiles(this.gameState.letterBag);
+  }
 
   doPlayMove(move) {
     this.gameState.moves.push(move);
@@ -80,12 +82,12 @@ class ScrabbleGame {
       // remove letter
       rack.splice(index, 1);
     }
-    player.drawTiles(this.gameState.letterBag);
   }
 
   makeMove(move) {
     const isFirstMove = this.gameState.moves.length === 0;
-    if (new MoveValidator(this.gameState, move, isFirstMove).moveIsValid()) {
+    const validator = new MoveValidator(this.gameState, move, isFirstMove);
+    if (validator.moveIsValid()) {
       this.doPlayMove(move);
 
       if (move.type === DUMP) {
@@ -97,7 +99,7 @@ class ScrabbleGame {
       this.checkForGameEnd();
       this.toggleActivePlayer();
     } else {
-      // handle error
+      return validator.messages;
     }
   }
 }

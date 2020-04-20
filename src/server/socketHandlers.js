@@ -62,7 +62,10 @@ function onInitialize(socket, name) {
 }
 
 function onMakeMove(socket, move) {
-  getCurrentGame().makeMove(move);
+  const errorMessages = getCurrentGame().makeMove(move);
+  if (errorMessages.length) {
+    io.in(move.playerName).emit('error', errorMessages);
+  }
   emitGameState(getCurrentGame());
 }
 

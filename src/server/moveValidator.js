@@ -135,7 +135,6 @@ const wordValidations = {
 
         let foundEmptySquare = false;
         for (const i of Object.keys(Array(lastCol - firstCol))) {
-          console.log(i);
           if (
             !getLetterPlacedAtPosition(move, row, firstCol + i) &&
             !board[row][firstCol + i]
@@ -155,6 +154,7 @@ class MoveValidator {
     this.move = newMove;
     this.derivedBoard = getDerivedBoard(gameState.moves);
     this.isFirstMove = isFirstMove;
+    this.messages = [];
   }
 
   logInvalidMove(message) {
@@ -171,6 +171,7 @@ class MoveValidator {
       for (const [k, validator] of Object.entries(letterValidations)) {
         if (!validator.test(l, this.derivedBoard)) {
           this.logInvalidMove(`${validator.message}: ${JSON.stringify(l)}`);
+          this.messages.push(validator.message);
           valid = false;
         }
       }
@@ -186,6 +187,7 @@ class MoveValidator {
         this.logInvalidMove(
           `${validator.message}: ${JSON.stringify(this.move)}`
         );
+        this.messages.push(validator.message);
         valid = false;
       }
     }
