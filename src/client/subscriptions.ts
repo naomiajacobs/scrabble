@@ -6,7 +6,7 @@ export enum GameEvent {
   INITIALIZE = "initialize",
   GAME_STATE = "server status",
   MAKE_MOVE = "make move",
-  ERROR = "error",
+  GAME_ERROR = "game error",
 }
 
 // initialize socket connection
@@ -14,7 +14,7 @@ const name = prompt("What's your name?", "Mert");
 export const socket = io();
 socket.emit(GameEvent.INITIALIZE, name, syncServerStatus);
 socket.on(GameEvent.GAME_STATE, syncServerStatus);
-socket.on(GameEvent.ERROR, (messages: Array<string>) => {
+socket.on(GameEvent.GAME_ERROR, (messages: Array<string>) => {
   alert(messages.join("\n"));
 });
 

@@ -1,0 +1,18 @@
+.game-log {
+  display: flex;
+  justify-content: center;
+  font-family: "FuturaBold", sans-serif;
+}
+
+thead, .scores {
+  font-size: 24px;
+}
+
+tr {
+  display: flex;
+  justify-content: space-around;
+}
+
+td {
+  margin: 0px 10px;
+}

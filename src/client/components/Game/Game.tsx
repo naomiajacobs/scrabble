@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 
 import { GameState, MoveType, PlacedLetter, PlayMove } from "../../Constants";
 import { getDeriveBoard } from "../../util";
@@ -8,6 +8,9 @@ import ControlButtons from "../ControlButtons/ControlButtons";
 import useGameLetters from "../../state/useGameLetters";
 import { makeMove } from "../../api";
 import usePrevious from "../../state/usePrevious";
+import GameLog from "../GameLog/GameLog";
+
+import './Game.css';
 
 export default function Game({
   gameState,
@@ -24,11 +27,14 @@ export default function Game({
     selectedLetterIndex,
     setSelectedLetterIndex,
     placeSelectedLetter,
-    reset
+    reset,
   } = useGameLetters();
 
   useEffect(() => {
-    if (previousState && gameState.moves.length !== previousState.moves.length) {
+    if (
+      previousState &&
+      gameState.moves.length !== previousState.moves.length
+    ) {
       reset();
     }
   });
@@ -36,12 +42,12 @@ export default function Game({
   const submit = () => {
     // get submitted move
     // validate client-side? (maybe later)
-    const lettersPlaced: Array<PlacedLetter> = (placedLetters
+    const lettersPlaced: Array<PlacedLetter> = placedLetters
       .map((letter, i) => {
         // TODO specify blanks
         return letter && [gameState.player.rack[i], letter, null];
       })
-      .filter((l) => l) as Array<PlacedLetter>);
+      .filter((l) => l) as Array<PlacedLetter>;
     const move: PlayMove = {
       playerName: gameState.player.name,
       type: MoveType.PLAY,
@@ -56,29 +62,36 @@ export default function Game({
         Hi, {gameState.player.name}! It's{" "}
         {active ? "your" : `${gameState.activePlayer}'s`} turn
       </h2>
-      <ControlButtons
-        active={active}
-        clearLetters={clearLetters}
-        reRackLetter={reRackLetter}
-        hasPlacedLetters={placedLetters.filter((l) => l).length > 0}
-        onSubmit={submit}
-      />
-      <Rack
-        tiles={gameState.player.rack}
-        selectedLetterIndex={selectedLetterIndex}
-        setSelectedLetterIndex={active ? setSelectedLetterIndex : () => {}}
-        placedLetters={placedLetters}
-      />
-      <ScrabbleBoard
-        board={getDeriveBoard(
-          gameState.moves,
-          placedLetters,
-          gameState.player.rack
-        )}
-        placeLetter={active ? placeSelectedLetter : () => {}}
-        setSelectedLetter={active ? setSelectedLetterIndex : () => {}}
-        selectedLetter={selectedLetterIndex}
-      />
+      <div className="game-area">
+        <div className="log-area">
+          <GameLog gameState={gameState} />
+        </div>
+        <div className="play-area">
+          <ControlButtons
+            active={active}
+            clearLetters={clearLetters}
+            reRackLetter={reRackLetter}
+            hasPlacedLetters={placedLetters.filter((l) => l).length > 0}
+            onSubmit={submit}
+          />
+          <Rack
+            tiles={gameState.player.rack}
+            selectedLetterIndex={selectedLetterIndex}
+            setSelectedLetterIndex={active ? setSelectedLetterIndex : () => {}}
+            placedLetters={placedLetters}
+          />
+          <ScrabbleBoard
+            board={getDeriveBoard(
+              gameState.moves,
+              placedLetters,
+              gameState.player.rack
+            )}
+            placeLetter={active ? placeSelectedLetter : () => {}}
+            setSelectedLetter={active ? setSelectedLetterIndex : () => {}}
+            selectedLetter={selectedLetterIndex}
+          />
+        </div>
+      </div>
     </div>
   );
 }

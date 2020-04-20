@@ -74,13 +74,17 @@ class ScrabbleGame {
     }
   }
 
-  refillRack(player) {
-    player.drawTiles(this.gameState.letterBag);
+  getMovePlayer(move) {
+    return this.gameState.players[move.playerName];
+  }
+
+  refillRack(move) {
+    this.getMovePlayer(move).drawTiles(this.gameState.letterBag);
   }
 
   doPlayMove(move) {
     this.gameState.moves.push(move);
-    const player = this.gameState.players[move.playerName];
+    const player = this.getMovePlayer(move);
     const rack = player.rack;
     for (const [letter, _, __] of move.lettersPlaced) {
       const index = rack.indexOf(letter);
@@ -99,7 +103,7 @@ class ScrabbleGame {
         this.doDumpMove(move);
       }
 
-      this.refillRack();
+      this.refillRack(move);
 
       this.checkForGameEnd(move);
       this.toggleActivePlayer();

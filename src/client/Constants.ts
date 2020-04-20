@@ -187,9 +187,9 @@ export const SQUARES_BY_LOCATION: {
   {}
 );
 export const RACK_LOCATION = "RACK_LOCATION";
-enum PlayerName {
-  MERT = "MERT",
-  NAOMI = "NAOMI",
+export enum PlayerName {
+  MERT = "Mert",
+  NAOMI = "Naomi",
 }
 export enum MoveType {
   PLAY = "PLAY",

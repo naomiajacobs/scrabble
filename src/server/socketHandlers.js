@@ -15,6 +15,7 @@ const IN_PROGRESS = "in progress";
 const INITIALIZE = "initialize";
 const MAKE_MOVE = "make move";
 const CHALLENGE = "challenge";
+const GAME_ERROR = "game error";
 
 function emitGameState(game) {
   io.in(NAOMI).emit(SERVER_STATUS, {
@@ -63,8 +64,8 @@ function onInitialize(socket, name) {
 
 function onMakeMove(socket, move) {
   const errorMessages = getCurrentGame().makeMove(move);
-  if (errorMessages.length) {
-    io.in(move.playerName).emit('error', errorMessages);
+  if (errorMessages && errorMessages.length) {
+    io.in(move.playerName).emit(GAME_ERROR, errorMessages);
   }
   emitGameState(getCurrentGame());
 }

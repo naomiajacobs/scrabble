@@ -1,0 +1,11 @@
+.game-area {
+  display: flex;
+}
+
+.play-area {
+  flex-grow: 2;
+}
+
+.log-area {
+  flex-grow: 1;
+}
