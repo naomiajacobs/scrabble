@@ -30,6 +30,7 @@
     "start-dev-client": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "test-backend": "node ./src/backend-test-runner.js",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

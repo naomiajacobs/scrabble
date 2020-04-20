@@ -1,13 +1,12 @@
 Running at https://corona-scrabble.herokuapp.com/
 To deploy, run `git push heroku master`.
-To develop, in one window run `yarn start-dev`, and in another run `nodemon server.js`.
+To develop, in one window run `yarn start-dev-client`, and in another run `yarn start-dev-server`.
 The CRA server will proxy socket requests to `server.js`.
+To test the backend, run `yarn test-backend` (TODO set up a real test suite)
 
-Inspired by https://www.robinsloan.com/notes/home-cooked-app/
-
+Inspired in spirit by https://www.robinsloan.com/notes/home-cooked-app/, and made as a gift to my mom, who loves Scrabble but hates all the online versions, as they don't use the correct dictionary and don't follow the official Scrabble rules.
 
 ---------------------------------------------
-
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

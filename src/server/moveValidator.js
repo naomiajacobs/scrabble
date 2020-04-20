@@ -1,27 +1,6 @@
 const { LETTER, DUMP, PASS } = require("./constants");
 const { getDerivedBoard } = require("./util");
 
-/*
-const {startNewGame} = require('./src/server/gameLogic.js');
-const {PLAY, PASS, DUMP, MERT, NAOMI, LETTER} = require('./src/server/constants.js');
-const {getDerivedBoard} = require('./src/server/util.js')
-const validMove = {playerName: NAOMI, type: PLAY, lettersPlaced: [[LETTER.I, [6, 7], null]]}
-const wrongPlayerMove = validMove;
-const invalidCoordsMove = {playerName: MERT, type: 'PLAY', lettersPlaced: [['A', [0, 24], null]]}
-const letterAlreadyThereMove = {playerName: MERT, type: 'PLAY', lettersPlaced: [['A', [7,7], null]]}
-const nonContinuousMove = {playerName: MERT, type: 'PLAY', lettersPlaced: [['A', [0,0], null], ['A', [0, 3], null]]}
-const continuousMove = {playerName: MERT, type:"PLAY", lettersPlaced: [["E",[8,6],null],["G",[8,5],null],["E",[8,7],null]]}
-const nonConnectedMove = {playerName: MERT, type: 'PLAY', lettersPlaced: [['A', [0,0], null]]}
-const game = startNewGame();
-game.makeMove(validMove);
-game.makeMove(continuousMove);
-game.makeMove(wrongPlayerMove);
-game.makeMove(invalidCoordsMove);
-game.makeMove(letterAlreadyThereMove);
-game.makeMove(nonContinuousMove);
-game.makeMove(nonConnectedMove);
- */
-
 function getAllRows(move) {
   return move.lettersPlaced.map((letter) => letter[1]).map(([row, _]) => row);
 }
@@ -55,7 +34,7 @@ function getTouchingSquares([row, col]) {
     [row - 1, col],
     [row, col + 1],
     [row, col - 1],
-  ].filter(location => isValidLocation(location));
+  ].filter((location) => isValidLocation(location));
 }
 
 function letterTouchesExistingLetter(move, board) {
@@ -97,7 +76,11 @@ const wordValidations = {
     message: "Move must include placing at least one letter",
   },
   lettersOnOneAxis: {
-    test: (move) => getUniqueRows(move).size === 1 || getUniqueCols(move) === 1,
+    test: (move) => {
+      const rows = getUniqueRows(move);
+      const cols = getUniqueCols(move);
+      return rows.size === 1 || cols.size === 1;
+    },
     message: "Letters can only go in one direction",
   },
   firstMoveUsesCenter: {
@@ -216,6 +199,7 @@ class MoveValidator {
     }
 
     if (this.move.type === PASS || this.move.type === DUMP) {
+      // TODO validate # of letters dumped isn't more than are left in the bag
       return true;
     }
 
