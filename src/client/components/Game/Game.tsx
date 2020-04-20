@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 
-import { GameState, Location, RackIndex } from "../../Constants";
+import { GameState } from "../../Constants";
 import { getDeriveBoard } from "../../util";
 import Rack from "../Rack/Rack";
 import ScrabbleBoard from "../ScrabbleBoard/ScrabbleBoard";
-import usePlacedLetters from "../../state/usePlacedLetters";
 import ControlButtons from "../ControlButtons/ControlButtons";
+import useGameLetters from "../../state/useGameLetters";
 
 export default function Game({
   gameState,
@@ -16,37 +16,12 @@ export default function Game({
 
   const {
     placedLetters,
-    placeLetter,
     clearLetters,
-    removeLetter,
-  } = usePlacedLetters();
-
-  // TODO move into hook
-  const [
+    reRackLetter,
     selectedLetterIndex,
     setSelectedLetterIndex,
-  ] = useState<RackIndex | null>(null);
-
-  const placeSelectedLetter = (location: Location) => {
-    // todo could also skip if the letter is already at the location (double-clicking)
-    if (selectedLetterIndex === null) {
-      return;
-    }
-
-    placeLetter(selectedLetterIndex, location);
-  };
-
-  const reRackLetter = () => {
-    if (
-      selectedLetterIndex === null ||
-      // Nothing to do if the selected letter is already in the rack
-      placedLetters[selectedLetterIndex] === null
-    ) {
-      return;
-    }
-
-    removeLetter(selectedLetterIndex);
-  };
+    placeSelectedLetter,
+  } = useGameLetters();
 
   return (
     <div className="game">
