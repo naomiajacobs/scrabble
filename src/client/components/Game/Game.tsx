@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 
 import { GameState, MoveType, PlacedLetter, PlayMove } from "../../Constants";
 import { getDeriveBoard } from "../../util";
@@ -7,12 +7,14 @@ import ScrabbleBoard from "../ScrabbleBoard/ScrabbleBoard";
 import ControlButtons from "../ControlButtons/ControlButtons";
 import useGameLetters from "../../state/useGameLetters";
 import { makeMove } from "../../api";
+import usePrevious from "../../state/usePrevious";
 
 export default function Game({
   gameState,
 }: {
   gameState: GameState;
 }): JSX.Element {
+  const previousState = usePrevious<GameState>(gameState);
   const active = gameState.player.name === gameState.activePlayer;
 
   const {
@@ -22,7 +24,14 @@ export default function Game({
     selectedLetterIndex,
     setSelectedLetterIndex,
     placeSelectedLetter,
+    reset
   } = useGameLetters();
+
+  useEffect(() => {
+    if (previousState && gameState.moves.length !== previousState.moves.length) {
+      reset();
+    }
+  });
 
   const submit = () => {
     // get submitted move

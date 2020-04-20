@@ -10,7 +10,7 @@ function useServerStatus(): ServerStatus {
     const subscriptionId = subscribeToServer(
       (newStatus: ServerStatus) => {
         setServerStatus(newStatus);
-        console.log(newStatus);
+        console.log('New status from backend: ', newStatus);
       }
     );
     return () => {

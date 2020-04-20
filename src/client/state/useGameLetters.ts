@@ -36,12 +36,18 @@ export default function useGameLetters() {
     removeLetter(selectedLetterIndex);
   };
 
+  const reset = () => {
+    setSelectedLetterIndex(null);
+    clearLetters();
+  };
+
   return {
     placedLetters,
     clearLetters,
     reRackLetter,
     selectedLetterIndex,
     setSelectedLetterIndex,
-    placeSelectedLetter
+    placeSelectedLetter,
+    reset
   };
 }
