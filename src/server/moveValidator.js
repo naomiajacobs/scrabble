@@ -10,9 +10,11 @@ const wrongPlayerMove = validMove;
 const invalidCoordsMove = {playerName: MERT, type: 'PLAY', lettersPlaced: [['A', [0, 24], null]]}
 const letterAlreadyThereMove = {playerName: MERT, type: 'PLAY', lettersPlaced: [['A', [7,7], null]]}
 const nonContinuousMove = {playerName: MERT, type: 'PLAY', lettersPlaced: [['A', [0,0], null], ['A', [0, 3], null]]}
+const continuousMove = {playerName: MERT, type:"PLAY", lettersPlaced: [["E",[8,6],null],["G",[8,5],null],["E",[8,7],null]]}
 const nonConnectedMove = {playerName: MERT, type: 'PLAY', lettersPlaced: [['A', [0,0], null]]}
 const game = startNewGame();
 game.makeMove(validMove);
+game.makeMove(continuousMove);
 game.makeMove(wrongPlayerMove);
 game.makeMove(invalidCoordsMove);
 game.makeMove(letterAlreadyThereMove);
@@ -133,7 +135,7 @@ const wordValidations = {
         const lastRow = Math.max(...move.lettersPlaced.map((l) => l[1][0]));
 
         let foundEmptySquare = false;
-        for (const i of Array(lastRow - firstRow)) {
+        for (const i of Object.keys(Array(lastRow - firstRow))) {
           if (
             !getLetterPlacedAtPosition(move, firstRow + i, col) &&
             !board[firstRow + i][col]
@@ -149,7 +151,8 @@ const wordValidations = {
         const lastCol = Math.max(...move.lettersPlaced.map((l) => l[1][1]));
 
         let foundEmptySquare = false;
-        for (const i of Array(lastCol - firstCol)) {
+        for (const i of Object.keys(Array(lastCol - firstCol))) {
+          console.log(i);
           if (
             !getLetterPlacedAtPosition(move, row, firstCol + i) &&
             !board[row][firstCol + i]

@@ -50,7 +50,7 @@ export default function Rack({
           );
         }
 
-        return <span />;
+        return <span key={i} />;
       })}
     </div>
   );

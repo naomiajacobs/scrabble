@@ -2,16 +2,17 @@ import { v4 as uuid } from "uuid";
 import { defaultServerStatus, ServerStatus } from "./Constants";
 import io from "socket.io-client";
 
-enum Event {
+export enum GameEvent {
   INITIALIZE = "initialize",
   GAME_STATE = "server status",
+  MAKE_MOVE = "make move",
 }
 
 // initialize socket connection
 const name = prompt("What's your name?", "Mert");
-const socket = io();
-socket.emit(Event.INITIALIZE, name, syncServerStatus);
-socket.on(Event.GAME_STATE, syncServerStatus);
+export const socket = io();
+socket.emit(GameEvent.INITIALIZE, name, syncServerStatus);
+socket.on(GameEvent.GAME_STATE, syncServerStatus);
 
 const subscribers: {
   [subscriptionId: string]: (gameState: ServerStatus) => void;

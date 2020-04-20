@@ -1,11 +1,12 @@
 import React from "react";
 
-import { GameState } from "../../Constants";
+import { GameState, MoveType, PlacedLetter, PlayMove } from "../../Constants";
 import { getDeriveBoard } from "../../util";
 import Rack from "../Rack/Rack";
 import ScrabbleBoard from "../ScrabbleBoard/ScrabbleBoard";
 import ControlButtons from "../ControlButtons/ControlButtons";
 import useGameLetters from "../../state/useGameLetters";
+import { makeMove } from "../../api";
 
 export default function Game({
   gameState,
@@ -23,6 +24,23 @@ export default function Game({
     placeSelectedLetter,
   } = useGameLetters();
 
+  const submit = () => {
+    // get submitted move
+    // validate client-side? (maybe later)
+    const lettersPlaced: Array<PlacedLetter> = (placedLetters
+      .map((letter, i) => {
+        // TODO specify blanks
+        return letter && [gameState.player.rack[i], letter, null];
+      })
+      .filter((l) => l) as Array<PlacedLetter>);
+    const move: PlayMove = {
+      playerName: gameState.player.name,
+      type: MoveType.PLAY,
+      lettersPlaced,
+    };
+    makeMove(move);
+  };
+
   return (
     <div className="game">
       <h2>
@@ -31,9 +49,10 @@ export default function Game({
       </h2>
       <ControlButtons
         active={active}
-        placedLetters={placedLetters}
         clearLetters={clearLetters}
         reRackLetter={reRackLetter}
+        hasPlacedLetters={placedLetters.filter((l) => l).length > 0}
+        onSubmit={submit}
       />
       <Rack
         tiles={gameState.player.rack}

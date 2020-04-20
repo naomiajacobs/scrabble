@@ -1,4 +1,4 @@
-import { Board, Move, MoveType, Rack } from "./Constants";
+import {Board, Move, MoveType, PlayMove, Rack} from "./Constants";
 import { PlacedLettersState } from "./state/usePlacedLetters";
 
 function makeEmptyBoard() {
@@ -18,7 +18,7 @@ export function getDeriveBoard(
 
   moves.forEach((move) => {
     if (move.type === MoveType.PLAY) {
-      for (const [letter, [row, col], _] of move.lettersPlaced) {
+      for (const [letter, [row, col], _] of (move as PlayMove).lettersPlaced) {
         board[row][col] = {letter, fromRack: false};
       }
     }

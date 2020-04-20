@@ -82,6 +82,8 @@ class ScrabbleGame {
 
   checkForGameEnd() {}
 
+  refillRack() {}
+
   makeMove(move) {
     const isFirstMove = this.gameState.moves.length === 0;
     if (new MoveValidator(this.gameState, move, isFirstMove).moveIsValid()) {
@@ -90,6 +92,8 @@ class ScrabbleGame {
       if (move.type === DUMP) {
         this.handleDump(move);
       }
+
+      this.refillRack();
 
       this.checkForGameEnd();
       this.toggleActivePlayer();

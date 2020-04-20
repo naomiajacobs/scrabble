@@ -1,38 +1,35 @@
 import React from "react";
 
-import {PlacedLettersState} from "../../state/usePlacedLetters";
-
 import "./ControlButtons.css";
 
 export default function ControlButtons({
   active,
-  placedLetters,
   clearLetters,
   reRackLetter,
+  hasPlacedLetters,
+  onSubmit,
 }: {
   active: boolean;
-  placedLetters: PlacedLettersState;
+  hasPlacedLetters: boolean;
   clearLetters: () => void;
   reRackLetter: () => void;
+  onSubmit: () => void;
 }): JSX.Element {
   return (
     <div className="control-buttons">
       <button
         type="button"
-        onClick={() => {}}
-        disabled={!active || placedLetters.filter((l) => l).length < 1}
+        disabled={!active || !hasPlacedLetters}
+        onClick={onSubmit}
       >
         Submit
       </button>
       <button
         type="button"
         onClick={reRackLetter}
-        disabled={!active || placedLetters.filter((l) => l).length < 1}
+        disabled={!active || !hasPlacedLetters}
       >
         Re-rack Letter
-      </button>
-      <button type="button" onClick={() => {}} disabled={!active}>
-        Pass
       </button>
       <button type="button" onClick={() => {}} disabled={!active}>
         Dump

@@ -193,7 +193,6 @@ enum PlayerName {
 }
 export enum MoveType {
   PLAY = "PLAY",
-  PASS = "PASS",
   DUMP = "DUMP",
 }
 // TODO deal with nulls for the end of the game
@@ -206,11 +205,17 @@ export type Location = [number, number];
 type PlacedBlank = [Letter, Location, Letter];
 type PlacedNonBlank = [Letter, Location, null];
 export type PlacedLetter = PlacedBlank | PlacedNonBlank;
-export interface Move {
+interface BaseMove {
   playerName: PlayerName;
   type: MoveType;
+}
+export interface DumpMove extends BaseMove {
+  lettersToDump: Array<RackIndex>;
+}
+export interface PlayMove extends BaseMove {
   lettersPlaced: Array<PlacedLetter>;
 }
+export type Move = PlayMove | DumpMove;
 
 export interface PreviouslyPlayedTile {
   letter: Letter;
