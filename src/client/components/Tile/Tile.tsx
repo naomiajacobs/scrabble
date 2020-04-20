@@ -1,11 +1,7 @@
-import React from "react";
+import React, { MouseEvent } from "react";
 
-import {Letter, LETTER_VALUES} from "../../Constants";
-import './Tile.css';
-
-function getBackgroundImageClass(letter: Letter): string {
-  return `backgroundImage-${(LETTER_VALUES[letter] % 4) + 1}`;
-}
+import { Letter, LETTER_VALUES } from "../../Constants";
+import "./Tile.css";
 
 export function PresentationalTile({
   letter,
@@ -16,34 +12,15 @@ export function PresentationalTile({
   className?: string;
   onClick?: () => void;
 }): JSX.Element {
+  const classNames = `tile ${className || ""}`;
+
   if (letter === Letter.BLANK) {
-    return <span className={`tile ${className || ""} ${getBackgroundImageClass(letter)}`} onClick={onClick} />;
+    return <span className={classNames} onClick={onClick} />;
   }
   return (
-    <span
-      className={`tile ${className || ""} ${getBackgroundImageClass(letter)}`}
-      onClick={onClick}
-    >
+    <span className={classNames} onClick={onClick}>
       {letter}
       <span className="tile-points">{LETTER_VALUES[letter]}</span>
     </span>
-  );
-}
-
-export function RackTile({
-  letter,
-  onSelect,
-  selected,
-}: {
-  letter: Letter;
-  selected: boolean;
-  onSelect: () => void;
-}): JSX.Element {
-  return (
-    <PresentationalTile
-      letter={letter}
-      className={selected ? "selected" : ""}
-      onClick={onSelect}
-    />
   );
 }

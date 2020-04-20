@@ -3,9 +3,8 @@
   font-size: 24px;
   height: 55px;
   width: 55px;
-  background: var(--tile);
-  background-size: cover;
-  background-position: center;
+  background-color: #6a1f29;
+  color: white;
   display: flex;
   justify-content: center;
   border: 1px black solid;
@@ -16,21 +15,21 @@
   margin: 5px;
 }
 
-.backgroundImage-1 {
-  background-image: url("../../../assets/images/tile1.png");
-}
+/*.backgroundImage-1 {*/
+/*  background-image: url("../../../assets/images/tile1.png");*/
+/*}*/
 
-.backgroundImage-2 {
-  background-image: url("../../../assets/images/tile2.png");
-}
+/*.backgroundImage-2 {*/
+/*  background-image: url("../../../assets/images/tile2.png");*/
+/*}*/
 
-.backgroundImage-3 {
-  background-image: url("../../../assets/images/tile3.png");
-}
+/*.backgroundImage-3 {*/
+/*  background-image: url("../../../assets/images/tile3.png");*/
+/*}*/
 
-.backgroundImage-4 {
-  background-image: url("../../../assets/images/tile4.png");
-}
+/*.backgroundImage-4 {*/
+/*  background-image: url("../../../assets/images/tile4.png");*/
+/*}*/
 
 .tile.selected {
   /* Sum of border and margin should be the same whether selected or not */

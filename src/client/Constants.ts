@@ -186,6 +186,7 @@ export const SQUARES_BY_LOCATION: {
   },
   {}
 );
+export const RACK_LOCATION = "RACK_LOCATION";
 enum PlayerName {
   MERT = "MERT",
   NAOMI = "NAOMI",
@@ -195,11 +196,16 @@ export enum MoveType {
   PASS = "PASS",
   DUMP = "DUMP",
 }
+// TODO deal with nulls for the end of the game
+export type Rack = [Letter, Letter, Letter, Letter, Letter, Letter, Letter];
 interface Player {
   name: PlayerName;
-  rack: Array<Letter>;
+  rack: Rack;
 }
-type PlacedLetter = [Letter, [number, number], Letter | null];
+export type Location = [number, number];
+type PlacedBlank = [Letter, Location, Letter];
+type PlacedNonBlank = [Letter, Location, null];
+export type PlacedLetter = PlacedBlank | PlacedNonBlank;
 export interface Move {
   playerName: PlayerName;
   type: MoveType;

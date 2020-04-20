@@ -1,10 +1,24 @@
 import React from "react";
 
-import { Board, Letter, SQUARES_BY_LOCATION, TILE_NAME } from "../../Constants";
+import {
+  Board,
+  Letter,
+  Location,
+  SQUARES_BY_LOCATION,
+  TILE_NAME,
+} from "../../Constants";
 import { PresentationalTile } from "../Tile/Tile";
-import './ScrabbleBoard.css';
+import "./ScrabbleBoard.css";
 
-function EmptySquare({ row, col }: { row: number; col: number }): JSX.Element {
+function EmptySquare({
+  row,
+  col,
+  onClick,
+}: {
+  row: number;
+  col: number;
+  onClick: () => void;
+}): JSX.Element {
   const locationKey = `${row},${col}`;
   const specialTileClassName = SQUARES_BY_LOCATION[locationKey] || "";
   return (
@@ -12,6 +26,7 @@ function EmptySquare({ row, col }: { row: number; col: number }): JSX.Element {
       className={`square ${specialTileClassName}`}
       data-row={row}
       data-col={col}
+      onClick={onClick}
     >
       {specialTileClassName ? TILE_NAME[specialTileClassName] : ""}
     </span>
@@ -20,8 +35,10 @@ function EmptySquare({ row, col }: { row: number; col: number }): JSX.Element {
 
 export default function ScrabbleBoard({
   board,
+  placeLetter,
 }: {
   board: Board;
+  placeLetter: (location: Location) => void;
 }): JSX.Element {
   return (
     <div className="board">
@@ -32,7 +49,14 @@ export default function ScrabbleBoard({
               letter ? (
                 <PresentationalTile key={colIndex} letter={letter} />
               ) : (
-                <EmptySquare key={colIndex} row={rowIndex} col={colIndex} />
+                <EmptySquare
+                  key={colIndex}
+                  row={rowIndex}
+                  col={colIndex}
+                  onClick={() => {
+                    placeLetter([rowIndex, colIndex]);
+                  }}
+                />
               )
             )}
           </div>

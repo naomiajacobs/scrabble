@@ -38,7 +38,6 @@ function App() {
   }
   return (
     <div className="App">
-      <h1>Scrabble App</h1>
       <div>
         {content}
       </div>
