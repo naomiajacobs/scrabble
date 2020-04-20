@@ -17,7 +17,7 @@ class Player {
   }
   drawTiles(letterBag) {
     console.log("Drawing tiles");
-    while (this.rack.length < 7) {
+    while (this.rack.length < 7 && letterBag.length > 0) {
       this.rack.push(letterBag.pop());
     }
     console.log(`Letters left in bag: ${letterBag.length}`);
@@ -67,7 +67,12 @@ class ScrabbleGame {
 
   doDumpMove(move) {}
 
-  checkForGameEnd() {}
+  checkForGameEnd(move) {
+    const player = this.gameState.players[move.playerName];
+    if (this.gameState.letterBag.length === 0 && player.rack.length === 0) {
+      // game over
+    }
+  }
 
   refillRack(player) {
     player.drawTiles(this.gameState.letterBag);
@@ -96,7 +101,7 @@ class ScrabbleGame {
 
       this.refillRack();
 
-      this.checkForGameEnd();
+      this.checkForGameEnd(move);
       this.toggleActivePlayer();
     } else {
       return validator.messages;
