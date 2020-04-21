@@ -18,7 +18,8 @@ function RackTile({
     <PresentationalTile
       letter={letter}
       className={selected ? "selected" : ""}
-      onClick={onSelect}
+      onMouseDown={onSelect}
+      draggable={true}
     />
   );
 }

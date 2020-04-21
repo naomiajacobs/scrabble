@@ -1,4 +1,4 @@
-import React from "react";
+import React, { DragEvent } from "react";
 
 import {
   Board,
@@ -13,6 +13,21 @@ import {
 import { PresentationalTile } from "../Tile/Tile";
 import "./ScrabbleBoard.css";
 
+function useDropTarget(
+  dropHandler: () => void
+): { onDrop: (e: DragEvent) => void; onDragOver: (e: DragEvent) => void } {
+  return {
+    onDrop: (e: DragEvent) => {
+      dropHandler();
+      e.preventDefault();
+    },
+    onDragOver: (e: DragEvent) => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = "move";
+    },
+  };
+}
+
 function EmptySquare({
   row,
   col,
@@ -24,12 +39,14 @@ function EmptySquare({
 }): JSX.Element {
   const locationKey = `${row},${col}`;
   const specialTileClassName = SQUARES_BY_LOCATION[locationKey] || "";
+  const dropTarget = useDropTarget(onClick);
   return (
     <span
       className={`square ${specialTileClassName}`}
       data-row={row}
       data-col={col}
       onClick={onClick}
+      {...dropTarget}
     >
       {specialTileClassName ? TILE_NAME[specialTileClassName] : ""}
     </span>
@@ -49,7 +66,8 @@ function TileFromRack({
     <PresentationalTile
       letter={letter}
       className={`from-rack ${selected ? "selected" : ""}`}
-      onClick={select}
+      onMouseDown={select}
+      draggable={true}
     />
   );
 }
@@ -100,6 +118,7 @@ export default function ScrabbleBoard({
                 <PresentationalTile
                   key={colIndex}
                   letter={(square as PreviouslyPlayedTile).letter}
+                  draggable={false}
                 />
               );
             })}

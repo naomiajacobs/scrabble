@@ -6,19 +6,26 @@ import "./Tile.css";
 export function PresentationalTile({
   letter,
   className,
-  onClick,
+  onMouseDown,
+  draggable,
 }: {
   letter: Letter;
   className?: string;
-  onClick?: () => void;
+  onMouseDown?: () => void;
+  draggable: boolean;
 }): JSX.Element {
   const classNames = `tile ${className || ""}`;
+  const props = {
+    className: classNames,
+    onMouseDown,
+    draggable,
+  };
 
   if (letter === Letter.BLANK) {
-    return <span className={classNames} onClick={onClick} />;
+    return <span {...props} />;
   }
   return (
-    <span className={classNames} onClick={onClick}>
+    <span {...props}>
       {letter}
       <span className="tile-points">{LETTER_VALUES[letter]}</span>
     </span>
