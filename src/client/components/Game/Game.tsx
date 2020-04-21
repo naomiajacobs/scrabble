@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 
 import { GameState, MoveType, PlacedLetter, PlayMove } from "../../Constants";
-import { getDeriveBoard } from "../../util";
+import { getDerivedBoard } from "../../util";
 import Rack from "../Rack/Rack";
 import ScrabbleBoard from "../ScrabbleBoard/ScrabbleBoard";
 import ControlButtons from "../ControlButtons/ControlButtons";
@@ -81,7 +81,7 @@ export default function Game({
             placedLetters={placedLetters}
           />
           <ScrabbleBoard
-            board={getDeriveBoard(
+            board={getDerivedBoard(
               gameState.moves,
               placedLetters,
               gameState.player.rack

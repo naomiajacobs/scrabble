@@ -3,14 +3,7 @@ import React from "react";
 import { GameState, Move, PlayerName } from "../../Constants";
 
 import "./GameLog.css";
-
-function calculateScoreForMove(gameState: GameState, move: Move): number {
-  return 10;
-}
-
-function calculateScore(gameState: GameState, player: PlayerName): number {
-  return 100;
-}
+import {calculateScore, calculateScoreForMove, partitionMoves} from "../../util";
 
 export default function GameLog({
   gameState,
@@ -19,12 +12,9 @@ export default function GameLog({
 }): JSX.Element {
   const naomiScore = calculateScore(gameState, PlayerName.NAOMI);
   const mertScore = calculateScore(gameState, PlayerName.MERT);
-  const naomiMoves = gameState.moves.filter(
-    (m) => m.playerName === PlayerName.NAOMI
-  );
-  const mertMoves = gameState.moves.filter(
-    (m) => m.playerName === PlayerName.MERT
-  );
+  const partitionedMoves = partitionMoves(gameState);
+  const naomiMoves = partitionedMoves[PlayerName.NAOMI];
+  const mertMoves = partitionedMoves[PlayerName.MERT];
   const longestMoves = Math.max(naomiMoves.length, mertMoves.length);
   return (
     <div className="game-log">
@@ -46,17 +36,11 @@ export default function GameLog({
               <tr className="move-row">
                 <td className="move">
                   {naomiMoves[i] &&
-                    `${i + 1}: ${calculateScoreForMove(
-                      gameState,
-                      naomiMoves[i]
-                    )}`}
+                    `${i + 1}: ${calculateScoreForMove(gameState, i)}`}
                 </td>
                 <td className="move">
                   {mertMoves[i] &&
-                    `${i + 1}: ${calculateScoreForMove(
-                      gameState,
-                      mertMoves[i]
-                    )}`}
+                    `${i + 1}: ${calculateScoreForMove(gameState, i)}`}
                 </td>
               </tr>
             ))}
