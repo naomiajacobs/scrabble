@@ -9,17 +9,19 @@ function RackTile({
   letter,
   onSelect,
   selected,
+  active
 }: {
   letter: Letter;
   selected: boolean;
   onSelect: () => void;
+  active: boolean;
 }): JSX.Element {
   return (
     <PresentationalTile
       letter={letter}
       className={selected ? "selected" : ""}
       onMouseDown={onSelect}
-      draggable={true}
+      draggable={active}
     />
   );
 }
@@ -29,11 +31,13 @@ export default function Rack({
   selectedLetterIndex,
   setSelectedLetterIndex,
   placedLetters,
+  active
 }: {
   tiles: RackType;
   selectedLetterIndex: RackIndex | null;
   setSelectedLetterIndex(index: RackIndex): void;
   placedLetters: PlacedLettersState;
+  active: boolean;
 }): JSX.Element {
   return (
     <div className="rack">
@@ -47,6 +51,7 @@ export default function Rack({
                 setSelectedLetterIndex(i as RackIndex);
               }}
               selected={selectedLetterIndex === i}
+              active={active}
             />
           );
         }

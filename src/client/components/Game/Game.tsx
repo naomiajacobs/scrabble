@@ -79,6 +79,7 @@ export default function Game({
             selectedLetterIndex={selectedLetterIndex}
             setSelectedLetterIndex={active ? setSelectedLetterIndex : () => {}}
             placedLetters={placedLetters}
+            active={active}
           />
           <ScrabbleBoard
             board={getDerivedBoard(
