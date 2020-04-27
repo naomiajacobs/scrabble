@@ -1,4 +1,4 @@
-enum SpecialSquare {
+export enum SpecialSquare {
   TRIPLE_LETTER = "tls",
   DOUBLE_LETTER = "dls",
   TRIPLE_WORD = "tws",
