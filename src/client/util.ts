@@ -1,6 +1,8 @@
 import {
   Board,
+  FinishedGameState,
   GameState,
+  Letter,
   LETTER_VALUES,
   Location,
   Move,
@@ -28,6 +30,10 @@ function addMoveToBoard(board: Board, move: Move): void {
       board[row][col] = { letter, fromRack: false };
     }
   }
+}
+
+export function getOtherPlayer(name: PlayerName): PlayerName {
+  return name === PlayerName.MERT ? PlayerName.NAOMI : PlayerName.MERT;
 }
 
 export function getDerivedBoard(
@@ -222,5 +228,65 @@ export class GameScore {
 
   scoreForMove(moveIndex: number): number {
     return this.moveScores[moveIndex];
+  }
+}
+
+export class FinalGameScore extends GameScore {
+  gameState: FinishedGameState;
+
+  constructor(gameState: FinishedGameState) {
+    super(gameState);
+    this.gameState = gameState;
+  }
+
+  endGameScoreAdjustments(): {
+    [PlayerName.NAOMI]: number;
+    [PlayerName.MERT]: number;
+  } {
+    let playerEndScore = 0;
+    let opponentEndScore = 0;
+    const lettersLeft: Array<Letter> = this.gameState.player.rack.filter(
+      (l) => l
+    ) as Array<Letter>;
+    const opponentRack: Array<Letter> = this.gameState.opponentRack.filter(
+      (l) => l
+    ) as Array<Letter>;
+
+    // only one rack should have 0 letters
+    if (
+      (lettersLeft.length > 0 && opponentRack.length !== 0) ||
+      (lettersLeft.length !== 0 && opponentRack.length > 0)
+    ) {
+      throw new Error("Only one player should have letters left");
+    }
+
+    lettersLeft.forEach((l) => {
+      playerEndScore -= LETTER_VALUES[l];
+      opponentEndScore += LETTER_VALUES[l];
+    });
+
+    opponentRack.forEach((l) => {
+      opponentEndScore -= LETTER_VALUES[l];
+      playerEndScore += LETTER_VALUES[l];
+    });
+
+    const self = this.gameState.player.name;
+    return {
+      [PlayerName.NAOMI]:
+        self === PlayerName.NAOMI ? playerEndScore : opponentEndScore,
+      [PlayerName.MERT]:
+        self === PlayerName.MERT ? playerEndScore : opponentEndScore,
+    };
+  }
+
+  finalScores(): { [PlayerName.NAOMI]: number; [PlayerName.MERT]: number } {
+    let naomiScore = this.scoreForPlayer(PlayerName.NAOMI);
+    let mertScore = this.scoreForPlayer(PlayerName.MERT);
+    const adjustments = this.endGameScoreAdjustments();
+
+    return {
+      [PlayerName.NAOMI]: naomiScore + adjustments[PlayerName.NAOMI],
+      [PlayerName.MERT]: mertScore + adjustments[PlayerName.MERT],
+    };
   }
 }

@@ -1,6 +1,16 @@
 const SocketIO = require("socket.io");
 
-const { MERT, NAOMI } = require("./constants");
+const {
+  MERT,
+  NAOMI,
+  SERVER_STATUS,
+  INITIALIZE,
+  IN_PROGRESS,
+  MAKE_MOVE,
+  CHALLENGE,
+  GAME_ERROR,
+  GAME_OVER,
+} = require("./constants");
 const { getCurrentGame, startNewGame } = require("./gameLogic");
 
 let io;
@@ -10,20 +20,15 @@ const getIo = function (http) {
   return io;
 };
 
-const SERVER_STATUS = "server status";
-const IN_PROGRESS = "in progress";
-const INITIALIZE = "initialize";
-const MAKE_MOVE = "make move";
-const CHALLENGE = "challenge";
-const GAME_ERROR = "game error";
-
 function emitGameState(game) {
   io.in(NAOMI).emit(SERVER_STATUS, {
-    currentGameStatus: IN_PROGRESS,
+    currentGameStatus:
+      game.gameState.status === IN_PROGRESS ? IN_PROGRESS : GAME_OVER,
     gameState: game.getGameState(NAOMI),
   });
   io.in(MERT).emit(SERVER_STATUS, {
-    currentGameStatus: IN_PROGRESS,
+    currentGameStatus:
+      game.gameState.status === IN_PROGRESS ? IN_PROGRESS : GAME_OVER,
     gameState: game.getGameState(MERT),
   });
 }

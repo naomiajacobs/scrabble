@@ -1,10 +1,10 @@
 const {
-  LETTER,
   LETTER_FREQUENCIES,
   MERT,
   NAOMI,
-  PLAY,
   DUMP,
+  GAME_OVER,
+  IN_PROGRESS,
 } = require("./constants");
 const MoveValidator = require("./moveValidator");
 
@@ -32,6 +32,7 @@ class ScrabbleGame {
       letterBag: this._randomizeTiles(),
       moves: [],
       activePlayer: firstActivePlayer,
+      status: IN_PROGRESS,
     };
     console.log(
       `Starting new game, first player is ${this.gameState.activePlayer}`
@@ -56,12 +57,18 @@ class ScrabbleGame {
   }
 
   getGameState(playerName) {
+    const opponent = playerName === NAOMI ? MERT : NAOMI;
     return {
       player: this.gameState.players[playerName],
       // todo remove letterbag from client?
       letterBag: this.gameState.letterBag,
       moves: this.gameState.moves,
       activePlayer: this.gameState.activePlayer,
+      status: this.gameState.status,
+      opponentRack:
+        this.gameState.status === GAME_OVER
+          ? this.gameState.players[opponent].rack
+          : null,
     };
   }
 
@@ -70,7 +77,7 @@ class ScrabbleGame {
   checkForGameEnd(move) {
     const player = this.gameState.players[move.playerName];
     if (this.gameState.letterBag.length === 0 && player.rack.length === 0) {
-      // game over
+      this.gameState.status = GAME_OVER;
     }
   }
 

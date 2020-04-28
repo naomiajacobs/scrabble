@@ -196,7 +196,15 @@ export enum MoveType {
   DUMP = "DUMP",
 }
 // TODO deal with nulls for the end of the game
-export type Rack = [Letter, Letter, Letter, Letter, Letter, Letter, Letter];
+export type Rack = [
+  Letter | null,
+  Letter | null,
+  Letter | null,
+  Letter | null,
+  Letter | null,
+  Letter | null,
+  Letter | null
+];
 interface Player {
   name: PlayerName;
   rack: Rack;
@@ -228,9 +236,7 @@ export interface TileFromRack {
   rackIndex: RackIndex;
 }
 
-export type Board = Array<
-  Array<PreviouslyPlayedTile | TileFromRack | null>
->;
+export type Board = Array<Array<PreviouslyPlayedTile | TileFromRack | null>>;
 
 export interface GameState {
   player: Player;
@@ -239,10 +245,14 @@ export interface GameState {
   activePlayer: PlayerName;
 }
 
+export interface FinishedGameState extends GameState {
+  opponentRack: Rack;
+}
+
 export enum CurrentGameStatus {
   FULL = "full",
   IN_PROGRESS = "in progress",
-  FINISHED = "finished",
+  GAME_OVER = "game over",
 }
 
 interface BaseServerStatus {
@@ -250,10 +260,17 @@ interface BaseServerStatus {
   gameState?: GameState;
 }
 
-interface ServerStatusWithGame extends BaseServerStatus {
-  currentGameStatus: CurrentGameStatus.IN_PROGRESS | CurrentGameStatus.FINISHED;
+interface InProgressGame extends BaseServerStatus {
+  currentGameStatus: CurrentGameStatus.IN_PROGRESS;
   gameState: GameState;
 }
+
+interface FinishedGame extends BaseServerStatus {
+  currentGameStatus: CurrentGameStatus.GAME_OVER;
+  gameState: FinishedGameState;
+}
+
+type ServerStatusWithGame = InProgressGame | FinishedGame;
 
 interface ServerStatusWithoutGame extends BaseServerStatus {
   currentGameStatus: CurrentGameStatus.FULL;

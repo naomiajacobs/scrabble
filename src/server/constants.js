@@ -2,40 +2,48 @@
 const NAOMI = "Naomi";
 const MERT = "Mert";
 
+const SERVER_STATUS = "server status";
+const IN_PROGRESS = "in progress";
+const INITIALIZE = "initialize";
+const MAKE_MOVE = "make move";
+const CHALLENGE = "challenge";
+const GAME_ERROR = "game error";
+const GAME_OVER = "game over";
+
 // Move Type
-const PLAY = 'PLAY';
-const PASS = 'PASS';
-const DUMP = 'DUMP';
+const PLAY = "PLAY";
+const PASS = "PASS";
+const DUMP = "DUMP";
 
 const LETTER = {
-  A: 'A',
-  B: 'B',
-  C: 'C',
-  D: 'D',
-  E: 'E',
-  F: 'F',
-  G: 'G',
-  H: 'H',
-  I: 'I',
-  J: 'J',
-  K: 'K',
-  L: 'L',
-  M: 'M',
-  N: 'N',
-  O: 'O',
-  P: 'P',
-  Q: 'Q',
-  R: 'R',
-  S: 'S',
-  T: 'T',
-  U: 'U',
-  V: 'V',
-  W: 'W',
-  X: 'X',
-  Y: 'Y',
-  Z: 'Z',
-  BLANK: 'BLANK',
-}
+  A: "A",
+  B: "B",
+  C: "C",
+  D: "D",
+  E: "E",
+  F: "F",
+  G: "G",
+  H: "H",
+  I: "I",
+  J: "J",
+  K: "K",
+  L: "L",
+  M: "M",
+  N: "N",
+  O: "O",
+  P: "P",
+  Q: "Q",
+  R: "R",
+  S: "S",
+  T: "T",
+  U: "U",
+  V: "V",
+  W: "W",
+  X: "X",
+  Y: "Y",
+  Z: "Z",
+  BLANK: "BLANK",
+};
 
 const LETTER_FREQUENCIES = {
   A: 9,
@@ -75,4 +83,11 @@ module.exports = {
   PLAY,
   PASS,
   DUMP,
+  SERVER_STATUS,
+  IN_PROGRESS,
+  INITIALIZE,
+  MAKE_MOVE,
+  CHALLENGE,
+  GAME_ERROR,
+  GAME_OVER,
 };

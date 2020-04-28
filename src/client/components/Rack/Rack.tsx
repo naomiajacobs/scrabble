@@ -41,12 +41,12 @@ export default function Rack({
 }): JSX.Element {
   return (
     <div className="rack">
-      {tiles.map((tile, i) => {
+      {tiles.filter(t => t).map((tile, i) => {
         if (!placedLetters[i]) {
           return (
             <RackTile
               key={i}
-              letter={tile}
+              letter={tile as Letter}
               onSelect={() => {
                 setSelectedLetterIndex(i as RackIndex);
               }}

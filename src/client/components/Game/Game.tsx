@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 
 import {
+  FinishedGameState,
   GameState,
   Letter,
   MoveType,
@@ -17,11 +18,14 @@ import usePrevious from "../../state/usePrevious";
 import GameLog from "../GameLog/GameLog";
 
 import "./Game.css";
+import GameSummary from "../GameSummary/GameSummary";
 
 export default function Game({
   gameState,
+  gameOver,
 }: {
   gameState: GameState;
+  gameOver: boolean;
 }): JSX.Element {
   const previousState = usePrevious<GameState>(gameState);
   const active = gameState.player.name === gameState.activePlayer;
@@ -74,22 +78,28 @@ export default function Game({
 
   return (
     <div className="game">
-      <h2>
-        Hi, {gameState.player.name}! It's{" "}
-        {active ? "your" : `${gameState.activePlayer}'s`} turn
-      </h2>
+      {gameOver ? (
+        <GameSummary gameState={gameState as FinishedGameState} />
+      ) : (
+        <h2>
+          Hi, {gameState.player.name}! It's{" "}
+          {active ? "your" : `${gameState.activePlayer}'s`} turn
+        </h2>
+      )}
       <div className="game-area">
         <div className="log-area">
-          <GameLog gameState={gameState} />
+          <GameLog gameState={gameState} gameOver={gameOver} />
         </div>
         <div className="play-area">
-          <ControlButtons
-            active={active}
-            clearLetters={clearLetters}
-            reRackLetter={reRackLetter}
-            hasPlacedLetters={placedLetters.filter((l) => l).length > 0}
-            onSubmit={submit}
-          />
+          {!gameOver && (
+            <ControlButtons
+              active={active}
+              clearLetters={clearLetters}
+              reRackLetter={reRackLetter}
+              hasPlacedLetters={placedLetters.filter((l) => l).length > 0}
+              onSubmit={submit}
+            />
+          )}
           <Rack
             tiles={gameState.player.rack}
             selectedLetterIndex={selectedLetterIndex}
