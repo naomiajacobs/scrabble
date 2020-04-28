@@ -1,6 +1,12 @@
 import React, { useEffect } from "react";
 
-import { GameState, MoveType, PlacedLetter, PlayMove } from "../../Constants";
+import {
+  GameState,
+  Letter,
+  MoveType,
+  PlacedLetter,
+  PlayMove,
+} from "../../Constants";
 import { getDerivedBoard } from "../../util";
 import Rack from "../Rack/Rack";
 import ScrabbleBoard from "../ScrabbleBoard/ScrabbleBoard";
@@ -10,7 +16,7 @@ import { makeMove } from "../../api";
 import usePrevious from "../../state/usePrevious";
 import GameLog from "../GameLog/GameLog";
 
-import './Game.css';
+import "./Game.css";
 
 export default function Game({
   gameState,
@@ -40,12 +46,22 @@ export default function Game({
   });
 
   const submit = () => {
-    // get submitted move
-    // validate client-side? (maybe later)
     const lettersPlaced: Array<PlacedLetter> = placedLetters
-      .map((letter, i) => {
-        // TODO specify blanks
-        return letter && [gameState.player.rack[i], letter, null];
+      .map((location, i) => {
+        if (!location) {
+          return null;
+        }
+        const letter = gameState.player.rack[i];
+        let letterSpec;
+        if (letter === Letter.BLANK) {
+          const blankSpecifier = window.prompt(
+            `What letter is the blank at (${location[0]},${location[1]})?`
+          );
+          letterSpec = [letter, location, blankSpecifier!.toUpperCase()];
+        } else {
+          letterSpec = [letter, location, null];
+        }
+        return letterSpec;
       })
       .filter((l) => l) as Array<PlacedLetter>;
     const move: PlayMove = {

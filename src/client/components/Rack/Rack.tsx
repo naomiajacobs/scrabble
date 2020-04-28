@@ -1,9 +1,9 @@
 import React from "react";
 
 import {Letter, Rack as RackType, RackIndex} from "../../Constants";
-import { PresentationalTile } from "../Tile/Tile";
+import {PresentationalTile} from "../Tile/Tile";
 import "./Rack.css";
-import { PlacedLettersState } from "../../state/usePlacedLetters";
+import {PlacedLettersState} from "../../state/usePlacedLetters";
 
 function RackTile({
   letter,
