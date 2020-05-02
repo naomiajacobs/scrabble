@@ -1,9 +1,9 @@
 import React from "react";
 
-import {FinishedGameState, GameState, PlayerName} from "../../Constants";
+import { FinishedGameState, GameState, PlayerName } from "../../Constants";
 
 import "./GameLog.css";
-import {FinalGameScore, GameScore} from "../../util";
+import { FinalGameScore, GameScore } from "../../util";
 
 function EndGameAdjustments({
   gameState,
@@ -43,31 +43,30 @@ export default function GameLog({
     <div className="game-log">
       <table>
         <thead>
-          <tr>
+          <tr className="names">
+            <td />
             <td>{PlayerName.NAOMI}</td>
             <td>{PlayerName.MERT}</td>
           </tr>
-        </thead>
-        <tbody>
-          <tr className="scores">
-            <td className="score">Score: {naomiScore}</td>
-            <td className="score">Score: {mertScore}</td>
+          <tr className="score-header">
+            <td>Move</td>
+            <td className="score">Total: {naomiScore}</td>
+            <td className="score">Total: {mertScore}</td>
           </tr>
+        </thead>
+        <tbody className="scores">
           {Array(numRounds)
             .fill(null)
             .map((foo, i) => (
               <tr className="move-row" key={i}>
+                <td>{i + 1}</td>
                 <td className="move">
                   {naomiMoves[i] &&
-                    `${i + 1}: ${gameScore.scoreForMove(
-                      naomiMoves[i].gameIndex
-                    )}`}
+                    gameScore.scoreForMove(naomiMoves[i].gameIndex)}
                 </td>
                 <td className="move">
                   {mertMoves[i] &&
-                    `${i + 1}: ${gameScore.scoreForMove(
-                      mertMoves[i].gameIndex
-                    )}`}
+                    gameScore.scoreForMove(mertMoves[i].gameIndex)}
                 </td>
               </tr>
             ))}

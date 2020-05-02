@@ -1,18 +1,28 @@
 .game-log {
   display: flex;
   justify-content: center;
-  font-family: "FuturaBold", sans-serif;
+  font-family: "NewGothicStandard", sans-serif;
+  font-weight: bold;
+  background: var(--dls-light);
+  padding: 20px;
+  border-radius: 20px;
 }
 
-thead, .scores {
-  font-size: 24px;
+thead {
+  font-size: 28px;
 }
 
-tr {
-  display: flex;
-  justify-content: space-around;
+.score-header {
+  font-size: 20px;
+}
+
+.scores {
+  font-size: 20px;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
 }
 
 td {
-  margin: 0px 10px;
+  margin: 0 10px;
+  padding: 10px;
 }
