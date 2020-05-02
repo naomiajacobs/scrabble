@@ -1,11 +1,8 @@
-.game-area {
-  display: flex;
-}
-
-.play-area {
-  flex-grow: 2;
-}
-
 .log-area {
-  flex-grow: 1;
+  position: fixed;
+  top: 80px;
+  left: 90px;
+  background: var(--sq-dls);
+  padding: 20px;
+  border-radius: 20px;
 }

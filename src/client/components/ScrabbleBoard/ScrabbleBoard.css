@@ -1,12 +1,4 @@
 .board {
-  --sq-basic: #cdc6ac;
-  --sq-tws: #fa664d;
-  --sq-dws: #f9bbaa;
-  --sq-tls: #3b9bb3;
-  --sq-dls: #b7d1cc;
-}
-
-.board {
   display: flex;
   flex-direction: column;
   justify-content: center;
