@@ -28,7 +28,7 @@ function App() {
   const serverStatus = useServerStatus();
   let content: JSX.Element | string;
   switch (serverStatus.currentGameStatus) {
-    case CurrentGameStatus.FULL:
+    case CurrentGameStatus.INTRUDER:
       content = "Who the hell are you?";
       break;
     case CurrentGameStatus.GAME_OVER:

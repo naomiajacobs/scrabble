@@ -15,6 +15,7 @@ const {
   CONFIRM_ABANDON,
   ABANDON_NOTIFICATION,
   REJECT_ABANDON,
+  INTRUDER,
 } = require("./constants");
 const { abandonGame, getCurrentGame, startNewGame } = require("./gameLogic");
 
@@ -72,7 +73,7 @@ function onConnection(socket) {
 function onInitialize(socket, name) {
   if (name !== NAOMI && name !== MERT) {
     console.log("An intruder: ", name);
-    socket.emit(SERVER_STATUS, { currentGameStatus: "full" });
+    socket.emit(SERVER_STATUS, { currentGameStatus: INTRUDER });
     return;
   }
   if (name === NAOMI) {

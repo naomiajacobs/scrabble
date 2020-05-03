@@ -2,18 +2,19 @@
 const NAOMI = "Naomi";
 const MERT = "Mert";
 
-const SERVER_STATUS = "server status";
-const IN_PROGRESS = "in progress";
-const INITIALIZE = "initialize";
-const MAKE_MOVE = "make move";
-const CHALLENGE = "challenge";
-const GAME_ERROR = "game error";
-const GAME_OVER = "game over";
-const PROMPT_ABANDON = "prompt abandon";
-const GET_ABANDON_CONFIRMATION = "get abandon confirmation";
-const CONFIRM_ABANDON = "confirm abandon";
-const REJECT_ABANDON = "reject abandon";
-const ABANDON_NOTIFICATION = "abandon notification";
+const SERVER_STATUS = "SERVER_STATUS";
+const IN_PROGRESS = "IN_PROGRESS";
+const INITIALIZE = "INITIALIZE";
+const MAKE_MOVE = "MAKE_MOVE";
+const CHALLENGE = "CHALLENGE";
+const GAME_ERROR = "GAME_ERROR";
+const GAME_OVER = "GAME_OVER";
+const PROMPT_ABANDON = "PROMPT_ABANDON";
+const GET_ABANDON_CONFIRMATION = "GET_ABANDON_CONFIRMATION";
+const CONFIRM_ABANDON = "CONFIRM_ABANDON";
+const REJECT_ABANDON = "REJECT_ABANDON";
+const ABANDON_NOTIFICATION = "ABANDON_NOTIFICATION";
+const INTRUDER = "INTRUDER";
 
 // Move Type
 const PLAY = "PLAY";
@@ -100,4 +101,5 @@ module.exports = {
   CONFIRM_ABANDON,
   REJECT_ABANDON,
   ABANDON_NOTIFICATION,
+  INTRUDER,
 };

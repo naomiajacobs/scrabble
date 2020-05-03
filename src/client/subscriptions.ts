@@ -4,15 +4,15 @@ import io from "socket.io-client";
 import { getOtherPlayer } from "./util";
 
 export enum GameEvent {
-  INITIALIZE = "initialize",
-  GAME_STATE = "server status",
-  MAKE_MOVE = "make move",
-  GAME_ERROR = "game error",
-  PROMPT_ABANDON = "prompt abandon",
-  GET_ABANDON_CONFIRMATION = "get abandon confirmation",
-  CONFIRM_ABANDON = "confirm abandon",
-  REJECT_ABANDON = "reject abandon",
-  ABANDON_NOTIFICATION = "abandon notification",
+  INITIALIZE = "INITIALIZE",
+  SERVER_STATUS = "SERVER_STATUS",
+  MAKE_MOVE = "MAKE_MOVE",
+  GAME_ERROR = "GAME_ERROR",
+  PROMPT_ABANDON = "PROMPT_ABANDON",
+  GET_ABANDON_CONFIRMATION = "GET_ABANDON_CONFIRMATION",
+  CONFIRM_ABANDON = "CONFIRM_ABANDON",
+  REJECT_ABANDON = "REJECT_ABANDON",
+  ABANDON_NOTIFICATION = "ABANDON_NOTIFICATION",
 }
 
 // initialize socket connection
@@ -22,7 +22,7 @@ while (!name) {
 }
 export const socket = io();
 socket.emit(GameEvent.INITIALIZE, name, syncServerStatus);
-socket.on(GameEvent.GAME_STATE, syncServerStatus);
+socket.on(GameEvent.SERVER_STATUS, syncServerStatus);
 socket.on(GameEvent.GAME_ERROR, (messages: Array<string>) => {
   alert(messages.join("\n"));
 });
@@ -42,6 +42,7 @@ function notifySubscribers(): void {
 let serverStatus: ServerStatus = defaultServerStatus;
 
 export function syncServerStatus(status: ServerStatus) {
+  console.log('Got new status from server: ', status);
   serverStatus = status;
   notifySubscribers();
 }
@@ -49,6 +50,7 @@ export function syncServerStatus(status: ServerStatus) {
 export function subscribeToServer(
   callback: (newStatus: ServerStatus) => void
 ): string {
+  console.log('Subscribing to server');
   const id = uuid();
   subscribers[id] = callback;
   callback(serverStatus);
@@ -56,6 +58,7 @@ export function subscribeToServer(
 }
 
 export function unsubscribeFromServer(id: string) {
+  console.log('Unsubscribing to server');
   delete subscribers[id];
 }
 

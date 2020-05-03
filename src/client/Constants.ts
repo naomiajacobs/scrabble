@@ -250,9 +250,9 @@ export interface FinishedGameState extends GameState {
 }
 
 export enum CurrentGameStatus {
-  FULL = "full",
-  IN_PROGRESS = "in progress",
-  GAME_OVER = "game over",
+  INTRUDER = "INTRUDER",
+  IN_PROGRESS = "IN_PROGRESS",
+  GAME_OVER = "GAME_OVER",
 }
 
 interface BaseServerStatus {
@@ -273,11 +273,11 @@ interface FinishedGame extends BaseServerStatus {
 type ServerStatusWithGame = InProgressGame | FinishedGame;
 
 interface ServerStatusWithoutGame extends BaseServerStatus {
-  currentGameStatus: CurrentGameStatus.FULL;
+  currentGameStatus: CurrentGameStatus.INTRUDER;
 }
 
 export type ServerStatus = ServerStatusWithGame | ServerStatusWithoutGame;
 
 export const defaultServerStatus: ServerStatus = {
-  currentGameStatus: CurrentGameStatus.FULL,
+  currentGameStatus: CurrentGameStatus.INTRUDER,
 };
