@@ -8,16 +8,19 @@ export function PresentationalTile({
   className,
   onMouseDown,
   draggable,
+  onClick
 }: {
   letter: Letter;
   className?: string;
   onMouseDown?: () => void;
+  onClick?: () => void;
   draggable: boolean;
 }): JSX.Element {
   const classNames = `tile ${className || ""}`;
   const props = {
     className: classNames,
     onMouseDown,
+    onClick,
     draggable,
   };
 

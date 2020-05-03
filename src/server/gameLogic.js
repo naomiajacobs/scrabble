@@ -24,7 +24,7 @@ class Player {
   }
 }
 
-const initialAbandonConfirmations = {[NAOMI]: false, [MERT]: false};
+const initialAbandonConfirmations = { [NAOMI]: false, [MERT]: false };
 
 class ScrabbleGame {
   constructor() {
@@ -36,7 +36,7 @@ class ScrabbleGame {
       activePlayer: firstActivePlayer,
       status: IN_PROGRESS,
     };
-    this.abandonConfirmations = {...initialAbandonConfirmations};
+    this.abandonConfirmations = { ...initialAbandonConfirmations };
     console.log(
       `Starting new game, first player is ${this.gameState.activePlayer}`
     );
@@ -55,7 +55,7 @@ class ScrabbleGame {
   }
 
   cancelAbandon() {
-    this.abandonConfirmations = {...initialAbandonConfirmations};
+    this.abandonConfirmations = { ...initialAbandonConfirmations };
   }
 
   toggleActivePlayer() {
@@ -87,12 +87,34 @@ class ScrabbleGame {
     };
   }
 
-  doDumpMove(move) {}
+  doDumpMove(move) {
+    // TODO validate you're not dumping more letters than there are in the bag
+    console.group('Dumping tiles');
+    this.gameState.moves.push(move);
+    const player = this.getMovePlayer(move);
+    const rack = player.rack;
+    console.log('Current rack: ', rack);
+    console.log('Indices of letters to dump: ', move.lettersToDump);
+    // Put the letters back in the bag
+    move.lettersToDump.forEach(letterIndex => {
+      this.gameState.letterBag.push(player.rack[letterIndex]);
+    });
+    // Reshuffle the bag so there's an equal chance of getting them again
+    shuffle(this.gameState.letterBag);
+
+    // Remove letters from rack
+    player.rack = rack.filter(
+      (letter, index) => !move.lettersToDump.includes(index)
+    );
+    console.log('Rack after dumping: ', player.rack);
+    console.groupEnd();
+  }
 
   checkForGameEnd(move) {
     const player = this.gameState.players[move.playerName];
     if (this.gameState.letterBag.length === 0 && player.rack.length === 0) {
       this.gameState.status = GAME_OVER;
+      console.log('Game is over!', JSON.stringify(currentGame));
     }
   }
 
@@ -119,10 +141,10 @@ class ScrabbleGame {
     const isFirstMove = this.gameState.moves.length === 0;
     const validator = new MoveValidator(this.gameState, move, isFirstMove);
     if (validator.moveIsValid()) {
-      this.doPlayMove(move);
-
       if (move.type === DUMP) {
         this.doDumpMove(move);
+      } else {
+        this.doPlayMove(move);
       }
 
       this.refillRack(move);
@@ -149,11 +171,13 @@ function startNewGame() {
 
 function abandonGame() {
   if (currentGame.shouldAbandonGame()) {
-    console.log('Abandoning game');
-    console.log('Abandoned game state: ', JSON.stringify(currentGame));
+    console.log("Abandoning game");
+    console.log("Abandoned game state: ", JSON.stringify(currentGame));
     currentGame = startNewGame();
   } else {
-    throw new Error("Tried to abandon game without confirmation from both players");
+    throw new Error(
+      "Tried to abandon game without confirmation from both players"
+    );
   }
 }
 

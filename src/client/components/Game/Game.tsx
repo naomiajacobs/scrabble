@@ -1,32 +1,85 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import {
+  DumpMove,
   FinishedGameState,
   GameState,
   Letter,
   MoveType,
   PlacedLetter,
   PlayMove,
+  Rack as RackType,
+  RackIndex,
 } from "../../Constants";
 import { getDerivedBoard } from "../../util";
-import Rack from "../Rack/Rack";
+import Rack, { DumpRack } from "../Rack/Rack";
 import ScrabbleBoard from "../ScrabbleBoard/ScrabbleBoard";
 import ControlButtons from "../ControlButtons/ControlButtons";
 import useGameLetters from "../../state/useGameLetters";
-import {makeMove, promptAbandon} from "../../api";
+import { makeMove, promptAbandon } from "../../api";
 import usePrevious from "../../state/usePrevious";
 import GameLog from "../GameLog/GameLog";
 
 import "./Game.css";
 import GameSummary from "../GameSummary/GameSummary";
+import { PlacedLettersState } from "../../state/usePlacedLetters";
+import useDumping from "../../state/useDumpLetters";
 
 function AbandonGameButton(): JSX.Element {
   return (
-    <button className="danger medium abandon-game" type="button" onClick={() => {
-      promptAbandon();
-    }}>
+    <button
+      className="danger medium abandon-game"
+      type="button"
+      onClick={() => {
+        promptAbandon();
+      }}
+    >
       Abandon Game
     </button>
+  );
+}
+
+function ManagedRack({
+  tiles,
+  selectedLetterIndex,
+  active,
+  placedLetters,
+  setSelectedLetterIndex,
+  dumping,
+  tilesToDump,
+  toggleTile,
+}: {
+  tiles: RackType;
+  selectedLetterIndex: RackIndex | null;
+  active: boolean;
+  placedLetters: PlacedLettersState;
+  setSelectedLetterIndex: (i: RackIndex) => void;
+  dumping: boolean;
+  tilesToDump: Array<RackIndex>;
+  toggleTile: (i: RackIndex) => void;
+}): JSX.Element {
+
+  if (!dumping) {
+    return (
+      <Rack
+        tiles={tiles}
+        selectedLetterIndex={selectedLetterIndex}
+        setSelectedLetterIndex={active ? setSelectedLetterIndex : () => {}}
+        placedLetters={placedLetters}
+        active={active}
+      />
+    );
+  }
+
+  return (
+    <>
+      <p>Select which letters to dump: </p>
+      <DumpRack
+        tiles={tiles}
+        selectedLetterIndices={tilesToDump}
+        onToggleTile={toggleTile}
+      />
+    </>
   );
 }
 
@@ -37,8 +90,10 @@ export default function Game({
   gameState: GameState;
   gameOver: boolean;
 }): JSX.Element {
-  const previousState = usePrevious<GameState>(gameState);
+  const previousGameState = usePrevious<GameState>(gameState);
   const active = gameState.player.name === gameState.activePlayer;
+  const {dumping, setDumping, toggleTile, tilesToDump} = useDumping();
+  const previousDumping = usePrevious(dumping);
 
   const {
     placedLetters,
@@ -51,39 +106,51 @@ export default function Game({
   } = useGameLetters();
 
   useEffect(() => {
-    if (
-      previousState &&
-      gameState.moves.length !== previousState.moves.length
-    ) {
+    const gameStateChanged =
+      previousGameState &&
+      gameState.moves.length !== previousGameState.moves.length;
+    const dumpingStateChanged = previousDumping !== dumping;
+
+    if (gameStateChanged || dumpingStateChanged) {
       reset();
     }
   });
 
   const submit = () => {
-    const lettersPlaced: Array<PlacedLetter> = placedLetters
-      .map((location, i) => {
-        if (!location) {
-          return null;
-        }
-        const letter = gameState.player.rack[i];
-        let letterSpec;
-        if (letter === Letter.BLANK) {
-          const blankSpecifier = window.prompt(
-            `What letter is the blank at (${location[0]},${location[1]})?`
-          );
-          letterSpec = [letter, location, blankSpecifier!.toUpperCase()];
-        } else {
-          letterSpec = [letter, location, null];
-        }
-        return letterSpec;
-      })
-      .filter((l) => l) as Array<PlacedLetter>;
-    const move: PlayMove = {
-      playerName: gameState.player.name,
-      type: MoveType.PLAY,
-      lettersPlaced,
-    };
-    makeMove(move);
+    if (dumping) {
+      const move: DumpMove = {
+        playerName: gameState.player.name,
+        type: MoveType.DUMP,
+        lettersToDump: tilesToDump,
+      };
+      makeMove(move);
+      setDumping(false);
+    } else {
+      const lettersPlaced: Array<PlacedLetter> = placedLetters
+        .map((location, i) => {
+          if (!location) {
+            return null;
+          }
+          const letter = gameState.player.rack[i];
+          let letterSpec;
+          if (letter === Letter.BLANK) {
+            const blankSpecifier = window.prompt(
+              `What letter is the blank at (${location[0]},${location[1]})?`
+            );
+            letterSpec = [letter, location, blankSpecifier!.toUpperCase()];
+          } else {
+            letterSpec = [letter, location, null];
+          }
+          return letterSpec;
+        })
+        .filter((l) => l) as Array<PlacedLetter>;
+      const move: PlayMove = {
+        playerName: gameState.player.name,
+        type: MoveType.PLAY,
+        lettersPlaced,
+      };
+      makeMove(move);
+    }
   };
 
   return (
@@ -107,16 +174,27 @@ export default function Game({
               active={active}
               clearLetters={clearLetters}
               reRackLetter={reRackLetter}
-              hasPlacedLetters={placedLetters.filter((l) => l).length > 0}
+              hasSubmittableLetters={
+                dumping
+                  ? tilesToDump.length > 0
+                  : placedLetters.filter((l) => l).length > 0
+              }
               onSubmit={submit}
+              toggleDumping={() => {
+                setDumping(!dumping);
+              }}
+              dumping={dumping}
             />
           )}
-          <Rack
+          <ManagedRack
             tiles={gameState.player.rack}
             selectedLetterIndex={selectedLetterIndex}
             setSelectedLetterIndex={active ? setSelectedLetterIndex : () => {}}
             placedLetters={placedLetters}
             active={active}
+            dumping={dumping}
+            tilesToDump={tilesToDump}
+            toggleTile={toggleTile}
           />
           <ScrabbleBoard
             board={getDerivedBoard(

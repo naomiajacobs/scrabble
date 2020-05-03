@@ -34,3 +34,9 @@ button:disabled {
 .danger {
   background-color: var(--sq-tws);
 }
+
+p {
+  margin: 10px 0;
+  font-family: "NewGothicStandard";
+  font-weight: bold;
+}

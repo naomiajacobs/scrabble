@@ -6,20 +6,24 @@ export default function ControlButtons({
   active,
   clearLetters,
   reRackLetter,
-  hasPlacedLetters,
+  hasSubmittableLetters,
   onSubmit,
+  toggleDumping,
+  dumping,
 }: {
   active: boolean;
-  hasPlacedLetters: boolean;
+  hasSubmittableLetters: boolean;
   clearLetters: () => void;
   reRackLetter: () => void;
   onSubmit: () => void;
+  toggleDumping: () => void;
+  dumping: boolean;
 }): JSX.Element {
   return (
     <div className="control-buttons">
       <button
         type="button"
-        disabled={!active || !hasPlacedLetters}
+        disabled={!active || !hasSubmittableLetters}
         onClick={onSubmit}
         className="small"
       >
@@ -29,17 +33,17 @@ export default function ControlButtons({
         type="button"
         className="small"
         onClick={reRackLetter}
-        disabled={!active || !hasPlacedLetters}
+        disabled={dumping || !active || (!dumping && !hasSubmittableLetters)}
       >
         Re-rack Letter
       </button>
       <button
         type="button"
         className="small"
-        onClick={() => {}}
+        onClick={toggleDumping}
         disabled={!active}
       >
-        Dump
+        {dumping ? "Cancel Dump" : "Dump"}
       </button>
       <button
         className="challenge small"
@@ -53,7 +57,7 @@ export default function ControlButtons({
         className="danger small"
         type="button"
         onClick={clearLetters}
-        disabled={!active}
+        disabled={dumping || !active}
       >
         Clear
       </button>
