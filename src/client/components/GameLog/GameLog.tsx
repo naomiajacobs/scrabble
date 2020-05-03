@@ -1,9 +1,20 @@
 import React from "react";
 
-import { FinishedGameState, GameState, PlayerName } from "../../Constants";
+import {
+  FinishedGameState,
+  GameState,
+  Move,
+  MoveType,
+  PlayerName,
+  PlayMove,
+} from "../../Constants";
 
 import "./GameLog.css";
 import { FinalGameScore, GameScore } from "../../util";
+
+const dumpEmoji = "🔄";
+const challengeEmoji = "👊";
+const bingoEmoji = "🎉";
 
 function EndGameAdjustments({
   gameState,
@@ -18,6 +29,29 @@ function EndGameAdjustments({
       <td>End adjustment: {scores[PlayerName.NAOMI]}</td>
       <td>End adjustment: {scores[PlayerName.MERT]}</td>
     </tr>
+  );
+}
+
+function MoveInfo({
+  gameScore,
+  moveInfo,
+}: {
+  gameScore: GameScore;
+  moveInfo?: { move: Move; gameIndex: number };
+}): JSX.Element {
+  if (!moveInfo) {
+    return <td className="move" />;
+  }
+  const { move, gameIndex } = moveInfo;
+
+  return (
+    <td className="move">
+      <span>{gameScore.scoreForMove(gameIndex)}</span>
+      {move.type === MoveType.DUMP && <span className="emoji">{dumpEmoji}</span>}
+      {move.type === MoveType.PLAY &&
+        (move as PlayMove).lettersPlaced.length === 7 &&
+        <span className="emoji">{bingoEmoji}</span>}
+    </td>
   );
 }
 
@@ -61,12 +95,10 @@ export default function GameLog({
               <tr className="move-row" key={i}>
                 <td>{i + 1}</td>
                 <td className="move">
-                  {naomiMoves[i] &&
-                    gameScore.scoreForMove(naomiMoves[i].gameIndex)}
+                  <MoveInfo gameScore={gameScore} moveInfo={naomiMoves[i]} />
                 </td>
                 <td className="move">
-                  {mertMoves[i] &&
-                    gameScore.scoreForMove(mertMoves[i].gameIndex)}
+                  <MoveInfo gameScore={gameScore} moveInfo={mertMoves[i]} />
                 </td>
               </tr>
             ))}
