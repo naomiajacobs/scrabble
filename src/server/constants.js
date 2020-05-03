@@ -9,6 +9,11 @@ const MAKE_MOVE = "make move";
 const CHALLENGE = "challenge";
 const GAME_ERROR = "game error";
 const GAME_OVER = "game over";
+const PROMPT_ABANDON = "prompt abandon";
+const GET_ABANDON_CONFIRMATION = "get abandon confirmation";
+const CONFIRM_ABANDON = "confirm abandon";
+const REJECT_ABANDON = "reject abandon";
+const ABANDON_NOTIFICATION = "abandon notification";
 
 // Move Type
 const PLAY = "PLAY";
@@ -90,4 +95,9 @@ module.exports = {
   CHALLENGE,
   GAME_ERROR,
   GAME_OVER,
+  PROMPT_ABANDON,
+  GET_ABANDON_CONFIRMATION,
+  CONFIRM_ABANDON,
+  REJECT_ABANDON,
+  ABANDON_NOTIFICATION,
 };

@@ -24,6 +24,8 @@ class Player {
   }
 }
 
+const initialAbandonConfirmations = {[NAOMI]: false, [MERT]: false};
+
 class ScrabbleGame {
   constructor() {
     const firstActivePlayer = Math.floor(Math.random() * 2) ? NAOMI : MERT;
@@ -34,6 +36,7 @@ class ScrabbleGame {
       activePlayer: firstActivePlayer,
       status: IN_PROGRESS,
     };
+    this.abandonConfirmations = {...initialAbandonConfirmations};
     console.log(
       `Starting new game, first player is ${this.gameState.activePlayer}`
     );
@@ -41,6 +44,18 @@ class ScrabbleGame {
     for (const player of Object.values(this.gameState.players)) {
       player.drawTiles(this.gameState.letterBag);
     }
+  }
+
+  confirmAbandon(playerName) {
+    this.abandonConfirmations[playerName] = true;
+  }
+
+  shouldAbandonGame() {
+    return this.abandonConfirmations[NAOMI] && this.abandonConfirmations[MERT];
+  }
+
+  cancelAbandon() {
+    this.abandonConfirmations = {...initialAbandonConfirmations};
   }
 
   toggleActivePlayer() {
@@ -132,7 +147,18 @@ function startNewGame() {
   return currentGame;
 }
 
+function abandonGame() {
+  if (currentGame.shouldAbandonGame()) {
+    console.log('Abandoning game');
+    console.log('Abandoned game state: ', JSON.stringify(currentGame));
+    currentGame = startNewGame();
+  } else {
+    throw new Error("Tried to abandon game without confirmation from both players");
+  }
+}
+
 module.exports = {
   getCurrentGame,
   startNewGame,
+  abandonGame,
 };

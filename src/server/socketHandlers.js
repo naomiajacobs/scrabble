@@ -10,8 +10,13 @@ const {
   CHALLENGE,
   GAME_ERROR,
   GAME_OVER,
+  PROMPT_ABANDON,
+  GET_ABANDON_CONFIRMATION,
+  CONFIRM_ABANDON,
+  ABANDON_NOTIFICATION,
+  REJECT_ABANDON,
 } = require("./constants");
-const { getCurrentGame, startNewGame } = require("./gameLogic");
+const { abandonGame, getCurrentGame, startNewGame } = require("./gameLogic");
 
 let io;
 
@@ -20,17 +25,19 @@ const getIo = function (http) {
   return io;
 };
 
+function emitToPlayers(message, createData) {
+  console.log(`Emitting ${message} to ${NAOMI}`);
+  io.in(NAOMI).emit(message, createData && createData(NAOMI));
+  console.log(`Emitting ${message} to ${MERT}`);
+  io.in(MERT).emit(message, createData && createData(MERT));
+}
+
 function emitGameState(game) {
-  io.in(NAOMI).emit(SERVER_STATUS, {
+  emitToPlayers(SERVER_STATUS, (playerName) => ({
     currentGameStatus:
       game.gameState.status === IN_PROGRESS ? IN_PROGRESS : GAME_OVER,
-    gameState: game.getGameState(NAOMI),
-  });
-  io.in(MERT).emit(SERVER_STATUS, {
-    currentGameStatus:
-      game.gameState.status === IN_PROGRESS ? IN_PROGRESS : GAME_OVER,
-    gameState: game.getGameState(MERT),
-  });
+    gameState: game.getGameState(playerName),
+  }));
 }
 
 function onConnection(socket) {
@@ -47,6 +54,18 @@ function onConnection(socket) {
 
   socket.on(CHALLENGE, () => {
     onChallenge(socket);
+  });
+
+  socket.on(PROMPT_ABANDON, (name) => {
+    onPromptAbandon(socket, name);
+  });
+
+  socket.on(CONFIRM_ABANDON, (name) => {
+    onConfirmAbandon(socket, name);
+  });
+
+  socket.on(REJECT_ABANDON, (name) => {
+    onRejectAbandon(socket, name);
   });
 }
 
@@ -76,6 +95,29 @@ function onMakeMove(socket, move) {
 }
 
 function onChallenge(socket) {}
+
+function onPromptAbandon(socket, name) {
+  console.log(`${name} wants to abandon the game`);
+  emitToPlayers(GET_ABANDON_CONFIRMATION, (playerName) => ({
+    selfPrompted: name === playerName,
+  }));
+}
+
+function onConfirmAbandon(socket, name) {
+  console.log(`${name} confirmed abandon`);
+  const game = getCurrentGame();
+  game.confirmAbandon(name);
+  if (game.shouldAbandonGame()) {
+    abandonGame();
+    emitToPlayers(ABANDON_NOTIFICATION);
+    const newGame = getCurrentGame();
+    emitGameState(newGame);
+  }
+}
+
+function onRejectAbandon(socket, name) {
+  getCurrentGame().cancelAbandon();
+}
 
 module.exports = {
   onConnection,

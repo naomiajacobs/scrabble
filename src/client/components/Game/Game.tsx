@@ -13,12 +13,22 @@ import Rack from "../Rack/Rack";
 import ScrabbleBoard from "../ScrabbleBoard/ScrabbleBoard";
 import ControlButtons from "../ControlButtons/ControlButtons";
 import useGameLetters from "../../state/useGameLetters";
-import { makeMove } from "../../api";
+import {makeMove, promptAbandon} from "../../api";
 import usePrevious from "../../state/usePrevious";
 import GameLog from "../GameLog/GameLog";
 
 import "./Game.css";
 import GameSummary from "../GameSummary/GameSummary";
+
+function AbandonGameButton(): JSX.Element {
+  return (
+    <button className="danger medium abandon-game" type="button" onClick={() => {
+      promptAbandon();
+    }}>
+      Abandon Game
+    </button>
+  );
+}
 
 export default function Game({
   gameState,
@@ -88,6 +98,7 @@ export default function Game({
       )}
       <div className="game-area">
         <div className="left-panel">
+          <AbandonGameButton />
           <GameLog gameState={gameState} gameOver={gameOver} />
         </div>
         <div className="play-area">
