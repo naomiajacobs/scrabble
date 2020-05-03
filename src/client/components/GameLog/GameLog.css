@@ -24,7 +24,14 @@ thead {
 
 td {
   margin: 0 10px;
-  padding: 10px;
+}
+
+thead td {
+  padding: 10px 7px;
+}
+
+tbody td {
+  padding: 3px 7px;
 }
 
 .emoji {
