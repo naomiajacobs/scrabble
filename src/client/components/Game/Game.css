@@ -4,7 +4,25 @@
   left: 90px;
 }
 
+.right-panel {
+  position: fixed;
+  top: 80px;
+  left: 1390px;
+}
+
+.letter-bag {
+  height: 200px;
+}
+
+.letters-left {
+  color: white;
+  font-size: 40px;
+  font-family: "FuturaBold";
+  position: relative;
+  top: -90px;
+  left: -94px;
+}
+
 .abandon-game {
   margin-bottom: 20px;
 }
-

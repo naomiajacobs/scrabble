@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+
+import letterBag from '../../../assets/images/crown-royal.jpg';
 
 import {
   DumpMove,
@@ -206,6 +208,10 @@ export default function Game({
             setSelectedLetter={active ? setSelectedLetterIndex : () => {}}
             selectedLetter={selectedLetterIndex}
           />
+        </div>
+        <div className="right-panel">
+          <img className="letter-bag" src={letterBag} />
+          <span className="letters-left">{gameState.letterBag.length}</span>
         </div>
       </div>
     </div>
