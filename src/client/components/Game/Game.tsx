@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 
-import letterBag from '../../../assets/images/crown-royal.jpg';
+import letterBag from "../../../assets/images/crown-royal.jpg";
 
 import {
   DumpMove,
@@ -60,7 +60,6 @@ function ManagedRack({
   tilesToDump: Array<RackIndex>;
   toggleTile: (i: RackIndex) => void;
 }): JSX.Element {
-
   if (!dumping) {
     return (
       <Rack
@@ -94,7 +93,7 @@ export default function Game({
 }): JSX.Element {
   const previousGameState = usePrevious<GameState>(gameState);
   const active = gameState.player.name === gameState.activePlayer;
-  const {dumping, setDumping, toggleTile, tilesToDump} = useDumping();
+  const { dumping, setDumping, toggleTile, tilesToDump } = useDumping();
   const previousDumping = usePrevious(dumping);
 
   const {
@@ -186,6 +185,11 @@ export default function Game({
                 setDumping(!dumping);
               }}
               dumping={dumping}
+              challengable={
+                gameState.moves.length > 0 &&
+                gameState.moves[gameState.moves.length - 1].type ===
+                  MoveType.PLAY
+              }
             />
           )}
           <ManagedRack

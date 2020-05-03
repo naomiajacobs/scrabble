@@ -10,6 +10,7 @@ export default function ControlButtons({
   onSubmit,
   toggleDumping,
   dumping,
+  challengable,
 }: {
   active: boolean;
   hasSubmittableLetters: boolean;
@@ -18,6 +19,7 @@ export default function ControlButtons({
   onSubmit: () => void;
   toggleDumping: () => void;
   dumping: boolean;
+  challengable: boolean;
 }): JSX.Element {
   return (
     <div className="control-buttons">
@@ -49,7 +51,7 @@ export default function ControlButtons({
         className="challenge small"
         type="button"
         onClick={() => {}}
-        disabled={!active}
+        disabled={!active || !challengable}
       >
         Challenge
       </button>
@@ -57,7 +59,7 @@ export default function ControlButtons({
         className="danger small"
         type="button"
         onClick={clearLetters}
-        disabled={dumping || !active}
+        disabled={dumping || !active || !hasSubmittableLetters}
       >
         Clear
       </button>
