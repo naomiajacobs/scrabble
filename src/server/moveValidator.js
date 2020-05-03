@@ -84,8 +84,8 @@ const wordValidations = {
     message: "Letters can only go in one direction",
   },
   firstMoveUsesCenter: {
-    test: (move, board, isFirstMove) => {
-      if (!isFirstMove) {
+    test: (move, board, isFirstPlayMove) => {
+      if (!isFirstPlayMove) {
         return true;
       }
       return move.lettersPlaced.some((l) => {
@@ -96,8 +96,8 @@ const wordValidations = {
     message: "First move must use the center square",
   },
   connectsToExistingWord: {
-    test: (move, board, isFirstMove) => {
-      if (isFirstMove) {
+    test: (move, board, isFirstPlayMove) => {
+      if (isFirstPlayMove) {
         return true;
       }
       return letterTouchesExistingLetter(move, board);
@@ -149,11 +149,11 @@ const wordValidations = {
 };
 
 class MoveValidator {
-  constructor(gameState, newMove, isFirstMove) {
+  constructor(gameState, newMove, isFirstPlayMove) {
     this.gameState = gameState;
     this.move = newMove;
     this.derivedBoard = getDerivedBoard(gameState.moves);
-    this.isFirstMove = isFirstMove;
+    this.isFirstPlayMove = isFirstPlayMove;
     this.messages = [];
   }
 
@@ -183,7 +183,7 @@ class MoveValidator {
     // DOESN'T validate that words are in the dictionary
     let valid = true;
     for (const [k, validator] of Object.entries(wordValidations)) {
-      if (!validator.test(this.move, this.derivedBoard, this.isFirstMove)) {
+      if (!validator.test(this.move, this.derivedBoard, this.isFirstPlayMove)) {
         this.logInvalidMove(
           `${validator.message}: ${JSON.stringify(this.move)}`
         );

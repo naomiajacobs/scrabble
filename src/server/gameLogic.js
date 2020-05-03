@@ -3,6 +3,7 @@ const {
   MERT,
   NAOMI,
   DUMP,
+  PLAY,
   GAME_OVER,
   IN_PROGRESS,
 } = require("./constants");
@@ -89,14 +90,14 @@ class ScrabbleGame {
 
   doDumpMove(move) {
     // TODO validate you're not dumping more letters than there are in the bag
-    console.group('Dumping tiles');
+    console.group("Dumping tiles");
     this.gameState.moves.push(move);
     const player = this.getMovePlayer(move);
     const rack = player.rack;
-    console.log('Current rack: ', rack);
-    console.log('Indices of letters to dump: ', move.lettersToDump);
+    console.log("Current rack: ", rack);
+    console.log("Indices of letters to dump: ", move.lettersToDump);
     // Put the letters back in the bag
-    move.lettersToDump.forEach(letterIndex => {
+    move.lettersToDump.forEach((letterIndex) => {
       this.gameState.letterBag.push(player.rack[letterIndex]);
     });
     // Reshuffle the bag so there's an equal chance of getting them again
@@ -106,7 +107,7 @@ class ScrabbleGame {
     player.rack = rack.filter(
       (letter, index) => !move.lettersToDump.includes(index)
     );
-    console.log('Rack after dumping: ', player.rack);
+    console.log("Rack after dumping: ", player.rack);
     console.groupEnd();
   }
 
@@ -114,7 +115,7 @@ class ScrabbleGame {
     const player = this.gameState.players[move.playerName];
     if (this.gameState.letterBag.length === 0 && player.rack.length === 0) {
       this.gameState.status = GAME_OVER;
-      console.log('Game is over!', JSON.stringify(currentGame));
+      console.log("Game is over!", JSON.stringify(currentGame));
     }
   }
 
@@ -138,8 +139,9 @@ class ScrabbleGame {
   }
 
   makeMove(move) {
-    const isFirstMove = this.gameState.moves.length === 0;
-    const validator = new MoveValidator(this.gameState, move, isFirstMove);
+    const isFirstPlayMove =
+      this.gameState.moves.filter((m) => m.type === PLAY).length === 0;
+    const validator = new MoveValidator(this.gameState, move, isFirstPlayMove);
     if (validator.moveIsValid()) {
       if (move.type === DUMP) {
         this.doDumpMove(move);
