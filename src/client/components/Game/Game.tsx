@@ -87,7 +87,7 @@ export default function Game({
         </h2>
       )}
       <div className="game-area">
-        <div className="log-area">
+        <div className="left-panel">
           <GameLog gameState={gameState} gameOver={gameOver} />
         </div>
         <div className="play-area">

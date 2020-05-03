@@ -21,21 +21,28 @@ export default function ControlButtons({
         type="button"
         disabled={!active || !hasPlacedLetters}
         onClick={onSubmit}
+        className="small"
       >
         Submit
       </button>
       <button
         type="button"
+        className="small"
         onClick={reRackLetter}
         disabled={!active || !hasPlacedLetters}
       >
         Re-rack Letter
       </button>
-      <button type="button" onClick={() => {}} disabled={!active}>
+      <button
+        type="button"
+        className="small"
+        onClick={() => {}}
+        disabled={!active}
+      >
         Dump
       </button>
       <button
-        className="challenge"
+        className="challenge small"
         type="button"
         onClick={() => {}}
         disabled={!active}
@@ -43,7 +50,7 @@ export default function ControlButtons({
         Challenge
       </button>
       <button
-        className="clear"
+        className="danger small"
         type="button"
         onClick={clearLetters}
         disabled={!active}
