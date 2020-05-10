@@ -16,7 +16,7 @@ const {
   ABANDON_NOTIFICATION,
   REJECT_ABANDON,
   INTRUDER,
-  DRAW_LETTERS
+  ACCEPT_MOVE
 } = require("./constants");
 const { abandonGame, getCurrentGame, startNewGame } = require("./gameLogic");
 
@@ -58,8 +58,8 @@ function onConnection(socket) {
     onChallenge(socket);
   });
 
-  socket.on(DRAW_LETTERS, (name) => {
-    onDraw(name);
+  socket.on(ACCEPT_MOVE, (name) => {
+    onAccept(name);
   });
 
   socket.on(PROMPT_ABANDON, (name) => {
@@ -100,10 +100,10 @@ function onMakeMove(socket, move) {
   emitGameState(getCurrentGame());
 }
 
-function onDraw(name) {
-  console.log(`${name} is drawing letters`);
+function onAccept(name) {
+  console.log(`${name} accepted move, drawing letters for next player`);
    const game = getCurrentGame();
-   game.endMoveByDrawing();
+   game.acceptMove();
    emitGameState(game);
 }
 

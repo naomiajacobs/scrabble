@@ -155,9 +155,9 @@ class ScrabbleGame {
     }
   }
 
-  endMoveByDrawing() {
+  acceptMove() {
     const move = this.getLastMove();
-    move.challengeStatus = ChallengeState.RESOLVED_UNCHALLENGED;
+    move.challengeStatus = ChallengeState.RESOLVED_ACCEPTED;
     this._endMove();
   }
 

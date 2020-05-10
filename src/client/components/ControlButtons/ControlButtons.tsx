@@ -5,18 +5,18 @@ import "./ControlButtons.css";
 
 function EndMoveButtons({
   onChallenge,
-  onDraw,
+  onAccept,
 }: {
   onChallenge: () => void;
-  onDraw: () => void;
+  onAccept: () => void;
 }): JSX.Element {
   return (
     <div className="control-buttons">
-      <button className="challenge small" type="button" onClick={onChallenge}>
-        Challenge
+      <button className="small" type="button" onClick={onAccept}>
+        Accept Move
       </button>
-      <button className="small" type="button" onClick={onDraw}>
-        Draw Letters
+      <button className="danger small" type="button" onClick={onChallenge}>
+        Challenge Move
       </button>
     </div>
   );
@@ -86,7 +86,7 @@ export default function ControlButtons({
   toggleDumping,
   dumping,
   onChallenge,
-  onDraw,
+  onAccept,
 }: {
   actionState: ActionState;
   hasSubmittableLetters: boolean;
@@ -96,7 +96,7 @@ export default function ControlButtons({
   toggleDumping: () => void;
   dumping: boolean;
   onChallenge: () => void;
-  onDraw: () => void;
+  onAccept: () => void;
 }): JSX.Element {
   switch (actionState) {
     case ActionState.GO:
@@ -126,6 +126,6 @@ export default function ControlButtons({
       );
 
     case ActionState.CHALLENGE_OR_DRAW:
-      return <EndMoveButtons onChallenge={onChallenge} onDraw={onDraw} />;
+      return <EndMoveButtons onChallenge={onChallenge} onAccept={onAccept} />;
   }
 }

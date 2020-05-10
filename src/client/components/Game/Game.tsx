@@ -25,7 +25,7 @@ import Rack, { DumpRack } from "../Rack/Rack";
 import ScrabbleBoard from "../ScrabbleBoard/ScrabbleBoard";
 import ControlButtons from "../ControlButtons/ControlButtons";
 import useGameLetters from "../../state/useGameLetters";
-import { drawLetters, makeMove, promptAbandon } from "../../api";
+import { acceptMove, makeMove, promptAbandon } from "../../api";
 import usePrevious from "../../state/usePrevious";
 import GameLog from "../GameLog/GameLog";
 
@@ -52,10 +52,10 @@ function Title({
       text = `It's ${opponentName}'s turn`;
       break;
     case ActionState.WAITING_FOR_CHALLENGE_OR_DRAW:
-      text = `Waiting for ${opponentName} to challenge or draw letters`;
+      text = `Waiting for ${opponentName} to challenge or accept move`;
       break;
     case ActionState.CHALLENGE_OR_DRAW:
-      text = `${opponentName} just went - challenge or draw letters`;
+      text = `${opponentName} just went - accept or challenge the move`;
       break;
   }
   return (
@@ -228,7 +228,7 @@ export default function Game({
               }}
               dumping={dumping}
               onChallenge={() => {}}
-              onDraw={drawLetters}
+              onAccept={acceptMove}
               actionState={actionState}
             />
           )}

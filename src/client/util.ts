@@ -228,7 +228,7 @@ export function lastMoveIsResolved(gameState: GameState): boolean {
         [
           ChallengeStatus.RESOLVED_INVALID,
           ChallengeStatus.RESOLVED_VALID,
-          ChallengeStatus.RESOLVED_UNCHALLENGED,
+          ChallengeStatus.RESOLVED_ACCEPTED,
         ].includes((lastMove as PlayMove).challengeStatus))
   );
 }
