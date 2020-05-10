@@ -6,6 +6,7 @@ const {
   PLAY,
   GAME_OVER,
   IN_PROGRESS,
+  ChallengeState,
 } = require("./constants");
 const MoveValidator = require("./moveValidator");
 
@@ -88,29 +89,6 @@ class ScrabbleGame {
     };
   }
 
-  doDumpMove(move) {
-    // TODO validate you're not dumping more letters than there are in the bag
-    console.group("Dumping tiles");
-    this.gameState.moves.push(move);
-    const player = this.getMovePlayer(move);
-    const rack = player.rack;
-    console.log("Current rack: ", rack);
-    console.log("Indices of letters to dump: ", move.lettersToDump);
-    // Put the letters back in the bag
-    move.lettersToDump.forEach((letterIndex) => {
-      this.gameState.letterBag.push(player.rack[letterIndex]);
-    });
-    // Reshuffle the bag so there's an equal chance of getting them again
-    shuffle(this.gameState.letterBag);
-
-    // Remove letters from rack
-    player.rack = rack.filter(
-      (letter, index) => !move.lettersToDump.includes(index)
-    );
-    console.log("Rack after dumping: ", player.rack);
-    console.groupEnd();
-  }
-
   checkForGameEnd(move) {
     const player = this.gameState.players[move.playerName];
     if (this.gameState.letterBag.length === 0 && player.rack.length === 0) {
@@ -138,6 +116,30 @@ class ScrabbleGame {
     }
   }
 
+  doDumpMove(move) {
+    // TODO validate you're not dumping more letters than there are in the bag
+    console.group("Dumping tiles");
+    this.gameState.moves.push(move);
+    const player = this.getMovePlayer(move);
+    const rack = player.rack;
+    console.log("Current rack: ", rack);
+    console.log("Indices of letters to dump: ", move.lettersToDump);
+    // Put the letters back in the bag
+    move.lettersToDump.forEach((letterIndex) => {
+      this.gameState.letterBag.push(player.rack[letterIndex]);
+    });
+    // Reshuffle the bag so there's an equal chance of getting them again
+    shuffle(this.gameState.letterBag);
+
+    // Remove letters from rack
+    player.rack = rack.filter(
+      (letter, index) => !move.lettersToDump.includes(index)
+    );
+    console.log("Rack after dumping: ", player.rack);
+    console.groupEnd();
+    this._endMove();
+  }
+
   makeMove(move) {
     const isFirstPlayMove =
       this.gameState.moves.filter((m) => m.type === PLAY).length === 0;
@@ -148,14 +150,29 @@ class ScrabbleGame {
       } else {
         this.doPlayMove(move);
       }
-
-      this.refillRack(move);
-
-      this.checkForGameEnd(move);
-      this.toggleActivePlayer();
     } else {
       return validator.messages;
     }
+  }
+
+  endMoveByDrawing() {
+    const move = this.getLastMove();
+    move.challengeStatus = ChallengeState.RESOLVED_UNCHALLENGED;
+    this._endMove();
+  }
+
+  _endMove() {
+    const move = this.getLastMove();
+    this.refillRack(move);
+    this.checkForGameEnd(move);
+    this.toggleActivePlayer();
+  }
+
+  getLastMove() {
+    const moves = this.gameState.moves;
+    return moves.length
+      ? this.gameState.moves[this.gameState.moves.length - 1]
+      : undefined;
   }
 }
 

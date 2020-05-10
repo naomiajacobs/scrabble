@@ -8,3 +8,7 @@ export function makeMove(move: Move) {
 export function promptAbandon() {
   socket.emit(GameEvent.PROMPT_ABANDON);
 }
+
+export function drawLetters() {
+  socket.emit(GameEvent.DRAW_LETTERS);
+}

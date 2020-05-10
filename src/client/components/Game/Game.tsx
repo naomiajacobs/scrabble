@@ -3,22 +3,29 @@ import React, { useEffect } from "react";
 import letterBag from "../../../assets/images/crown-royal.jpg";
 
 import {
+  ActionState,
+  ChallengeStatus,
   DumpMove,
   FinishedGameState,
   GameState,
   Letter,
   MoveType,
-  PlacedLetter,
+  PlacedLetter, PlayerName,
   PlayMove,
   Rack as RackType,
   RackIndex,
 } from "../../Constants";
-import { getDerivedBoard } from "../../util";
+import {
+  getActionState,
+  getDerivedBoard,
+  getOtherPlayer,
+  isYourTurn,
+} from "../../util";
 import Rack, { DumpRack } from "../Rack/Rack";
 import ScrabbleBoard from "../ScrabbleBoard/ScrabbleBoard";
 import ControlButtons from "../ControlButtons/ControlButtons";
 import useGameLetters from "../../state/useGameLetters";
-import { makeMove, promptAbandon } from "../../api";
+import { drawLetters, makeMove, promptAbandon } from "../../api";
 import usePrevious from "../../state/usePrevious";
 import GameLog from "../GameLog/GameLog";
 
@@ -26,6 +33,37 @@ import "./Game.css";
 import GameSummary from "../GameSummary/GameSummary";
 import { PlacedLettersState } from "../../state/usePlacedLetters";
 import useDumping from "../../state/useDumpLetters";
+
+function Title({
+  actionState,
+  yourName,
+  opponentName,
+}: {
+  actionState: ActionState;
+  yourName: PlayerName;
+  opponentName: PlayerName;
+}): JSX.Element {
+  let text;
+  switch (actionState) {
+    case ActionState.GO:
+      text = "It's your turn";
+      break;
+    case ActionState.WAITING_FOR_OPPONENT_MOVE:
+      text = `It's ${opponentName}'s turn`;
+      break;
+    case ActionState.WAITING_FOR_CHALLENGE_OR_DRAW:
+      text = `Waiting for ${opponentName} to challenge or draw letters`;
+      break;
+    case ActionState.CHALLENGE_OR_DRAW:
+      text = `${opponentName} just went - challenge or draw letters`;
+      break;
+  }
+  return (
+    <h2>
+      Hi, {yourName}! {text}
+    </h2>
+  );
+}
 
 function AbandonGameButton(): JSX.Element {
   return (
@@ -41,6 +79,7 @@ function AbandonGameButton(): JSX.Element {
   );
 }
 
+// Toggles between playing and dumping
 function ManagedRack({
   tiles,
   selectedLetterIndex,
@@ -92,7 +131,7 @@ export default function Game({
   gameOver: boolean;
 }): JSX.Element {
   const previousGameState = usePrevious<GameState>(gameState);
-  const active = gameState.player.name === gameState.activePlayer;
+  const active = isYourTurn(gameState);
   const { dumping, setDumping, toggleTile, tilesToDump } = useDumping();
   const previousDumping = usePrevious(dumping);
 
@@ -149,20 +188,24 @@ export default function Game({
         playerName: gameState.player.name,
         type: MoveType.PLAY,
         lettersPlaced,
+        challengeStatus: ChallengeStatus.UNRESOLVED_UNCHALLENGED,
       };
       makeMove(move);
     }
   };
+
+  const actionState = getActionState(gameState);
 
   return (
     <div className="game">
       {gameOver ? (
         <GameSummary gameState={gameState as FinishedGameState} />
       ) : (
-        <h2>
-          Hi, {gameState.player.name}! It's{" "}
-          {active ? "your" : `${gameState.activePlayer}'s`} turn
-        </h2>
+        <Title
+          actionState={actionState}
+          yourName={gameState.player.name}
+          opponentName={getOtherPlayer(gameState.player.name)}
+        />
       )}
       <div className="game-area">
         <div className="left-panel">
@@ -172,7 +215,6 @@ export default function Game({
         <div className="play-area">
           {!gameOver && (
             <ControlButtons
-              active={active}
               clearLetters={clearLetters}
               reRackLetter={reRackLetter}
               hasSubmittableLetters={
@@ -185,11 +227,9 @@ export default function Game({
                 setDumping(!dumping);
               }}
               dumping={dumping}
-              challengable={
-                gameState.moves.length > 0 &&
-                gameState.moves[gameState.moves.length - 1].type ===
-                  MoveType.PLAY
-              }
+              onChallenge={() => {}}
+              onDraw={drawLetters}
+              actionState={actionState}
             />
           )}
           <ManagedRack

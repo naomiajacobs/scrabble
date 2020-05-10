@@ -220,8 +220,16 @@ interface BaseMove {
 export interface DumpMove extends BaseMove {
   lettersToDump: Array<RackIndex>;
 }
+export enum ChallengeStatus {
+  'UNRESOLVED_UNCHALLENGED' = 'UNRESOLVED_UNCHALLENGED',
+  'RESOLVED_UNCHALLENGED' = 'RESOLVED_UNCHALLENGED',
+  'UNRESOLVED_CHALLENGED' = 'UNRESOLVED_CHALLENGED',
+  'RESOLVED_INVALID' = 'RESOLVED_INVALID',
+  'RESOLVED_VALID' = 'RESOLVED_VALID',
+}
 export interface PlayMove extends BaseMove {
   lettersPlaced: Array<PlacedLetter>;
+  challengeStatus: ChallengeStatus;
 }
 export type Move = PlayMove | DumpMove;
 
@@ -281,3 +289,10 @@ export type ServerStatus = ServerStatusWithGame | ServerStatusWithoutGame;
 export const defaultServerStatus: ServerStatus = {
   currentGameStatus: CurrentGameStatus.INTRUDER,
 };
+
+export enum ActionState {
+  GO = "GO",
+  WAITING_FOR_CHALLENGE_OR_DRAW = "WAITING_FOR_CHALLENGE_OR_DRAW",
+  WAITING_FOR_OPPONENT_MOVE = "WAITING_FOR_OPPONENT_MOVE",
+  CHALLENGE_OR_DRAW = "CHALLENGE_OR_DRAW",
+}

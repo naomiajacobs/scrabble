@@ -1,5 +1,7 @@
 import {
+  ActionState,
   Board,
+  ChallengeStatus,
   FinishedGameState,
   GameState,
   Letter,
@@ -206,6 +208,60 @@ export function calculateScore(gameState: GameState): Array<number> {
     return calculateScoreForMove(board, move as PlayMove);
   });
   return scores;
+}
+
+export function isYourTurn(gameState: GameState): boolean {
+  return gameState.player.name === gameState.activePlayer;
+}
+
+export function getLastMove(gameState: GameState): Move | null {
+  return gameState.moves.length > 0
+    ? gameState.moves[gameState.moves.length - 1]
+    : null;
+}
+
+export function lastMoveIsResolved(gameState: GameState): boolean {
+  const lastMove = getLastMove(gameState);
+  return Boolean(
+    !lastMove ||
+      (lastMove.type !== MoveType.PLAY ||
+        [
+          ChallengeStatus.RESOLVED_INVALID,
+          ChallengeStatus.RESOLVED_VALID,
+          ChallengeStatus.RESOLVED_UNCHALLENGED,
+        ].includes((lastMove as PlayMove).challengeStatus))
+  );
+}
+
+export function canChallenge(gameState: GameState): boolean {
+  const lastMove = getLastMove(gameState);
+  return Boolean(
+    !isYourTurn(gameState) &&
+      lastMove &&
+      lastMove.type === MoveType.PLAY &&
+      (lastMove as PlayMove).challengeStatus ===
+        ChallengeStatus.UNRESOLVED_UNCHALLENGED
+  );
+}
+
+export function getActionState(gameState: GameState): ActionState {
+  const yourTurn = isYourTurn(gameState);
+  const lastMoveResolved = lastMoveIsResolved(gameState);
+  let state: ActionState;
+  if (yourTurn) {
+    if (lastMoveResolved) {
+      state = ActionState.GO;
+    } else {
+      state = ActionState.WAITING_FOR_CHALLENGE_OR_DRAW;
+    }
+  } else {
+    if (lastMoveResolved) {
+      state = ActionState.WAITING_FOR_OPPONENT_MOVE;
+    } else {
+      state = ActionState.CHALLENGE_OR_DRAW;
+    }
+  }
+  return state;
 }
 
 export class GameScore {

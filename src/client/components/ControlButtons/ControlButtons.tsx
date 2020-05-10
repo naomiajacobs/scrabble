@@ -1,25 +1,43 @@
 import React from "react";
 
+import { ActionState } from "../../Constants";
 import "./ControlButtons.css";
 
-export default function ControlButtons({
-  active,
-  clearLetters,
-  reRackLetter,
-  hasSubmittableLetters,
-  onSubmit,
-  toggleDumping,
-  dumping,
-  challengable,
+function EndMoveButtons({
+  onChallenge,
+  onDraw,
 }: {
-  active: boolean;
-  hasSubmittableLetters: boolean;
+  onChallenge: () => void;
+  onDraw: () => void;
+}): JSX.Element {
+  return (
+    <div className="control-buttons">
+      <button className="challenge small" type="button" onClick={onChallenge}>
+        Challenge
+      </button>
+      <button className="small" type="button" onClick={onDraw}>
+        Draw Letters
+      </button>
+    </div>
+  );
+}
+
+function StandardButtons({
+  clearLetters,
+  dumping,
+  hasSubmittableLetters,
+  active,
+  onSubmit,
+  reRackLetter,
+  toggleDumping,
+}: {
   clearLetters: () => void;
-  reRackLetter: () => void;
-  onSubmit: () => void;
-  toggleDumping: () => void;
   dumping: boolean;
-  challengable: boolean;
+  hasSubmittableLetters: boolean;
+  active: boolean;
+  onSubmit: () => void;
+  reRackLetter: () => void;
+  toggleDumping: () => void;
 }): JSX.Element {
   return (
     <div className="control-buttons">
@@ -48,14 +66,6 @@ export default function ControlButtons({
         {dumping ? "Cancel Dump" : "Dump"}
       </button>
       <button
-        className="challenge small"
-        type="button"
-        onClick={() => {}}
-        disabled={!active || !challengable}
-      >
-        Challenge
-      </button>
-      <button
         className="danger small"
         type="button"
         onClick={clearLetters}
@@ -65,4 +75,57 @@ export default function ControlButtons({
       </button>
     </div>
   );
+}
+
+export default function ControlButtons({
+  actionState,
+  clearLetters,
+  reRackLetter,
+  hasSubmittableLetters,
+  onSubmit,
+  toggleDumping,
+  dumping,
+  onChallenge,
+  onDraw,
+}: {
+  actionState: ActionState;
+  hasSubmittableLetters: boolean;
+  clearLetters: () => void;
+  reRackLetter: () => void;
+  onSubmit: () => void;
+  toggleDumping: () => void;
+  dumping: boolean;
+  onChallenge: () => void;
+  onDraw: () => void;
+}): JSX.Element {
+  switch (actionState) {
+    case ActionState.GO:
+      return (
+        <StandardButtons
+          clearLetters={clearLetters}
+          dumping={dumping}
+          hasSubmittableLetters={hasSubmittableLetters}
+          active={true}
+          onSubmit={onSubmit}
+          reRackLetter={reRackLetter}
+          toggleDumping={toggleDumping}
+        />
+      );
+    case ActionState.WAITING_FOR_OPPONENT_MOVE:
+    case ActionState.WAITING_FOR_CHALLENGE_OR_DRAW:
+      return (
+        <StandardButtons
+          clearLetters={clearLetters}
+          dumping={dumping}
+          hasSubmittableLetters={hasSubmittableLetters}
+          active={false}
+          onSubmit={onSubmit}
+          reRackLetter={reRackLetter}
+          toggleDumping={toggleDumping}
+        />
+      );
+
+    case ActionState.CHALLENGE_OR_DRAW:
+      return <EndMoveButtons onChallenge={onChallenge} onDraw={onDraw} />;
+  }
 }
