@@ -10,7 +10,8 @@ import {
   GameState,
   Letter,
   MoveType,
-  PlacedLetter, PlayerName,
+  PlacedLetter,
+  PlayerName,
   PlayMove,
   Rack as RackType,
   RackIndex,
@@ -59,9 +60,10 @@ function Title({
       break;
   }
   return (
-    <h2>
-      Hi, {yourName}! {text}
-    </h2>
+    <>
+      <h2>Hi, {yourName}!</h2>
+      <h3>{text}</h3>
+    </>
   );
 }
 
