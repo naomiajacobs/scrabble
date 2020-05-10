@@ -37,21 +37,21 @@ function MoveInfo({
   moveInfo,
 }: {
   gameScore: GameScore;
-  moveInfo?: { move: Move; gameIndex: number };
+  moveInfo: { move: Move; gameIndex: number };
 }): JSX.Element {
-  if (!moveInfo) {
-    return <td className="move" />;
-  }
   const { move, gameIndex } = moveInfo;
 
   return (
-    <td className="move">
+    <>
       <span>{gameScore.scoreForMove(gameIndex)}</span>
-      {move.type === MoveType.DUMP && <span className="emoji">{dumpEmoji}</span>}
+      {move.type === MoveType.DUMP && (
+        <span className="emoji">{dumpEmoji}</span>
+      )}
       {move.type === MoveType.PLAY &&
-        (move as PlayMove).lettersPlaced.length === 7 &&
-        <span className="emoji">{bingoEmoji}</span>}
-    </td>
+        (move as PlayMove).lettersPlaced.length === 7 && (
+          <span className="emoji">{bingoEmoji}</span>
+        )}
+    </>
   );
 }
 
@@ -95,10 +95,14 @@ export default function GameLog({
               <tr className="move-row" key={i}>
                 <td>{i + 1}</td>
                 <td className="move">
-                  <MoveInfo gameScore={gameScore} moveInfo={naomiMoves[i]} />
+                  {naomiMoves[i] && (
+                    <MoveInfo gameScore={gameScore} moveInfo={naomiMoves[i]} />
+                  )}
                 </td>
                 <td className="move">
-                  <MoveInfo gameScore={gameScore} moveInfo={mertMoves[i]} />
+                  {mertMoves[i] && (
+                    <MoveInfo gameScore={gameScore} moveInfo={mertMoves[i]} />
+                  )}
                 </td>
               </tr>
             ))}
