@@ -1,9 +1,17 @@
 import React from "react";
 
-import {ChallengeStatus, FinishedGameState, GameState, Move, MoveType, PlayerName, PlayMove,} from "../../Constants";
+import {
+  ChallengeStatus,
+  FinishedGameState,
+  GameState,
+  Move,
+  MoveType,
+  PlayerName,
+  PlayMove,
+} from "../../Constants";
 
 import "./GameLog.css";
-import {FinalGameScore, GameScore} from "../../util";
+import { FinalGameScore, GameScore } from "../../util";
 
 const dumpEmoji = "🔄";
 const challengeEmoji = "👊";
@@ -101,8 +109,8 @@ export default function GameLog({
           </tr>
           <tr className="score-header">
             <td>Move</td>
-            <td className="score">Total: {naomiScore}</td>
-            <td className="score">Total: {mertScore}</td>
+            <td />
+            <td />
           </tr>
         </thead>
         <tbody className="scores">
@@ -126,6 +134,11 @@ export default function GameLog({
           {gameOver && (
             <EndGameAdjustments gameState={gameState as FinishedGameState} />
           )}
+          <tr className="score-row">
+            <td />
+            <td className="score">Total: {naomiScore}</td>
+            <td className="score">Total: {mertScore}</td>
+          </tr>
         </tbody>
       </table>
     </div>
