@@ -288,7 +288,7 @@ export default function Game({
           />
         </div>
         <div className="right-panel">
-          <img className="letter-bag" src={letterBag} />
+          <img className="letter-bag" src={letterBag} alt="scrabble-bag"/>
           <span className="letters-left">{gameState.letterBag.length}</span>
         </div>
       </div>

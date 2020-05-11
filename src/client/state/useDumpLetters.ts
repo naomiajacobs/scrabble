@@ -20,7 +20,7 @@ export default function useDumping() {
     if (!dumping && tilesToDump.length > 0) {
       setTilesToDump([]);
     }
-  });
+  }, [dumping, tilesToDump.length]);
 
   return {
     dumping,
