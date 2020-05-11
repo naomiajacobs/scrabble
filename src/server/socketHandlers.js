@@ -7,7 +7,6 @@ const {
   GAME_OVER,
   INTRUDER,
   GameEvent,
-  ChallengeResolution,
 } = require("./constants");
 const { abandonGame, getCurrentGame, startNewGame } = require("./gameLogic");
 

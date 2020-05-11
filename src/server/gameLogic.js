@@ -7,7 +7,6 @@ const {
   GAME_OVER,
   IN_PROGRESS,
   ChallengeStatus,
-  ChallengeResolution,
 } = require("./constants");
 const MoveValidator = require("./moveValidator");
 const { getOtherPlayer } = require("./util");

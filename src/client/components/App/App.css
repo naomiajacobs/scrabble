@@ -1,4 +1,8 @@
-html, body, #root, .App {
+html {
+  height: 120%;
+}
+
+body, #root, .App {
   height: 100%;
 }
 
