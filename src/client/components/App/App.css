@@ -10,6 +10,7 @@ html, body, #root, .App {
   --sq-tls: #3b9bb3;
   --sq-dls: #b7d1cc;
   --dls-light: #d1ebe6;
+  --tile-size: 42px;
 
   text-align: center;
   background-color: var(--background);
@@ -46,7 +47,7 @@ button:disabled {
 }
 
 p {
-  margin: 10px 0;
+  margin: 5px 0;
   font-family: "NewGothicStandard", sans-serif;
   font-weight: bold;
 }

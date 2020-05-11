@@ -71,7 +71,7 @@ function ManagedRack({
 
   return (
     <>
-      <p>Select which letters to dump: </p>
+      <p className="dump-instructions">Select which letters to dump: </p>
       <DumpRack
         tiles={tiles}
         selectedLetterIndices={tilesToDump}

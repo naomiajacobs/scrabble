@@ -1,10 +1,16 @@
-.rack {
-  --tile: #fedbbf;
+.rack-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 15px;
 }
 
 .rack {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 15px;
+  height: 85px;
+  width: 460px;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
 }

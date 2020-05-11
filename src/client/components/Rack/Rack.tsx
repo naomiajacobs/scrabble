@@ -5,6 +5,8 @@ import { PresentationalTile } from "../Tile/Tile";
 import "./Rack.css";
 import { PlacedLettersState } from "../../state/usePlacedLetters";
 
+import rackImage from "../../../assets/images/rack.png";
+
 function RackTile({
   letter,
   onSelect,
@@ -45,6 +47,20 @@ function DumpTile({
   );
 }
 
+function RackContainer({
+  children,
+}: {
+  children: React.ReactNode;
+}): JSX.Element {
+  return (
+    <div className="rack-container">
+      <div className="rack" style={{ backgroundImage: `url("${rackImage}")` }}>
+        {children}
+      </div>
+    </div>
+  );
+}
+
 export default function Rack({
   tiles,
   selectedLetterIndex,
@@ -59,7 +75,7 @@ export default function Rack({
   active: boolean;
 }): JSX.Element {
   return (
-    <div className="rack">
+    <RackContainer>
       {tiles
         .filter((t) => t)
         .map((tile, i) => {
@@ -79,7 +95,7 @@ export default function Rack({
 
           return <span key={i} />;
         })}
-    </div>
+    </RackContainer>
   );
 }
 
@@ -93,7 +109,7 @@ export function DumpRack({
   onToggleTile(index: RackIndex): void;
 }): JSX.Element {
   return (
-    <div className="rack">
+    <RackContainer>
       {tiles
         .filter((t) => t)
         .map((tile, i) => (
@@ -106,6 +122,6 @@ export function DumpRack({
             }}
           />
         ))}
-    </div>
+    </RackContainer>
   );
 }
