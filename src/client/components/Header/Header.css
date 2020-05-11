@@ -1,0 +1,30 @@
+.header {
+  background-color: var(--sq-dls);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  height: 70px;
+}
+
+.header-item {
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.greeting,
+.abandon {
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+
+.greeting {
+  height: 100%;
+  padding: 0 25px;
+  background-color: var(--sq-tls);
+}
+
+.abandon {
+  margin: 5px;
+}

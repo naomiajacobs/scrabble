@@ -1,16 +1,24 @@
+html, body, #root, .App {
+  height: 100%;
+}
+
 .App {
-  text-align: center;
+  --background: #001C34;
   --sq-basic: #cdc6ac;
   --sq-tws: #fa664d;
   --sq-dws: #f9bbaa;
   --sq-tls: #3b9bb3;
   --sq-dls: #b7d1cc;
   --dls-light: #d1ebe6;
+
+  text-align: center;
+  background-color: var(--background);
 }
 
 button {
   margin: 0 5px 10px 5px;
   background-color: var(--sq-tls);
+  border-color: var(--sq-tls);
   cursor: pointer;
   font-family: "FuturaBold", sans-serif;
 }
@@ -22,21 +30,23 @@ button.small {
 }
 
 button.medium {
-  padding: 15px;
+  padding: 10px;
   font-size: 24px;
   border-radius: 10px;
 }
 
 button:disabled {
   background-color: var(--sq-dls);
+  border-color: var(--sq-dls);
 }
 
 .danger {
   background-color: var(--sq-tws);
+  border-color: var(--sq-tws);
 }
 
 p {
   margin: 10px 0;
-  font-family: "NewGothicStandard";
+  font-family: "NewGothicStandard", sans-serif;
   font-weight: bold;
 }

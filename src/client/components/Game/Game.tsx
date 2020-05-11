@@ -1,17 +1,15 @@
 import React, { useEffect } from "react";
 
-import letterBag from "../../../assets/images/crown-royal.jpg";
+import letterBag from "../../../assets/images/crown_royale_transparent.png";
 
 import {
   ActionState,
   ChallengeStatus,
   DumpMove,
-  FinishedGameState,
   GameState,
   Letter,
   MoveType,
   PlacedLetter,
-  PlayerName,
   PlayMove,
   Rack as RackType,
   RackIndex,
@@ -20,7 +18,6 @@ import {
   getActionState,
   getDerivedBoard,
   getLastMove,
-  getOtherPlayer,
   isYourTurn,
 } from "../../util";
 import Rack, { DumpRack } from "../Rack/Rack";
@@ -31,62 +28,14 @@ import {
   acceptMove,
   challengeMove,
   makeMove,
-  promptAbandon,
   resolveChallenge,
 } from "../../api";
 import usePrevious from "../../state/usePrevious";
 import GameLog from "../GameLog/GameLog";
 
 import "./Game.css";
-import GameSummary from "../GameSummary/GameSummary";
 import { PlacedLettersState } from "../../state/usePlacedLetters";
 import useDumping from "../../state/useDumpLetters";
-
-function Title({
-  actionState,
-  yourName,
-  opponentName,
-}: {
-  actionState: ActionState;
-  yourName: PlayerName;
-  opponentName: PlayerName;
-}): JSX.Element {
-  let text;
-  switch (actionState) {
-    case ActionState.GO:
-      text = "It's your turn";
-      break;
-    case ActionState.WAITING_FOR_OPPONENT_MOVE:
-      text = `It's ${opponentName}'s turn`;
-      break;
-    case ActionState.WAITING_FOR_CHALLENGE_OR_DRAW:
-      text = `Waiting for ${opponentName} to challenge or accept move`;
-      break;
-    case ActionState.CHALLENGE_OR_DRAW:
-      text = `${opponentName} just went - accept or challenge the move`;
-      break;
-  }
-  return (
-    <>
-      <h2>Hi, {yourName}!</h2>
-      <h3>{text}</h3>
-    </>
-  );
-}
-
-function AbandonGameButton(): JSX.Element {
-  return (
-    <button
-      className="danger medium abandon-game"
-      type="button"
-      onClick={() => {
-        promptAbandon();
-      }}
-    >
-      Abandon Game
-    </button>
-  );
-}
 
 // Toggles between playing and dumping
 function ManagedRack({
@@ -139,6 +88,8 @@ export default function Game({
   gameState: GameState;
   gameOver: boolean;
 }): JSX.Element {
+  console.log("letterbag: ", letterBag);
+
   const previousGameState = usePrevious<GameState>(gameState);
   const active = isYourTurn(gameState);
   const { dumping, setDumping, toggleTile, tilesToDump } = useDumping();
@@ -222,79 +173,71 @@ export default function Game({
 
   return (
     <div className="game">
-      {gameOver ? (
-        <GameSummary gameState={gameState as FinishedGameState} />
-      ) : (
-        <Title
-          actionState={actionState}
-          yourName={gameState.player.name}
-          opponentName={getOtherPlayer(gameState.player.name)}
-        />
-      )}
-      <div className="game-area">
-        <div className="left-panel">
-          <AbandonGameButton />
-          <GameLog gameState={gameState} gameOver={gameOver} />
-        </div>
-        <div className="play-area">
-          {!gameOver && (
-            <ControlButtons
-              clearLetters={clearLetters}
-              reRackLetter={reRackLetter}
-              hasSubmittableLetters={
-                dumping
-                  ? tilesToDump.length > 0
-                  : placedLetters.filter((l) => l).length > 0
-              }
-              onSubmit={submit}
-              toggleDumping={() => {
-                setDumping(!dumping);
-              }}
-              dumping={dumping}
-              onChallenge={() => {
-                challengeMove(gameState.player.name);
-              }}
-              onAccept={() => {
-                acceptMove(gameState.player.name);
-              }}
-              actionState={actionState}
-              onMoveInvalidated={() =>
-                resolveChallenge(ChallengeStatus.RESOLVED_INVALID)
-              }
-              onMoveValidated={() =>
-                resolveChallenge(ChallengeStatus.RESOLVED_VALID)
-              }
-            />
-          )}
-          <ManagedRack
-            tiles={gameState.player.rack}
-            selectedLetterIndex={selectedLetterIndex}
-            setSelectedLetterIndex={active ? setSelectedLetterIndex : () => {}}
-            placedLetters={placedLetters}
-            active={active}
+      <div className="left-panel">
+        <GameLog gameState={gameState} gameOver={gameOver} />
+      </div>
+      <div className="play-area">
+        {!gameOver && (
+          <ControlButtons
+            clearLetters={clearLetters}
+            reRackLetter={reRackLetter}
+            hasSubmittableLetters={
+              dumping
+                ? tilesToDump.length > 0
+                : placedLetters.filter((l) => l).length > 0
+            }
+            onSubmit={submit}
+            toggleDumping={() => {
+              setDumping(!dumping);
+            }}
             dumping={dumping}
-            tilesToDump={tilesToDump}
-            toggleTile={toggleTile}
+            onChallenge={() => {
+              challengeMove(gameState.player.name);
+            }}
+            onAccept={() => {
+              acceptMove(gameState.player.name);
+            }}
+            actionState={actionState}
+            onMoveInvalidated={() =>
+              resolveChallenge(ChallengeStatus.RESOLVED_INVALID)
+            }
+            onMoveValidated={() =>
+              resolveChallenge(ChallengeStatus.RESOLVED_VALID)
+            }
           />
-          <ScrabbleBoard
-            board={getDerivedBoard(
-              gameState.moves,
-              placedLetters,
-              gameState.player.rack
-            )}
-            placeLetter={active ? placeSelectedLetter : () => {}}
-            setSelectedLetter={active ? setSelectedLetterIndex : () => {}}
-            selectedLetter={selectedLetterIndex}
-            highlightLastMove={[
-              ActionState.AWAITING_CHALLENGE_RESOLUTION,
-              ActionState.WAITING_FOR_CHALLENGE_OR_DRAW,
-              ActionState.CHALLENGE_OR_DRAW,
-            ].includes(actionState)}
-          />
-        </div>
-        <div className="right-panel">
-          <img className="letter-bag" src={letterBag} alt="scrabble-bag" />
-          <span className="letters-left">{gameState.letterBag.length}</span>
+        )}
+        <ManagedRack
+          tiles={gameState.player.rack}
+          selectedLetterIndex={selectedLetterIndex}
+          setSelectedLetterIndex={active ? setSelectedLetterIndex : () => {}}
+          placedLetters={placedLetters}
+          active={active}
+          dumping={dumping}
+          tilesToDump={tilesToDump}
+          toggleTile={toggleTile}
+        />
+        <ScrabbleBoard
+          board={getDerivedBoard(
+            gameState.moves,
+            placedLetters,
+            gameState.player.rack
+          )}
+          placeLetter={active ? placeSelectedLetter : () => {}}
+          setSelectedLetter={active ? setSelectedLetterIndex : () => {}}
+          selectedLetter={selectedLetterIndex}
+          highlightLastMove={[
+            ActionState.AWAITING_CHALLENGE_RESOLUTION,
+            ActionState.WAITING_FOR_CHALLENGE_OR_DRAW,
+            ActionState.CHALLENGE_OR_DRAW,
+          ].includes(actionState)}
+        />
+      </div>
+      <div className="right-panel">
+        <div
+          className="letters-left"
+          style={{ backgroundImage: `url("${letterBag}")` }}
+        >
+          {gameState.letterBag.length}
         </div>
       </div>
     </div>

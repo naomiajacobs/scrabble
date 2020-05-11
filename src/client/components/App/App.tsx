@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
 import Game from "../Game/Game";
+import Header from "../Header/Header";
 import {
   CurrentGameStatus,
   defaultServerStatus,
@@ -32,10 +33,20 @@ function App() {
       content = "Who the hell are you?";
       break;
     case CurrentGameStatus.GAME_OVER:
-      content = <Game gameState={serverStatus.gameState} gameOver={true} />;
+      content = (
+        <>
+          <Header gameState={serverStatus.gameState} gameOver={true} />
+          <Game gameState={serverStatus.gameState} gameOver={true} />
+        </>
+      );
       break;
     case CurrentGameStatus.IN_PROGRESS:
-      content = <Game gameState={serverStatus.gameState} gameOver={false} />;
+      content = (
+        <>
+          <Header gameState={serverStatus.gameState} gameOver={false} />
+          <Game gameState={serverStatus.gameState} gameOver={false} />
+        </>
+      );
       break;
     default:
       content = `Unknown server response: ${serverStatus}`;
