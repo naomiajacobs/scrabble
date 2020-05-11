@@ -28,9 +28,9 @@ function EndGameAdjustments({
 
   return (
     <tr>
-      <td />
-      <td>End rack: {scores[PlayerName.NAOMI]}</td>
-      <td>End rack: {scores[PlayerName.MERT]}</td>
+      <td>End rack</td>
+      <td>{scores[PlayerName.NAOMI]}</td>
+      <td>{scores[PlayerName.MERT]}</td>
     </tr>
   );
 }
