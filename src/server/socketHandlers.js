@@ -3,20 +3,11 @@ const SocketIO = require("socket.io");
 const {
   MERT,
   NAOMI,
-  SERVER_STATUS,
-  INITIALIZE,
   IN_PROGRESS,
-  MAKE_MOVE,
-  CHALLENGE,
-  GAME_ERROR,
   GAME_OVER,
-  PROMPT_ABANDON,
-  GET_ABANDON_CONFIRMATION,
-  CONFIRM_ABANDON,
-  ABANDON_NOTIFICATION,
-  REJECT_ABANDON,
   INTRUDER,
-  ACCEPT_MOVE
+  GameEvent,
+  ChallengeResolution,
 } = require("./constants");
 const { abandonGame, getCurrentGame, startNewGame } = require("./gameLogic");
 
@@ -35,7 +26,7 @@ function emitToPlayers(message, createData) {
 }
 
 function emitGameState(game) {
-  emitToPlayers(SERVER_STATUS, (playerName) => ({
+  emitToPlayers(GameEvent.SERVER_STATUS, (playerName) => ({
     currentGameStatus:
       game.gameState.status === IN_PROGRESS ? IN_PROGRESS : GAME_OVER,
     gameState: game.getGameState(playerName),
@@ -46,31 +37,35 @@ function onConnection(socket) {
   console.log("a user connected");
 
   // Register listeners
-  socket.on(INITIALIZE, (name) => {
+  socket.on(GameEvent.INITIALIZE, (name) => {
     onInitialize(socket, name);
   });
 
-  socket.on(MAKE_MOVE, (move) => {
+  socket.on(GameEvent.MAKE_MOVE, (move) => {
     onMakeMove(socket, move);
   });
 
-  socket.on(CHALLENGE, () => {
-    onChallenge(socket);
+  socket.on(GameEvent.CHALLENGE_MOVE, (name) => {
+    onChallenge(socket, name);
   });
 
-  socket.on(ACCEPT_MOVE, (name) => {
+  socket.on(GameEvent.CHALLENGE_RESOLVED, (challengeStatus) => {
+    onChallengeResolved(challengeStatus);
+  });
+
+  socket.on(GameEvent.ACCEPT_MOVE, (name) => {
     onAccept(name);
   });
 
-  socket.on(PROMPT_ABANDON, (name) => {
+  socket.on(GameEvent.PROMPT_ABANDON, (name) => {
     onPromptAbandon(socket, name);
   });
 
-  socket.on(CONFIRM_ABANDON, (name) => {
+  socket.on(GameEvent.CONFIRM_ABANDON, (name) => {
     onConfirmAbandon(socket, name);
   });
 
-  socket.on(REJECT_ABANDON, (name) => {
+  socket.on(GameEvent.REJECT_ABANDON, (name) => {
     onRejectAbandon(socket, name);
   });
 }
@@ -78,7 +73,7 @@ function onConnection(socket) {
 function onInitialize(socket, name) {
   if (name !== NAOMI && name !== MERT) {
     console.log("An intruder: ", name);
-    socket.emit(SERVER_STATUS, { currentGameStatus: INTRUDER });
+    socket.emit(GameEvent.SERVER_STATUS, { currentGameStatus: INTRUDER });
     return;
   }
   if (name === NAOMI) {
@@ -95,7 +90,7 @@ function onInitialize(socket, name) {
 function onMakeMove(socket, move) {
   const errorMessages = getCurrentGame().makeMove(move);
   if (errorMessages && errorMessages.length) {
-    io.in(move.playerName).emit(GAME_ERROR, errorMessages);
+    io.in(move.playerName).emit(GameEvent.GAME_ERROR, errorMessages);
   }
   emitGameState(getCurrentGame());
 }
@@ -107,13 +102,16 @@ function onAccept(name) {
    emitGameState(game);
 }
 
-function onChallenge(socket) {
-
+function onChallenge(socket, name) {
+  console.log(`${name} is challenging`);
+  const game = getCurrentGame();
+  game.challengeMove();
+  emitGameState(game);
 }
 
 function onPromptAbandon(socket, name) {
   console.log(`${name} wants to abandon the game`);
-  emitToPlayers(GET_ABANDON_CONFIRMATION, (playerName) => ({
+  emitToPlayers(GameEvent.GET_ABANDON_CONFIRMATION, (playerName) => ({
     selfPrompted: name === playerName,
   }));
 }
@@ -124,7 +122,7 @@ function onConfirmAbandon(socket, name) {
   game.confirmAbandon(name);
   if (game.shouldAbandonGame()) {
     abandonGame();
-    emitToPlayers(ABANDON_NOTIFICATION);
+    emitToPlayers(GameEvent.ABANDON_NOTIFICATION);
     const newGame = getCurrentGame();
     emitGameState(newGame);
   }
@@ -132,6 +130,13 @@ function onConfirmAbandon(socket, name) {
 
 function onRejectAbandon(socket, name) {
   getCurrentGame().cancelAbandon();
+}
+
+function onChallengeResolved(challengeStatus) {
+  console.log(`Challenge resolved: ${challengeStatus}`);
+  const game = getCurrentGame();
+  game.resolveChallenge(challengeStatus);
+  emitGameState(game);
 }
 
 module.exports = {

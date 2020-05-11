@@ -1,4 +1,4 @@
-const { PLAY } = require('./constants');
+const { ChallengeStatus, MERT, NAOMI, PLAY } = require("./constants");
 
 function makeEmptyBoard() {
   const board = [];
@@ -11,7 +11,10 @@ function makeEmptyBoard() {
 function getDerivedBoard(moves) {
   const board = makeEmptyBoard();
   moves.forEach((move) => {
-    if (move.type === PLAY) {
+    if (
+      move.type === PLAY &&
+      move.challengeStatus !== ChallengeStatus.RESOLVED_INVALID
+    ) {
       for (const [letter, [row, col], _] of move.lettersPlaced) {
         board[row][col] = letter;
       }
@@ -20,4 +23,8 @@ function getDerivedBoard(moves) {
   return board;
 }
 
-module.exports = { getDerivedBoard };
+function getOtherPlayer(name) {
+  return name === MERT ? NAOMI : MERT;
+}
+
+module.exports = { getDerivedBoard, getOtherPlayer };

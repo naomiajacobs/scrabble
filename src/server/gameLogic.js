@@ -6,9 +6,11 @@ const {
   PLAY,
   GAME_OVER,
   IN_PROGRESS,
-  ChallengeState,
+  ChallengeStatus,
+  ChallengeResolution,
 } = require("./constants");
 const MoveValidator = require("./moveValidator");
+const { getOtherPlayer } = require("./util");
 
 const shuffle = require("shuffle-array");
 
@@ -142,7 +144,11 @@ class ScrabbleGame {
 
   makeMove(move) {
     const isFirstPlayMove =
-      this.gameState.moves.filter((m) => m.type === PLAY).length === 0;
+      this.gameState.moves.filter(
+        (m) =>
+          m.type === PLAY &&
+          m.challengeStatus !== ChallengeStatus.RESOLVED_INVALID
+      ).length === 0;
     const validator = new MoveValidator(this.gameState, move, isFirstPlayMove);
     if (validator.moveIsValid()) {
       if (move.type === DUMP) {
@@ -157,8 +163,35 @@ class ScrabbleGame {
 
   acceptMove() {
     const move = this.getLastMove();
-    move.challengeStatus = ChallengeState.RESOLVED_ACCEPTED;
+    move.challengeStatus = ChallengeStatus.RESOLVED_ACCEPTED;
     this._endMove();
+  }
+
+  challengeMove() {
+    const move = this.getLastMove();
+    move.challengeStatus = ChallengeStatus.UNRESOLVED_CHALLENGED;
+  }
+
+  resolveChallenge(challengeStatus) {
+    // TODO error if it wasn't challenged before
+
+    const move = this.getLastMove();
+    move.challengeStatus = challengeStatus;
+    if (challengeStatus === ChallengeStatus.RESOLVED_INVALID) {
+      console.log("Challenge successful!");
+      this.gameState.players[move.playerName].rack.push(
+        ...move.lettersPlaced.map((pl) => pl[0])
+      );
+      this._endMove();
+    } else {
+      console.log("Challenge failed!");
+      this._endMove();
+      this.gameState.moves.push({
+        playerName: getOtherPlayer(move.playerName),
+        type: "SKIP",
+      });
+      this._endMove();
+    }
   }
 
   _endMove() {

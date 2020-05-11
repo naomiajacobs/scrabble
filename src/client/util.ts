@@ -27,7 +27,10 @@ function makeEmptyBoard() {
 }
 
 function addMoveToBoard(board: Board, move: Move): void {
-  if (move.type === MoveType.PLAY) {
+  if (
+    move.type === MoveType.PLAY &&
+    (move as PlayMove).challengeStatus !== ChallengeStatus.RESOLVED_INVALID
+  ) {
     for (const [letter, [row, col], _] of (move as PlayMove).lettersPlaced) {
       board[row][col] = { letter, fromRack: false };
     }
@@ -201,7 +204,10 @@ export function calculateScore(gameState: GameState): Array<number> {
   const board = makeEmptyBoard();
 
   const scores = gameState.moves.map((move) => {
-    if (move.type === MoveType.DUMP) {
+    if (
+      [MoveType.DUMP, MoveType.SKIP].includes(move.type) ||
+      (move as PlayMove).challengeStatus === ChallengeStatus.RESOLVED_INVALID
+    ) {
       return 0;
     }
     addMoveToBoard(board, move);
@@ -224,29 +230,34 @@ export function lastMoveIsResolved(gameState: GameState): boolean {
   const lastMove = getLastMove(gameState);
   return Boolean(
     !lastMove ||
-      (lastMove.type !== MoveType.PLAY ||
-        [
-          ChallengeStatus.RESOLVED_INVALID,
-          ChallengeStatus.RESOLVED_VALID,
-          ChallengeStatus.RESOLVED_ACCEPTED,
-        ].includes((lastMove as PlayMove).challengeStatus))
+      lastMove.type !== MoveType.PLAY ||
+      [
+        ChallengeStatus.RESOLVED_INVALID,
+        ChallengeStatus.RESOLVED_VALID,
+        ChallengeStatus.RESOLVED_ACCEPTED,
+      ].includes((lastMove as PlayMove).challengeStatus)
   );
 }
 
-export function canChallenge(gameState: GameState): boolean {
+function awaitingChallengeResolution(gameState: GameState): boolean {
   const lastMove = getLastMove(gameState);
   return Boolean(
-    !isYourTurn(gameState) &&
-      lastMove &&
+    lastMove &&
       lastMove.type === MoveType.PLAY &&
       (lastMove as PlayMove).challengeStatus ===
-        ChallengeStatus.UNRESOLVED_UNCHALLENGED
+        ChallengeStatus.UNRESOLVED_CHALLENGED
   );
 }
 
 export function getActionState(gameState: GameState): ActionState {
   const yourTurn = isYourTurn(gameState);
   const lastMoveResolved = lastMoveIsResolved(gameState);
+  const awaitingResolution = awaitingChallengeResolution(gameState);
+
+  if (awaitingResolution) {
+    return ActionState.AWAITING_CHALLENGE_RESOLUTION;
+  }
+
   let state: ActionState;
   if (yourTurn) {
     if (lastMoveResolved) {

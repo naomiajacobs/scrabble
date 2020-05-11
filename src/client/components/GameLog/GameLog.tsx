@@ -1,20 +1,14 @@
 import React from "react";
 
-import {
-  FinishedGameState,
-  GameState,
-  Move,
-  MoveType,
-  PlayerName,
-  PlayMove,
-} from "../../Constants";
+import {ChallengeStatus, FinishedGameState, GameState, Move, MoveType, PlayerName, PlayMove,} from "../../Constants";
 
 import "./GameLog.css";
-import { FinalGameScore, GameScore } from "../../util";
+import {FinalGameScore, GameScore} from "../../util";
 
 const dumpEmoji = "🔄";
 const challengeEmoji = "👊";
 const bingoEmoji = "🎉";
+const skipEmoji = "⏭️";
 
 function EndGameAdjustments({
   gameState,
@@ -32,6 +26,33 @@ function EndGameAdjustments({
   );
 }
 
+function getEmoji(move: Move): string | null {
+  const isBingo =
+    move.type === MoveType.PLAY &&
+    (move as PlayMove).lettersPlaced.length === 7;
+  const failedChallenge =
+    move.type === MoveType.PLAY &&
+    (move as PlayMove).challengeStatus === ChallengeStatus.RESOLVED_INVALID;
+
+  if (move.type === MoveType.DUMP) {
+    return dumpEmoji;
+  }
+
+  if (move.type === MoveType.SKIP) {
+    return skipEmoji;
+  }
+
+  if (failedChallenge) {
+    return challengeEmoji;
+  }
+
+  if (isBingo) {
+    return bingoEmoji;
+  }
+
+  return null;
+}
+
 function MoveInfo({
   gameScore,
   moveInfo,
@@ -40,17 +61,12 @@ function MoveInfo({
   moveInfo: { move: Move; gameIndex: number };
 }): JSX.Element {
   const { move, gameIndex } = moveInfo;
+  const emoji = getEmoji(move);
 
   return (
     <>
       <span>{gameScore.scoreForMove(gameIndex)}</span>
-      {move.type === MoveType.DUMP && (
-        <span className="emoji">{dumpEmoji}</span>
-      )}
-      {move.type === MoveType.PLAY &&
-        (move as PlayMove).lettersPlaced.length === 7 && (
-          <span className="emoji">{bingoEmoji}</span>
-        )}
+      {emoji && <span className="emoji">{emoji}</span>}
     </>
   );
 }

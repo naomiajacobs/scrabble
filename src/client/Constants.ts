@@ -164,6 +164,7 @@ export enum PlayerName {
 export enum MoveType {
   PLAY = "PLAY",
   DUMP = "DUMP",
+  SKIP = "SKIP",
 }
 // TODO deal with nulls for the end of the game
 export type Rack = [
@@ -201,7 +202,8 @@ export interface PlayMove extends BaseMove {
   lettersPlaced: Array<PlacedLetter>;
   challengeStatus: ChallengeStatus;
 }
-export type Move = PlayMove | DumpMove;
+interface SkipMove extends BaseMove {}
+export type Move = PlayMove | DumpMove | SkipMove;
 
 export interface PreviouslyPlayedTile {
   letter: Letter;
@@ -265,4 +267,5 @@ export enum ActionState {
   WAITING_FOR_CHALLENGE_OR_DRAW = "WAITING_FOR_CHALLENGE_OR_DRAW",
   WAITING_FOR_OPPONENT_MOVE = "WAITING_FOR_OPPONENT_MOVE",
   CHALLENGE_OR_DRAW = "CHALLENGE_OR_DRAW",
+  AWAITING_CHALLENGE_RESOLUTION = "AWAITING_CHALLENGE_RESOLUTION",
 }

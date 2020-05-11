@@ -19,6 +19,7 @@ import {
 import {
   getActionState,
   getDerivedBoard,
+  getLastMove,
   getOtherPlayer,
   isYourTurn,
 } from "../../util";
@@ -26,7 +27,13 @@ import Rack, { DumpRack } from "../Rack/Rack";
 import ScrabbleBoard from "../ScrabbleBoard/ScrabbleBoard";
 import ControlButtons from "../ControlButtons/ControlButtons";
 import useGameLetters from "../../state/useGameLetters";
-import { acceptMove, makeMove, promptAbandon } from "../../api";
+import {
+  acceptMove,
+  challengeMove,
+  makeMove,
+  promptAbandon,
+  resolveChallenge,
+} from "../../api";
 import usePrevious from "../../state/usePrevious";
 import GameLog from "../GameLog/GameLog";
 
@@ -148,12 +155,27 @@ export default function Game({
   } = useGameLetters();
 
   useEffect(() => {
-    const gameStateChanged =
-      previousGameState &&
-      gameState.moves.length !== previousGameState.moves.length;
+    let receivedNewMove = false;
+    let moveChanged = false;
+    if (previousGameState) {
+      receivedNewMove =
+        gameState.moves.length !== previousGameState.moves.length;
+      if (!receivedNewMove) {
+        const oldLastMove = getLastMove(previousGameState);
+        const newLastMove = getLastMove(gameState);
+        moveChanged = Boolean(
+          oldLastMove &&
+            newLastMove &&
+            // Technically not correct, but other move types will just have undefined
+            (oldLastMove as PlayMove).challengeStatus !==
+              (newLastMove as PlayMove).challengeStatus
+        );
+      }
+    }
+
     const dumpingStateChanged = previousDumping !== dumping;
 
-    if (gameStateChanged || dumpingStateChanged) {
+    if (receivedNewMove || moveChanged || dumpingStateChanged) {
       reset();
     }
   });
@@ -229,9 +251,19 @@ export default function Game({
                 setDumping(!dumping);
               }}
               dumping={dumping}
-              onChallenge={() => {}}
-              onAccept={acceptMove}
+              onChallenge={() => {
+                challengeMove(gameState.player.name);
+              }}
+              onAccept={() => {
+                acceptMove(gameState.player.name);
+              }}
               actionState={actionState}
+              onMoveInvalidated={() =>
+                resolveChallenge(ChallengeStatus.RESOLVED_INVALID)
+              }
+              onMoveValidated={() =>
+                resolveChallenge(ChallengeStatus.RESOLVED_VALID)
+              }
             />
           )}
           <ManagedRack

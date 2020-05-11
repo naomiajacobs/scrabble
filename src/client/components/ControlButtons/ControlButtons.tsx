@@ -3,6 +3,29 @@ import React from "react";
 import { ActionState } from "../../Constants";
 import "./ControlButtons.css";
 
+function ChallengeResolutionButtons({
+  onMoveInvalidated,
+  onMoveValidated,
+}: {
+  onMoveValidated: () => void;
+  onMoveInvalidated: () => void;
+}): JSX.Element {
+  return (
+    <div className="control-buttons">
+      <button className="small" type="button" onClick={onMoveValidated}>
+        Move is valid
+      </button>
+      <button
+        className="danger small"
+        type="button"
+        onClick={onMoveInvalidated}
+      >
+        Move is invalid
+      </button>
+    </div>
+  );
+}
+
 function EndMoveButtons({
   onChallenge,
   onAccept,
@@ -87,6 +110,8 @@ export default function ControlButtons({
   dumping,
   onChallenge,
   onAccept,
+  onMoveValidated,
+  onMoveInvalidated,
 }: {
   actionState: ActionState;
   hasSubmittableLetters: boolean;
@@ -97,6 +122,8 @@ export default function ControlButtons({
   dumping: boolean;
   onChallenge: () => void;
   onAccept: () => void;
+  onMoveValidated: () => void;
+  onMoveInvalidated: () => void;
 }): JSX.Element {
   switch (actionState) {
     case ActionState.GO:
@@ -124,8 +151,9 @@ export default function ControlButtons({
           toggleDumping={toggleDumping}
         />
       );
-
     case ActionState.CHALLENGE_OR_DRAW:
       return <EndMoveButtons onChallenge={onChallenge} onAccept={onAccept} />;
+    case ActionState.AWAITING_CHALLENGE_RESOLUTION:
+      return <ChallengeResolutionButtons onMoveInvalidated={onMoveInvalidated} onMoveValidated={onMoveValidated}/>;
   }
 }
