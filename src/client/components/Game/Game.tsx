@@ -285,10 +285,15 @@ export default function Game({
             placeLetter={active ? placeSelectedLetter : () => {}}
             setSelectedLetter={active ? setSelectedLetterIndex : () => {}}
             selectedLetter={selectedLetterIndex}
+            highlightLastMove={[
+              ActionState.AWAITING_CHALLENGE_RESOLUTION,
+              ActionState.WAITING_FOR_CHALLENGE_OR_DRAW,
+              ActionState.CHALLENGE_OR_DRAW,
+            ].includes(actionState)}
           />
         </div>
         <div className="right-panel">
-          <img className="letter-bag" src={letterBag} alt="scrabble-bag"/>
+          <img className="letter-bag" src={letterBag} alt="scrabble-bag" />
           <span className="letters-left">{gameState.letterBag.length}</span>
         </div>
       </div>

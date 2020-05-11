@@ -208,6 +208,7 @@ export type Move = PlayMove | DumpMove | SkipMove;
 export interface PreviouslyPlayedTile {
   letter: Letter;
   fromRack: false;
+  fromLastMove: boolean;
 }
 export type RackIndex = 0 | 1 | 2 | 3 | 4 | 5 | 6;
 export interface TileFromRack {

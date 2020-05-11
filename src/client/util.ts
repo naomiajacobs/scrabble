@@ -26,13 +26,13 @@ function makeEmptyBoard() {
   return board;
 }
 
-function addMoveToBoard(board: Board, move: Move): void {
+function addMoveToBoard(board: Board, move: Move, isLastMove: boolean): void {
   if (
     move.type === MoveType.PLAY &&
     (move as PlayMove).challengeStatus !== ChallengeStatus.RESOLVED_INVALID
   ) {
     for (const [letter, [row, col], _] of (move as PlayMove).lettersPlaced) {
-      board[row][col] = { letter, fromRack: false };
+      board[row][col] = { letter, fromRack: false, fromLastMove: isLastMove };
     }
   }
 }
@@ -48,8 +48,8 @@ export function getDerivedBoard(
 ): Board {
   const board = makeEmptyBoard();
 
-  moves.forEach((move) => {
-    addMoveToBoard(board, move);
+  moves.forEach((move, index) => {
+    addMoveToBoard(board, move, index === moves.length - 1);
   });
 
   placedLetters.forEach((location, i) => {
@@ -210,7 +210,7 @@ export function calculateScore(gameState: GameState): Array<number> {
     ) {
       return 0;
     }
-    addMoveToBoard(board, move);
+    addMoveToBoard(board, move, false);
     return calculateScoreForMove(board, move as PlayMove);
   });
   return scores;

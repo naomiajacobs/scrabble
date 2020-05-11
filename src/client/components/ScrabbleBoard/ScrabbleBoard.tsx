@@ -77,11 +77,13 @@ export default function ScrabbleBoard({
   placeLetter,
   setSelectedLetter,
   selectedLetter,
+  highlightLastMove
 }: {
   board: Board;
   placeLetter: (location: Location) => void;
   setSelectedLetter: (number: RackIndex) => void;
   selectedLetter: RackIndex | null;
+  highlightLastMove: boolean;
 }): JSX.Element {
   return (
     <div className="board">
@@ -119,6 +121,7 @@ export default function ScrabbleBoard({
                   key={colIndex}
                   letter={(square as PreviouslyPlayedTile).letter}
                   draggable={false}
+                  className={highlightLastMove && square!.fromLastMove ? 'selected' : ''}
                 />
               );
             })}
