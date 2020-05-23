@@ -16,6 +16,7 @@ export enum GameEvent {
   ACCEPT_MOVE = "ACCEPT_MOVE",
   CHALLENGE_MOVE = "CHALLENGE_MOVE",
   CHALLENGE_RESOLVED = "CHALLENGE_RESOLVED",
+  RESUME_GAME_FROM_JSON = "RESUME_GAME_FROM_JSON",
 }
 
 // initialize socket connection

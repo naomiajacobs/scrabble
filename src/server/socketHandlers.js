@@ -8,7 +8,12 @@ const {
   INTRUDER,
   GameEvent,
 } = require("./constants");
-const { abandonGame, getCurrentGame, startNewGame } = require("./gameLogic");
+const {
+  abandonGame,
+  getCurrentGame,
+  startNewGame,
+  resumeGameFromJSON,
+} = require("./gameLogic");
 
 let io;
 
@@ -68,6 +73,10 @@ function onConnection(socket) {
   socket.on(GameEvent.REJECT_ABANDON, (name) => {
     onRejectAbandon(socket, name);
   });
+
+  socket.on(GameEvent.RESUME_GAME_FROM_JSON, (json, name) => {
+    onResumeGameFromJSON(json, name);
+  });
 }
 
 function onInitialize(socket, name) {
@@ -97,9 +106,9 @@ function onMakeMove(socket, move) {
 
 function onAccept(name) {
   console.log(`${name} accepted move, drawing letters for next player`);
-   const game = getCurrentGame();
-   game.acceptMove();
-   emitGameState(game);
+  const game = getCurrentGame();
+  game.acceptMove();
+  emitGameState(game);
 }
 
 function onChallenge(socket, name) {
@@ -137,6 +146,12 @@ function onChallengeResolved(challengeStatus) {
   const game = getCurrentGame();
   game.resolveChallenge(challengeStatus);
   emitGameState(game);
+}
+
+function onResumeGameFromJSON(json, name) {
+  console.log(`${name} resuming game from JSON`);
+  const newGame = resumeGameFromJSON(json);
+  emitGameState(newGame);
 }
 
 module.exports = {

@@ -15,8 +15,8 @@ const shuffle = require("shuffle-array");
 const uuidv4 = require("uuid").v4;
 
 class Player {
-  constructor(name) {
-    this.rack = [];
+  constructor(name, rack) {
+    this.rack = rack || [];
     this.name = name;
   }
   drawTiles(letterBag) {
@@ -31,40 +31,56 @@ class Player {
 const initialAbandonConfirmations = { [NAOMI]: false, [MERT]: false };
 
 class ScrabbleGame {
-  constructor() {
-    this.id = uuidv4();
-    const firstActivePlayer = Math.floor(Math.random() * 2) ? NAOMI : MERT;
-    this.gameState = {
-      players: { [NAOMI]: new Player(NAOMI), [MERT]: new Player(MERT) },
-      letterBag: this._randomizeTiles(),
-      moves: [],
-      activePlayer: firstActivePlayer,
-      status: IN_PROGRESS,
-    };
-    this.abandonConfirmations = { ...initialAbandonConfirmations };
-    console.log(
-      `Starting new game, first player is ${this.gameState.activePlayer}`
-    );
-    console.log("Drawing initial tiles");
-    for (const player of Object.values(this.gameState.players)) {
-      player.drawTiles(this.gameState.letterBag);
+  constructor(json) {
+    if (json) {
+      const inflatedGame = JSON.parse(json);
+      this.gameState = inflatedGame;
+      this.gameState.players = {
+        [NAOMI]: new Player(NAOMI, inflatedGame.players.Naomi.rack),
+        [MERT]: new Player(MERT, inflatedGame.players.Mert.rack),
+      };
+      console.log(
+        `Resuming game, current player is ${this.gameState.activePlayer}`
+      );
+    } else {
+      const firstActivePlayer = Math.floor(Math.random() * 2) ? NAOMI : MERT;
+      this.gameState = {
+        id: uuidv4(),
+        players: { [NAOMI]: new Player(NAOMI), [MERT]: new Player(MERT) },
+        letterBag: this._randomizeTiles(),
+        moves: [],
+        activePlayer: firstActivePlayer,
+        status: IN_PROGRESS,
+        abandonConfirmations: { ...initialAbandonConfirmations },
+      };
+      console.log(
+        `Starting new game, first player is ${this.gameState.activePlayer}`
+      );
+      console.log("Drawing initial tiles");
+      for (const player of Object.values(this.gameState.players)) {
+        player.drawTiles(this.gameState.letterBag);
+      }
     }
   }
 
   save() {
     // TODO upload to s3 or use DB
+    console.log(JSON.stringify(this.gameState));
   }
 
   confirmAbandon(playerName) {
-    this.abandonConfirmations[playerName] = true;
+    this.gameState.abandonConfirmations[playerName] = true;
   }
 
   shouldAbandonGame() {
-    return this.abandonConfirmations[NAOMI] && this.abandonConfirmations[MERT];
+    return (
+      this.gameState.abandonConfirmations[NAOMI] &&
+      this.gameState.abandonConfirmations[MERT]
+    );
   }
 
   cancelAbandon() {
-    this.abandonConfirmations = { ...initialAbandonConfirmations };
+    this.gameState.abandonConfirmations = { ...initialAbandonConfirmations };
   }
 
   toggleActivePlayer() {
@@ -83,7 +99,7 @@ class ScrabbleGame {
   getGameState(playerName) {
     const opponent = playerName === NAOMI ? MERT : NAOMI;
     return {
-      id: this.id,
+      id: this.gameState.id,
       player: this.gameState.players[playerName],
       // todo remove letterbag from client?
       letterBag: this.gameState.letterBag,
@@ -221,9 +237,9 @@ function getCurrentGame() {
   return currentGame;
 }
 
-function startNewGame() {
-  console.log("Starting a new game");
-  currentGame = new ScrabbleGame();
+function startNewGame(json) {
+  console.log(`Starting a new game${json ? " from JSON" : ""}`);
+  currentGame = new ScrabbleGame(json);
   return currentGame;
 }
 
@@ -239,8 +255,16 @@ function abandonGame() {
   }
 }
 
+function resumeGameFromJSON(json) {
+  console.log("Abandoning game to resume different game");
+  console.log("Abandoned game state: ", JSON.stringify(currentGame));
+  currentGame = startNewGame(json);
+  return currentGame;
+}
+
 module.exports = {
   getCurrentGame,
   startNewGame,
   abandonGame,
+  resumeGameFromJSON,
 };

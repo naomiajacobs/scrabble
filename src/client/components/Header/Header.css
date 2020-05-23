@@ -12,6 +12,7 @@
   font-weight: bold;
 }
 
+.right-buttons,
 .greeting,
 .abandon {
   align-items: center;
@@ -25,6 +26,6 @@
   background-color: var(--sq-tls);
 }
 
-.abandon {
-  margin: 5px;
+.right-buttons {
+  margin-top: 10px;
 }

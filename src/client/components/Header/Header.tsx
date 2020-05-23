@@ -9,19 +9,15 @@ import {
 import GameSummary from "../GameSummary/GameSummary";
 import { getActionState, getOtherPlayer } from "../../util";
 
-import './Header.css';
-import {promptAbandon} from "../../api";
+import "./Header.css";
+import { promptAbandon, resumeGameFromJSON } from "../../api";
 
-function Title({
+function TitleCenter({
   actionState,
-  yourName,
   opponentName,
-  abandonGame
 }: {
   actionState: ActionState;
-  yourName: PlayerName;
   opponentName: PlayerName;
-  abandonGame: () => void;
 }): JSX.Element {
   let text;
   switch (actionState) {
@@ -38,13 +34,7 @@ function Title({
       text = `${opponentName} just went - accept or challenge the move`;
       break;
   }
-  return (
-    <>
-      <div className="header-item greeting">Hi, {yourName}!</div>
-      <div className="header-item action-info">{text}</div>
-      <button className="header-item abandon danger medium"onClick={abandonGame}>Abandon Game</button>
-    </>
-  );
+  return <div className="header-item action-info">{text}</div>;
 }
 
 export default function Header({
@@ -55,19 +45,43 @@ export default function Header({
   gameState: GameState;
 }): JSX.Element {
   const actionState = getActionState(gameState);
+  const name = gameState.player.name;
+
+  const resumeGame = () => {
+    const json = prompt("Paste in game JSON");
+    if (!json) {
+      alert("Did not give JSON");
+    } else {
+      resumeGameFromJSON(json, name);
+    }
+  };
 
   return (
     <div className="header">
+      <div className="header-item greeting">Hi, {name}!</div>
       {gameOver ? (
         <GameSummary gameState={gameState as FinishedGameState} />
       ) : (
-        <Title
+        <TitleCenter
           actionState={actionState}
-          yourName={gameState.player.name}
-          opponentName={getOtherPlayer(gameState.player.name)}
-          abandonGame={promptAbandon}
+          opponentName={getOtherPlayer(name)}
         />
       )}
+      <div className="right-buttons">
+        <button className="header-item small" onClick={resumeGame}>
+          Resume Game
+        </button>
+        {gameOver ? (
+          <button className="header-item small">Start New Game</button>
+        ) : (
+          <button
+            className="header-item abandon danger small"
+            onClick={() => promptAbandon(name)}
+          >
+            Abandon Game
+          </button>
+        )}
+      </div>
     </div>
   );
 }
