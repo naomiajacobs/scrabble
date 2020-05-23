@@ -10,7 +10,7 @@ import GameSummary from "../GameSummary/GameSummary";
 import { getActionState, getOtherPlayer } from "../../util";
 
 import "./Header.css";
-import { promptAbandon, resumeGameFromJSON } from "../../api";
+import { promptAbandon, resumeGameFromJSON, startNewGame } from "../../api";
 
 function TitleCenter({
   actionState,
@@ -72,7 +72,9 @@ export default function Header({
           Resume Game
         </button>
         {gameOver ? (
-          <button className="header-item small">Start New Game</button>
+          <button className="header-item small" onClick={() => startNewGame(name)}>
+            Start New Game
+          </button>
         ) : (
           <button
             className="header-item abandon danger small"

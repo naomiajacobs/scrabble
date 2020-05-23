@@ -28,3 +28,7 @@ export function resolveChallenge(
 export function resumeGameFromJSON(json: string, name: PlayerName) {
   socket.emit(GameEvent.RESUME_GAME_FROM_JSON, json, name);
 }
+
+export function startNewGame(name: PlayerName) {
+  socket.emit(GameEvent.START_NEW_GAME, name);
+}

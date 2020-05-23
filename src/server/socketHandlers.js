@@ -77,6 +77,10 @@ function onConnection(socket) {
   socket.on(GameEvent.RESUME_GAME_FROM_JSON, (json, name) => {
     onResumeGameFromJSON(json, name);
   });
+
+  socket.on(GameEvent.START_NEW_GAME, (name) => {
+    onStartNewGame(name);
+  })
 }
 
 function onInitialize(socket, name) {
@@ -152,6 +156,12 @@ function onResumeGameFromJSON(json, name) {
   console.log(`${name} resuming game from JSON`);
   const newGame = resumeGameFromJSON(json);
   emitGameState(newGame);
+}
+
+function onStartNewGame(name) {
+  console.log(`${name} starting new game`);
+  const game = startNewGame();
+  emitGameState(game);
 }
 
 module.exports = {
