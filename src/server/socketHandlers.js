@@ -30,6 +30,7 @@ function emitGameState(game) {
       game.gameState.status === IN_PROGRESS ? IN_PROGRESS : GAME_OVER,
     gameState: game.getGameState(playerName),
   }));
+  game.save();
 }
 
 function onConnection(socket) {

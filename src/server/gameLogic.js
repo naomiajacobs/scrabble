@@ -12,6 +12,7 @@ const MoveValidator = require("./moveValidator");
 const { getOtherPlayer } = require("./util");
 
 const shuffle = require("shuffle-array");
+const uuidv4 = require("uuid").v4;
 
 class Player {
   constructor(name) {
@@ -31,6 +32,7 @@ const initialAbandonConfirmations = { [NAOMI]: false, [MERT]: false };
 
 class ScrabbleGame {
   constructor() {
+    this.id = uuidv4();
     const firstActivePlayer = Math.floor(Math.random() * 2) ? NAOMI : MERT;
     this.gameState = {
       players: { [NAOMI]: new Player(NAOMI), [MERT]: new Player(MERT) },
@@ -47,6 +49,10 @@ class ScrabbleGame {
     for (const player of Object.values(this.gameState.players)) {
       player.drawTiles(this.gameState.letterBag);
     }
+  }
+
+  save() {
+    // TODO upload to s3 or use DB
   }
 
   confirmAbandon(playerName) {
@@ -77,6 +83,7 @@ class ScrabbleGame {
   getGameState(playerName) {
     const opponent = playerName === NAOMI ? MERT : NAOMI;
     return {
+      id: this.id,
       player: this.gameState.players[playerName],
       // todo remove letterbag from client?
       letterBag: this.gameState.letterBag,
