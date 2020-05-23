@@ -19,6 +19,6 @@ export default function GameSummary({
   if (youWon) {
     return <h2>YOU WON, CONGRATS!!!</h2>;
   } else {
-    return <h2>{`HAHA, ${opponent} WON - YOU LOSE`}</h2>;
+    return <h2>{`HAHA, ${opponent} WON - YOU LOSE 😛`}</h2>;
   }
 }
