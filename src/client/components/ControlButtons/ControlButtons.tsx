@@ -35,12 +35,14 @@ function EndMoveButtons({
 }): JSX.Element {
   return (
     <div className="control-buttons">
-      <button className="small" type="button" onClick={onAccept}>
-        Accept Move
-      </button>
-      <button className="danger small" type="button" onClick={onChallenge}>
-        Challenge Move
-      </button>
+      <div className="end-move">
+        <button className="small" type="button" onClick={onAccept}>
+          Accept Move
+        </button>
+        <button className="danger small" type="button" onClick={onChallenge}>
+          Challenge Move
+        </button>
+      </div>
     </div>
   );
 }
@@ -154,6 +156,11 @@ export default function ControlButtons({
     case ActionState.CHALLENGE_OR_DRAW:
       return <EndMoveButtons onChallenge={onChallenge} onAccept={onAccept} />;
     case ActionState.AWAITING_CHALLENGE_RESOLUTION:
-      return <ChallengeResolutionButtons onMoveInvalidated={onMoveInvalidated} onMoveValidated={onMoveValidated}/>;
+      return (
+        <ChallengeResolutionButtons
+          onMoveInvalidated={onMoveInvalidated}
+          onMoveValidated={onMoveValidated}
+        />
+      );
   }
 }

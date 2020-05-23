@@ -21,7 +21,7 @@ body, #root, .App {
 }
 
 button {
-  margin: 0 5px 10px 5px;
+  margin: 10px 5px;
   background-color: var(--sq-tls);
   border-color: var(--sq-tls);
   cursor: pointer;
