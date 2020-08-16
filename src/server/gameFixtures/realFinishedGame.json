@@ -1,0 +1,322 @@
+{
+  "id": "4ceab4c6-d735-4b08-9e4e-7c948cef3a4f",
+  "players": {
+    "Naomi": { "rack": [], "name": "Naomi" },
+    "Mert": { "rack": ["E", "E", "I", "T"], "name": "Mert" }
+  },
+  "letterBag": [],
+  "moves": [
+    {
+      "playerName": "Naomi",
+      "type": "PLAY",
+      "lettersPlaced": [
+        ["A", [7, 6], null],
+        ["M", [7, 7], null],
+        ["C", [7, 4], null],
+        ["R", [7, 5], null]
+      ],
+      "challengeStatus": "RESOLVED_ACCEPTED"
+    },
+    {
+      "playerName": "Mert",
+      "type": "PLAY",
+      "lettersPlaced": [
+        ["N", [8, 8], null],
+        ["Y", [8, 6], null],
+        ["I", [8, 7], null]
+      ],
+      "challengeStatus": "RESOLVED_ACCEPTED"
+    },
+    {
+      "playerName": "Naomi",
+      "type": "PLAY",
+      "lettersPlaced": [
+        ["E", [6, 5], null],
+        ["P", [6, 6], null]
+      ],
+      "challengeStatus": "RESOLVED_INVALID"
+    },
+    {
+      "playerName": "Mert",
+      "type": "PLAY",
+      "lettersPlaced": [
+        ["D", [9, 4], null],
+        ["E", [8, 4], null],
+        ["A", [6, 4], null]
+      ],
+      "challengeStatus": "RESOLVED_ACCEPTED"
+    },
+    {
+      "playerName": "Naomi",
+      "type": "PLAY",
+      "lettersPlaced": [
+        ["O", [9, 3], null],
+        ["T", [11, 3], null],
+        ["E", [10, 3], null],
+        ["P", [8, 3], null]
+      ],
+      "challengeStatus": "RESOLVED_ACCEPTED"
+    },
+    {
+      "playerName": "Mert",
+      "type": "PLAY",
+      "lettersPlaced": [
+        ["A", [11, 2], null],
+        ["O", [11, 1], null]
+      ],
+      "challengeStatus": "RESOLVED_ACCEPTED"
+    },
+    {
+      "playerName": "Naomi",
+      "type": "PLAY",
+      "lettersPlaced": [
+        ["I", [9, 9], null],
+        ["E", [9, 11], null],
+        ["U", [9, 8], null],
+        ["G", [9, 7], null],
+        ["D", [9, 10], null]
+      ],
+      "challengeStatus": "RESOLVED_ACCEPTED"
+    },
+    {
+      "playerName": "Mert",
+      "type": "PLAY",
+      "lettersPlaced": [
+        ["N", [10, 0], null],
+        ["I", [9, 0], null],
+        ["G", [11, 0], null],
+        ["L", [8, 0], null],
+        ["F", [7, 0], null],
+        ["S", [12, 0], null]
+      ],
+      "challengeStatus": "RESOLVED_ACCEPTED"
+    },
+    {
+      "playerName": "Naomi",
+      "type": "PLAY",
+      "lettersPlaced": [
+        ["N", [10, 11], null],
+        ["V", [8, 11], null],
+        ["D", [11, 11], null]
+      ],
+      "challengeStatus": "RESOLVED_ACCEPTED"
+    },
+    {
+      "playerName": "Mert",
+      "type": "PLAY",
+      "lettersPlaced": [
+        ["S", [12, 11], null],
+        ["T", [12, 12], null],
+        ["J", [12, 9], null],
+        ["U", [12, 10], null]
+      ],
+      "challengeStatus": "RESOLVED_ACCEPTED"
+    },
+    {
+      "playerName": "Naomi",
+      "type": "PLAY",
+      "lettersPlaced": [
+        ["M", [13, 10], null],
+        ["O", [13, 9], null]
+      ],
+      "challengeStatus": "RESOLVED_ACCEPTED"
+    },
+    {
+      "playerName": "Mert",
+      "type": "PLAY",
+      "lettersPlaced": [
+        ["I", [5, 5], null],
+        ["R", [5, 4], null],
+        ["K", [5, 7], null],
+        ["N", [5, 6], null]
+      ],
+      "challengeStatus": "RESOLVED_ACCEPTED"
+    },
+    {
+      "playerName": "Naomi",
+      "type": "PLAY",
+      "lettersPlaced": [
+        ["S", [14, 10], null],
+        ["B", [14, 9], null],
+        ["E", [14, 8], null],
+        ["W", [14, 7], null]
+      ],
+      "challengeStatus": "RESOLVED_ACCEPTED"
+    },
+    {
+      "playerName": "Mert",
+      "type": "PLAY",
+      "lettersPlaced": [
+        ["H", [10, 2], null],
+        ["G", [12, 2], null]
+      ],
+      "challengeStatus": "RESOLVED_ACCEPTED"
+    },
+    {
+      "playerName": "Naomi",
+      "type": "PLAY",
+      "lettersPlaced": [
+        ["B", [1, 7], null],
+        ["I", [3, 7], null],
+        ["R", [2, 7], null],
+        ["C", [4, 7], null]
+      ],
+      "challengeStatus": "RESOLVED_ACCEPTED"
+    },
+    {
+      "playerName": "Mert",
+      "type": "PLAY",
+      "lettersPlaced": [
+        ["L", [2, 4], null],
+        ["E", [2, 6], null],
+        ["E", [2, 5], null]
+      ],
+      "challengeStatus": "RESOLVED_ACCEPTED"
+    },
+    {
+      "playerName": "Naomi",
+      "type": "PLAY",
+      "lettersPlaced": [
+        ["D", [9, 1], null],
+        ["I", [8, 1], null],
+        ["A", [7, 1], null]
+      ],
+      "challengeStatus": "RESOLVED_ACCEPTED"
+    },
+    {
+      "playerName": "Mert",
+      "type": "PLAY",
+      "lettersPlaced": [
+        ["R", [3, 5], null],
+        ["O", [3, 3], null],
+        ["A", [3, 4], null]
+      ],
+      "challengeStatus": "RESOLVED_ACCEPTED"
+    },
+    {
+      "playerName": "Naomi",
+      "type": "PLAY",
+      "lettersPlaced": [
+        ["I", [4, 12], null],
+        ["N", [4, 14], null],
+        ["E", [4, 9], null],
+        ["A", [4, 10], null],
+        ["T", [4, 11], null],
+        ["O", [4, 13], null],
+        ["R", [4, 8], null]
+      ],
+      "challengeStatus": "RESOLVED_ACCEPTED"
+    },
+    {
+      "playerName": "Mert",
+      "type": "PLAY",
+      "lettersPlaced": [
+        ["S", [0, 14], null],
+        ["R", [3, 14], null],
+        ["O", [2, 14], null],
+        ["H", [1, 14], null]
+      ],
+      "challengeStatus": "RESOLVED_ACCEPTED"
+    },
+    {
+      "playerName": "Naomi",
+      "type": "PLAY",
+      "lettersPlaced": [
+        ["Z", [5, 12], null],
+        ["BLANK", [3, 12], "U"],
+        ["Q", [2, 12], null]
+      ],
+      "challengeStatus": "RESOLVED_ACCEPTED"
+    },
+    {
+      "playerName": "Mert",
+      "type": "PLAY",
+      "lettersPlaced": [
+        ["O", [5, 2], null],
+        ["L", [4, 2], null],
+        ["T", [7, 2], null],
+        ["O", [6, 2], null]
+      ],
+      "challengeStatus": "RESOLVED_ACCEPTED"
+    },
+    {
+      "playerName": "Naomi",
+      "type": "PLAY",
+      "lettersPlaced": [
+        ["A", [5, 10], null],
+        ["Y", [5, 9], null]
+      ],
+      "challengeStatus": "RESOLVED_ACCEPTED"
+    },
+    {
+      "playerName": "Mert",
+      "type": "PLAY",
+      "lettersPlaced": [
+        ["A", [4, 1], null],
+        ["L", [3, 1], null],
+        ["W", [5, 1], null]
+      ],
+      "challengeStatus": "RESOLVED_VALID"
+    },
+    { "playerName": "Naomi", "type": "SKIP" },
+    {
+      "playerName": "Mert",
+      "type": "PLAY",
+      "lettersPlaced": [
+        ["E", [3, 0], null],
+        ["N", [2, 0], null],
+        ["A", [1, 0], null],
+        ["V", [0, 0], null]
+      ],
+      "challengeStatus": "RESOLVED_ACCEPTED"
+    },
+    {
+      "playerName": "Naomi",
+      "type": "PLAY",
+      "lettersPlaced": [
+        ["I", [10, 10], null],
+        ["F", [10, 9], null]
+      ],
+      "challengeStatus": "RESOLVED_INVALID"
+    },
+    {
+      "playerName": "Mert",
+      "type": "PLAY",
+      "lettersPlaced": [
+        ["E", [1, 2], null],
+        ["X", [1, 1], null]
+      ],
+      "challengeStatus": "RESOLVED_ACCEPTED"
+    },
+    {
+      "playerName": "Naomi",
+      "type": "PLAY",
+      "lettersPlaced": [
+        ["U", [0, 4], null],
+        ["T", [0, 6], null],
+        ["BLANK", [0, 3], "R"],
+        ["I", [0, 5], null],
+        ["F", [0, 2], null]
+      ],
+      "challengeStatus": "RESOLVED_ACCEPTED"
+    },
+    {
+      "playerName": "Mert",
+      "type": "PLAY",
+      "lettersPlaced": [["U", [2, 2], null]],
+      "challengeStatus": "RESOLVED_ACCEPTED"
+    },
+    {
+      "playerName": "Naomi",
+      "type": "PLAY",
+      "lettersPlaced": [
+        ["P", [0, 8], null],
+        ["E", [1, 8], null]
+      ],
+      "challengeStatus": "RESOLVED_ACCEPTED"
+    }
+  ],
+  "activePlayer": "Mert",
+  "status": "GAME_OVER",
+  "abandonConfirmations": { "Naomi": false, "Mert": false }
+}
