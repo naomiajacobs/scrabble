@@ -126,7 +126,7 @@ export const LETTER_VALUES: { [key in Letter]: number } = {
   I: 1,
   J: 8,
   K: 5,
-  L: 2,
+  L: 1,
   M: 3,
   N: 1,
   O: 1,
